@@ -8,7 +8,9 @@ var POI = [{"lat": 42.36674376745008, "lng": -71.10622062455482, "addr_id": 564,
 Meteor.startup(function() {
 
     //pre-populate with locations if empty:
-    if (Locations.find().count() == 0){
+    //if (Locations.find().count() == 0){
+    Locations.remove({}); //JUST FOR DEVELOPMENT!
+
         /*var fs = Npm.require('fs');
         var file = fs.readFile('./poi.json',function(err,data){
             if(err){
@@ -25,7 +27,7 @@ Meteor.startup(function() {
             p['index'] = i; //for random retrieval
             Locations.insert(p);
         });
-    }
+    //}
 
 
     Meteor.publish("guesses", function () {
