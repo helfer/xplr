@@ -9,6 +9,9 @@ body { height: 100%; margin: 0; padding: 0; background-color: #F4F6F6 }
 	padding:0;
 }
 
+input:hover {
+	cursor: pointer;
+}
 #header {
 	height:58px;
 	padding:12px 0 16px 0;
@@ -20,13 +23,21 @@ body { height: 100%; margin: 0; padding: 0; background-color: #F4F6F6 }
 	background-color:#ffffff;
 	color:#808184;
 	font-size:11px;
-	border:0;
+	border:0 solid #ffffff;
 	margin:0;
 	-webkit-appearance: none;
 	display: inline-block;
 	text-align: center;
 	position:relative;
 	float:right;
+	vertical-align: 0px;
+	margin-top:28px;
+}
+
+.sig:hover{
+	cursor: pointer;
+	background-color:#E16C4E;
+	color:#ffffff;
 }
 #signin {
 	border-radius: 3px 0 0 3px;
@@ -34,7 +45,7 @@ body { height: 100%; margin: 0; padding: 0; background-color: #F4F6F6 }
 
 #signup {
 	border-radius: 0 3px 3px 0;
-	border-left:1px;
+	margin-left:1px;
 
 }
 #panel {
