@@ -1,12 +1,12 @@
 if (Meteor.isClient) {
-  var marker;
+  var marker, pano, map;
 
   Template.streetview.rendered = function (){
     if(!this._rendered) {
         this._rendered = true;
 
-        var lat = -33.867141;
-        var lng = 151.207114;
+        var lng = -71.09245089365557;
+        var lat = 42.36345602184655;
         var point = new google.maps.LatLng(lat,lng);
         var panoramaOptions = {
             position:point,
@@ -25,7 +25,7 @@ if (Meteor.isClient) {
         //};
         //var myDOMobj = document.getElementById("map-canvas");
         //var map = new google.maps.Map(myDOMobj,mapOptions);
-        var map = L.mapbox.map('map', 'heshan0131.h074i536');
+        map = L.mapbox.map('map', 'heshan0131.h074i536');
 
         //add marker  
         marker = L.marker([42.381, -71.106], {
@@ -39,9 +39,16 @@ if (Meteor.isClient) {
 
   Template.panel.events({
     'click input.inc': function (){
-      var location = marker.getLatLng();
-      console.log(location);
-      pano.setPosition(location);
+      var marker_loc = marker.getLatLng();      
+      var pano_loc = pano.getPosition();
+
+      var answer = L.marker([pano_loc["d"] , pano_loc["e"]], {
+            icon: L.mapbox.marker.icon({
+                'marker-color': '#3BB98C'
+            }),
+            draggable: false
+        }).addTo(map)
+
     }
 
   });
