@@ -42,7 +42,7 @@ if (Meteor.isClient) {
   }
 
   Template.panel.events({
-    'click input.inc': function (){
+    'click #guess': function (){
       var marker_loc = marker.getLatLng();      
       var pano_loc = pano.getPosition();
       var pano_latlng = L.latLng(pano_loc["d"], pano_loc["e"]);
@@ -81,6 +81,16 @@ if (Meteor.isClient) {
       // zoom the map to the polyline
       map.fitBounds(polyline.getBounds());
 
+      //this totally doesn't work unless we get all points, but who cares for now?
+      var pcount = Locations.find().count();
+      var pick = Math.floor(Math.random()*pcount);
+      var next_location = Locations.findOne({index:pick});
+      console.log(next_location);
+      if(next_location == "undefined")
+        console.log("Houston, we have a problem");
+      pano.setPosition(new google.maps.LatLng(next_location['lat'],next_location['lng']));
+
+    
     }
 
   });

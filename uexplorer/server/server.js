@@ -21,7 +21,8 @@ Meteor.startup(function() {
                 });
             }
         });*/
-        _.each(POI,function(p){
+        _.each(POI,function(p,i){
+            p['index'] = i; //for random retrieval
             Locations.insert(p);
         });
     }
