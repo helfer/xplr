@@ -49,6 +49,14 @@ input:hover {
 	margin-left:1px;
 
 }
+#streetview{
+	margin-bottom:2px;
+}
+
+#map {
+	position:relative;
+	float:left;	
+}
 
 #panel {
 	position:relative;
@@ -56,7 +64,19 @@ input:hover {
 	background-color:#ffffff;
 }
 
-#map {
-	position:relative;
-	float:left;
+#guess {
 	
+	margin-left: 30px;
+
+	margin-top:252px;
+	width:160px;
+	height:40px;
+	background-color: #E16C4E;
+	color:#ffffff;
+	font-size: 14px;
+}
+
+#guess:hover{
+	background-color: #D65238;
+}
+
