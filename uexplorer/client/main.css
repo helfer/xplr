@@ -1,6 +1,20 @@
 /* CSS declarations go here */
+
+.TradeGothicLTPro-Light { 
+	font-family: TradeGothicLTPro-Light;
+	font-weight: normal;
+	font-style: normal;
+}
+
 html { height: 100% }
-body { height: 100%; margin: 0; padding: 0; background-color: #F4F6F6 }
+body { height: 100%; 
+		margin: 0; 
+		padding: 0; 
+		background-color: #F4F6F6; 
+		font-family: TradeGothicLTPro-Light;
+		color:#808184;
+		font-size:12px;
+	}
 #container {
 	width:900px;
 	position:relative;
@@ -28,7 +42,7 @@ input:hover {
 	width:56px;
 	height:30px;
 	background-color:#ffffff;
-	color:#808184;
+	
 	font-size:11px;	
 	position:relative;
 	float:right;

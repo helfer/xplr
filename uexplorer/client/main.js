@@ -35,8 +35,9 @@ if (Meteor.isClient) {
                     icon: L.mapbox.marker.icon({
                         'marker-color': '#e16c4e'
                     }),
-                    draggable: true
-                }).addTo(map)
+                    draggable: true,
+                    title: "Drag me to guess"
+                }).addTo(map);
 
   }
 
@@ -44,13 +45,41 @@ if (Meteor.isClient) {
     'click input.inc': function (){
       var marker_loc = marker.getLatLng();      
       var pano_loc = pano.getPosition();
+      var pano_latlng = L.latLng(pano_loc["d"], pano_loc["e"]);
+      var distance = parseInt(marker_loc.distanceTo(pano_latlng));
+      var msg;
+      
+      if (distance > 4000) msg = "No comment...You are " + distance + " meters away!";
+      else if (distance <= 4000 && distance > 2000) msg = "Oops...You are " + distance + " meters away!";
+      else if (distance <= 1000 && distance > 1000) msg = "Not bad...You are " + distance + " meters away!";
+      else if (distance < 1000) msg = "OMG...You are only " + distance + " meters away!";
 
-      var answer = L.marker([pano_loc["d"] , pano_loc["e"]], {
+      $("#message").text(msg);
+      $("#message").css("display","block");
+      
+      console.log(distance);
+
+      Guesses.insert({
+        user:Meteor.userId(),
+        lat:marker_loc.lat,
+        lng:marker_loc.lng,
+        real_lat:pano_loc["d"],
+        real_lng:pano_loc["e"],
+        score:0
+      });
+
+      var answer = L.marker(pano_latlng, {
             icon: L.mapbox.marker.icon({
                 'marker-color': '#3BB98C'
             }),
             draggable: false
-        }).addTo(map)
+        }).addTo(map);
+
+      // create a red polyline from an arrays of LatLng points
+      var polyline = L.polyline([marker_loc,pano_latlng], {color: 'red'}).addTo(map);
+
+      // zoom the map to the polyline
+      map.fitBounds(polyline.getBounds());
 
     }
 
