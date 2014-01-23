@@ -1,6 +1,9 @@
 if (Meteor.isClient) {
   var marker, pano, map;
 
+  Meteor.subscribe('guesses');
+  Meteor.subscribe('locations');
+
   Template.streetview.rendered = function (){
     if(!this._rendered) {
         this._rendered = true;
