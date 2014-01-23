@@ -1,4 +1,5 @@
 if (Meteor.isClient) {
+  var marker;
 
   Template.streetview.rendered = function (){
     if(!this._rendered) {
@@ -27,7 +28,7 @@ if (Meteor.isClient) {
         var map = L.mapbox.map('map', 'heshan0131.h074i536');
 
         //add marker  
-        L.marker([42.381, -71.106], {
+        marker = L.marker([42.381, -71.106], {
                     icon: L.mapbox.marker.icon({
                         'marker-color': '#e16c4e'
                     }),
@@ -35,6 +36,14 @@ if (Meteor.isClient) {
                 }).addTo(map)
 
   }
+
+  Template.panel.events({
+    'click input.inc': function (){
+      var location = marker.getLatLng();
+      alert(location);
+    }
+
+  });
 
 }
 if (Meteor.isServer) {

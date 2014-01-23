@@ -1,11 +1,27 @@
 
+<template name="header">
+    <div id="header">
+        <img src="logo.svg" />
+        <input type="button" class="sig" id="signup" value="Sign up" />
+        <input type="button" class="sig" id="signin" value="Sign in" />
+       
+    </div>
+</template>
+
 <template name="streetview">
-    <div id="streetview" style="width: 100%; height: 400px;"/>
+    <div id="streetview" style="width: 100%; height: 320px;"></div>
 </template>
 
 <template name="map">
-    <div id="map" style="width: 100%; height: 400px;"/>
+    <div id="map" style="width: 100%; height: 320px;"></div>
 </template>
+
+<template name="panel">
+    <div id="panel" >
+        <input type="button" class="inc" value="Guess!" />
+    </div>    
+</template>
+
 
 
 <head>
@@ -20,7 +36,11 @@
 
 
 <body>
-    {{> streetview}}
-    {{> map}}
+    <div id="container">
+        {{> header}}
+        {{> streetview}}
+        {{> map}}
+        {{> panel}}
+    </div>
 </body>
 

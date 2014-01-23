@@ -1,3 +1,47 @@
 /* CSS declarations go here */
 html { height: 100% }
-body { height: 100%; margin: 0; padding: 0 }
+body { height: 100%; margin: 0; padding: 0; background-color: #F4F6F6 }
+#container {
+	width:900px;
+	position:relative;
+	margin-left:auto;
+	margin-right:auto;
+	padding:0;
+}
+
+#header {
+	height:58px;
+	padding:12px 0 16px 0;
+}
+
+.sig {
+	width:56px;
+	height:30px;
+	background-color:#ffffff;
+	color:#808184;
+	font-size:11px;
+	border:0;
+	margin:0;
+	-webkit-appearance: none;
+	display: inline-block;
+	text-align: center;
+	position:relative;
+	float:right;
+}
+#signin {
+	border-radius: 3px 0 0 3px;
+}
+
+#signup {
+	border-radius: 0 3px 3px 0;
+	border-left:1px;
+
+}
+#panel {
+	top : 360px;
+	width: 240px;
+	height: 360px;
+	float: right;
+	background-color:#ffffff;
+
+}
