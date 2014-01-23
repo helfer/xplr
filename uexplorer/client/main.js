@@ -1,5 +1,6 @@
 if (Meteor.isClient) {
   var marker, pano, map;
+  var state = 'GUESS';
 
   Meteor.subscribe('guesses');
   Meteor.subscribe('locations');
@@ -22,12 +23,7 @@ if (Meteor.isClient) {
   }
 
   Template.map.rendered = function (){
-       // var mapOptions = {
-         // center: new google.maps.LatLng(-34.397, 150.644),
-          //zoom: 8
-        //};
-        //var myDOMobj = document.getElementById("map-canvas");
-        //var map = new google.maps.Map(myDOMobj,mapOptions);
+
         map = L.mapbox.map('map', 'heshan0131.h074i536');
 
         //add marker  
@@ -43,12 +39,29 @@ if (Meteor.isClient) {
 
   Template.panel.events({
     'click #guess': function (){
+
+      switch(state){
+        case 'GUESS':
+          check_guess();
+          state = 'NEXT';
+        break;
+        case 'NEXT':
+          prompt_new_guess();
+          state = 'GUESS';
+        break;
+      }
+           
+    },
+
+  });
+
+  function check_guess(){
       var marker_loc = marker.getLatLng();      
       var pano_loc = pano.getPosition();
       var pano_latlng = L.latLng(pano_loc["d"], pano_loc["e"]);
       var distance = parseInt(marker_loc.distanceTo(pano_latlng));
       var msg;
-      
+
       if (distance > 4000) msg = "No comment...You are " + distance + " meters away!";
       else if (distance <= 4000 && distance > 2000) msg = "Oops...You are " + distance + " meters away!";
       else if (distance <= 1000 && distance > 1000) msg = "Not bad...You are just " + distance + " meters away!";
@@ -56,8 +69,8 @@ if (Meteor.isClient) {
 
       $("#message").text(msg);
       $("#message").css("display","block");
-      $("#guess").val("Next");
-      $("#guess").css("background-color","#3BB98C")
+      $("#guess").val("Next");      
+      $("#guess").css("background-color","#3BB98C");
       
       Guesses.insert({
         user:Meteor.userId(),
@@ -79,21 +92,36 @@ if (Meteor.isClient) {
       var polyline = L.polyline([marker_loc,pano_latlng], {color: 'red'}).addTo(map);
 
       // zoom the map to the polyline
-      map.fitBounds(polyline.getBounds());
+      map.fitBounds(polyline.getBounds());      
 
-      //this totally doesn't work unless we get all points, but who cares for now?
+  }
+
+  function prompt_new_guess(){
+
+      $(".leaflet-overlay-pane").empty();
+      $(".leaflet-marker-pane").empty();
+
+      marker = L.marker([42.381, -71.106], {
+                    icon: L.mapbox.marker.icon({
+                        'marker-color': '#e16c4e'
+                    }),
+                    draggable: true,
+                    title: "Drag me to guess"
+                }).addTo(map);
+
+      $("#guess").val("Guess!");      
+      $("#guess").css("background-color","#E16C4E");
+      $("#message").css("display","none");
+
+
       var pcount = Locations.find().count();
       var pick = Math.floor(Math.random()*pcount);
       var next_location = Locations.findOne({index:pick});
       console.log(next_location);
       if(next_location == "undefined")
         console.log("Houston, we have a problem");
-      pano.setPosition(new google.maps.LatLng(next_location['lat'],next_location['lng']));
-
-    
-    }
-
-  });
+      pano.setPosition(new google.maps.LatLng(next_location['lat'],next_location['lng'])); 
+  }
 
 }
 if (Meteor.isServer) {

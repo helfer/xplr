@@ -94,17 +94,23 @@ input:hover {
 	
 }
 
-#guess {
+.inc {
 	position:absolute;
 	top:252px;
 	margin-left: 30px;	
 	width:160px;
-	height:40px;
-	background-color: #E16C4E;
+	height:40px;	
 	color:#ffffff;
 	font-size: 14px;
 }
 
+#guess {
+	background-color: #E16C4E;
+}
+
+#next {
+	background-color: #3BB98C;
+}
 #guess:hover{
 	background-color: #D65238;
 }
