@@ -660,4 +660,3 @@ poi_id,address_id,poi_type,Point_of_interest_name,named_address
 696,13224,CPMPLX,Cadbury Commons,FALSE
 697,24781,CPMPLX,The Cambridge Homes,FALSE
 698,835,CPMPLX,Youville House,FALSE
-NULL,NULL,NULL,NULL,NULL
