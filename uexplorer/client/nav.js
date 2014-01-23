@@ -3,7 +3,7 @@ Template.header.events(
     {
         'click #signin': function(ev,template){
             console.log('signin');
-            $('#signin-modal').toggle('modal');
+            $('#signin-modal').modal('toggle');
         },
         'click #signup': function(ev,template){
             console.log('signup');

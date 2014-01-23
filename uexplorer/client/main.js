@@ -40,7 +40,8 @@ if (Meteor.isClient) {
   Template.panel.events({
     'click input.inc': function (){
       var location = marker.getLatLng();
-      alert(location);
+      console.log(location);
+      pano.setPosition(location);
     }
 
   });
