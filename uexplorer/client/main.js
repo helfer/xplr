@@ -51,14 +51,14 @@ if (Meteor.isClient) {
       
       if (distance > 4000) msg = "No comment...You are " + distance + " meters away!";
       else if (distance <= 4000 && distance > 2000) msg = "Oops...You are " + distance + " meters away!";
-      else if (distance <= 1000 && distance > 1000) msg = "Not bad...You are " + distance + " meters away!";
+      else if (distance <= 1000 && distance > 1000) msg = "Not bad...You are just " + distance + " meters away!";
       else if (distance < 1000) msg = "OMG...You are only " + distance + " meters away!";
 
       $("#message").text(msg);
       $("#message").css("display","block");
+      $("#guess").val("Next");
+      $("#guess").css("background-color","#3BB98C")
       
-      console.log(distance);
-
       Guesses.insert({
         user:Meteor.userId(),
         lat:marker_loc.lat,

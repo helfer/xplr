@@ -12,8 +12,8 @@ body { height: 100%;
 		padding: 0; 
 		background-color: #F4F6F6; 
 		font-family: TradeGothicLTPro-Light;
-		color:#808184;
-		font-size:12px;
+		color:#58595B;
+		font-size:13px;
 	}
 #container {
 	width:900px;
@@ -49,6 +49,13 @@ input:hover {
 	margin-top:28px;
 }
 
+#login-temp {
+	margin-top:46px;
+	margin-right:80px;
+	position:relative;
+	float:right;
+}
+
 .sig:hover{	
 	background-color:#E16C4E;
 	color:#ffffff;
@@ -78,11 +85,19 @@ input:hover {
 	background-color:#ffffff;
 }
 
-#guess {
-	
+#message {
+	height:100px;
+	margin-top:20px;
 	margin-left: 30px;
+	margin-right:30px;
+	font-size:14px;
+	
+}
 
-	margin-top:252px;
+#guess {
+	position:absolute;
+	top:252px;
+	margin-left: 30px;	
 	width:160px;
 	height:40px;
 	background-color: #E16C4E;
