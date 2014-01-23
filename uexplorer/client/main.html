@@ -1,12 +1,4 @@
 
-<template name="header">
-    <div id="header">
-        <img src="logo.svg" />
-        <input type="button" class="sig" id="signup" value="Sign up" />
-        <input type="button" class="sig" id="signin" value="Sign in" />
-    </div>
-</template>
-
 <template name="streetview">
     <div id="streetview" style="width: 100%; height: 320px;"></div>
 </template>
@@ -36,6 +28,7 @@
 
 <body>
     <div id="container">
+        {{> modals}}
         {{> header}}
         {{> streetview}}
         {{> map}}

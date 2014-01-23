@@ -1,0 +1,36 @@
+
+<template name="header">
+    <div id="header">
+        <img src="logo.svg" />
+        <input type="button" class="sig" id="signup" value="Sign up" />
+        <input type="button" class="sig" id="signin" value="Sign in" />
+    </div>
+</template>
+
+<template name="modals">
+    {{>signin-modal}}
+    {{>signup-modal}}
+</template>
+
+<template name="signin-modal">
+    <div id="signin-modal" class="modal hide fade" tabindex="-1"
+    role="dialog" aria-labelledby="windowTitleLabel" aria-hidden="true">
+        <div class="modal-header">
+            <a href="#" class="close" data-dismiss="modal">&times;</a>
+            <h3>Please enter a new title for this window.</h3>
+        </div>
+        <div class="modal-body">
+            <div class="divDialogElements">
+                <input class="xlarge" id="xlInput" name="xlInput" type="text" />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn" id="btn-cancel">Cancel</a>
+            <a href="#" class="btn btn-primary" id="btn-ok">OK</a>
+        </div>
+    </div>
+</template>
+
+<template name="signup-modal">
+
+</template>
