@@ -5,6 +5,22 @@ if (Meteor.isClient) {
   Meteor.subscribe('guesses');
   Meteor.subscribe('locations');
 
+  /* Deps.autorun(function () {
+    //draw them points :)
+    var gu = Guesses.find().fetch();
+        console.log('outorun'); 
+        _.each(gu,function(g){
+            console.log(g.real_lng,g.real_lat);
+            var boo = L.marker([g.real_lng, g.real_lat], {
+                        icon: L.mapbox.marker.icon({
+                            'marker-color': '#000000'
+                        }),
+                        draggable: false,
+                    }).addTo(map);
+            console.log(boo);
+        });
+  });*/
+
   Template.streetview.rendered = function (){
     if(!this._rendered) {
         this._rendered = true;
@@ -98,8 +114,9 @@ if (Meteor.isClient) {
 
   function prompt_new_guess(){
 
-      $(".leaflet-overlay-pane").empty();
+      //$(".leaflet-overlay-pane").empty();
       $(".leaflet-marker-pane").empty();
+      $("path.leaflet-clickable").remove();
 
       marker = L.marker([42.381, -71.106], {
                     icon: L.mapbox.marker.icon({
@@ -117,7 +134,6 @@ if (Meteor.isClient) {
       var pcount = Locations.find().count();
       var pick = Math.floor(Math.random()*pcount);
       var next_location = Locations.findOne({index:pick});
-      console.log(next_location);
       if(next_location == "undefined")
         console.log("Houston, we have a problem");
       pano.setPosition(new google.maps.LatLng(next_location['lat'],next_location['lng'])); 
