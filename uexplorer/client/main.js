@@ -146,8 +146,7 @@ if (Meteor.isClient) {
 
   function prompt_new_guess(){
 
-      $(".leaflet-overlay-pane").empty();
-      //$(".leaflet-marker-pane").empty();
+      $("path.leaflet-clickable").remove();
       $("img[src='icon_g.png']").remove();
       $("img[src='icon_b.png']").remove();    
       
