@@ -21,14 +21,10 @@ if (Meteor.isClient) {
     console.log('outorun'); 
     _.each(gu,function(g){
         console.log(g.real_lat,g.real_lng);
-        var color = g.score < 150 ? '#00FF00':'#FF0000';
+        var dotIcon = g.score < 150 ? circleIcon_g:circleIcon;
         var boo = L.marker([g.real_lat, g.real_lng], {
-                    icon: L.mapbox.marker.icon({
-                        'marker-color': color
-                    }),
-                    draggable: false,
+                    icon: dotIcon                  
                 }).addTo(map);
-        console.log(boo);
     });
   });
 
@@ -53,30 +49,37 @@ if (Meteor.isClient) {
         map = L.mapbox.map('map', 'heshan0131.h074i536');
         map_ready = true;
 
-          circleIcon = L.icon({
-            iconUrl: 'icon_circle.png',
-            iconRetinaUrl: 'icon_circle.png',
-            iconSize: [15, 15],
-            iconAnchor: [7, 7],
-            popupAnchor: [-3, -76],
+        circleIcon = L.icon({
+          iconUrl: 'icon_circle.png',
+          iconRetinaUrl: 'icon_circle.png',
+          iconSize: [15, 15],
+          iconAnchor: [7, 7],
+          popupAnchor: [-3, -76],
+        });
 
-          });
+        circleIcon_g = L.icon({
+          iconUrl: 'icon_circle_g.png',
+          iconRetinaUrl: 'icon_circle.png',
+          iconSize: [15, 15],
+          iconAnchor: [7, 7],
+          popupAnchor: [-3, -76],
+        });
 
-          Loc_Icon_b = L.icon({
-            iconUrl: 'icon_b.png',
-            iconRetinaUrl: 'icon_b.png',
-            iconSize: [26, 40],
-            iconAnchor: [13, 40],
-            popupAnchor: [-3, -76],
-          });
+        Loc_Icon_b = L.icon({
+          iconUrl: 'icon_b.png',
+          iconRetinaUrl: 'icon_b.png',
+          iconSize: [26, 40],
+          iconAnchor: [13, 40],
+          popupAnchor: [-3, -76],
+        });
 
-          Loc_Icon_g = L.icon({
-            iconUrl: 'icon_g.png',
-            iconRetinaUrl: 'icon_g.png',
-            iconSize: [26, 40],
-            iconAnchor: [13, 40],
-            popupAnchor: [-3, -76],
-          });
+        Loc_Icon_g = L.icon({
+          iconUrl: 'icon_g.png',
+          iconRetinaUrl: 'icon_g.png',
+          iconSize: [26, 40],
+          iconAnchor: [13, 40],
+          popupAnchor: [-3, -76],
+        });
 
 
         //add marker  
