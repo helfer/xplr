@@ -2,6 +2,7 @@ if (Meteor.isClient) {
   var marker, pano, map;
   var map_ready = false;
   var state = 'GUESS';
+  var last_guess;
 
 
 
@@ -123,6 +124,7 @@ if (Meteor.isClient) {
       var pano_loc = pano.getPosition();
       pano_latlng = L.latLng(pano_loc["d"], pano_loc["e"]);
       var distance = parseInt(marker_loc.distanceTo(pano_latlng));
+      last_guess = distance;
       var msg;
 
       if (distance > 4000) msg = "No comment...You are " + distance + " meters away!";
@@ -159,6 +161,13 @@ if (Meteor.isClient) {
   }
 
   function prompt_new_guess(){
+   
+      var pcount = Locations.find().count();
+      var pick = Math.floor(Math.random()*pcount);
+      var next_location = Locations.findOne({index:pick});
+      if(next_location == "undefined")
+        console.log("Houston, we have a problem");
+      pano.setPosition(new google.maps.LatLng(next_location['lat'],next_location['lng'])); 
 
       $("path.leaflet-clickable").remove();
       $("img[src='icon_g.png']").remove();
@@ -172,19 +181,12 @@ if (Meteor.isClient) {
                 }).addTo(map);
 
       //answer.setIcon(circleIcon);
-      var dot = L.marker(pano_latlng, {icon: circleIcon}).addTo(map);
+      var dotIcon = last_guess < 150 ? circleIcon_g:circleIcon;
+      var dot = L.marker(pano_latlng, {icon: dotIcon}).addTo(map);
 
       $("#guess").val("Guess!");      
       $("#guess").css("background-color","#E16C4E");
       $("#message").css("display","none");
-
-
-      var pcount = Locations.find().count();
-      var pick = Math.floor(Math.random()*pcount);
-      var next_location = Locations.findOne({index:pick});
-      if(next_location == "undefined")
-        console.log("Houston, we have a problem");
-      pano.setPosition(new google.maps.LatLng(next_location['lat'],next_location['lng'])); 
   }
 
 }
