@@ -18,6 +18,15 @@ if (Meteor.isClient) {
         console.log("map_ready",map_ready);
         return;
     }
+    if(!Meteor.user()){
+      console.log('logging out, eh?');
+
+      $("path.leaflet-clickable").remove();
+      $("img[src='icon_circle_g.png']").remove();
+      $("img[src='icon_circle.png']").remove();
+      $("img[src='icon_g.png']").remove(); 
+      //remove the guess locations
+    }
     console.log('outorun'); 
     _.each(gu,function(g){
         console.log(g.real_lat,g.real_lng);
