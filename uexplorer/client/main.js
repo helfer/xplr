@@ -1,12 +1,28 @@
+
+
 if (Meteor.isClient) {
-  var marker, pano, map;
+  
+  marker = null;
+  pano = null;
+  map = null;
   var map_ready = false;
   var state = 'GUESS';
   var last_guess;
 
-
-
-
+  steps = [
+    {"title":"Guess",
+      "description":"Find out where the pictures were taken.",
+      "image":"Guess.png",
+      "color":"#E16C4E"},
+    {"title":"Explore",
+      "description":"Discover places you didn’t know.",
+      "image":"Explore.png",
+      "color":"#28AFC3"},
+    {"title":"Share",
+      "description":"Tell your friends about your achievements.",
+      "image":"Share.png",
+      "color":"#E3E478"}
+  ];
 
 
   Meteor.subscribe('guesses');
@@ -38,6 +54,11 @@ if (Meteor.isClient) {
     });
   });
 
+  Template.steps.steps = function () {
+    return steps;
+  };
+
+
   Template.streetview.rendered = function (){
     if(!this._rendered) {
         this._rendered = true;
@@ -55,6 +76,21 @@ if (Meteor.isClient) {
     }
   }
 
+  Template.streetview.events({
+    'click #play': function (){
+      $(".row").animate({"left":"-900px"},1000);
+           
+    },
+  });
+
+  Template.header.events({
+    'click #logo': function (){
+      $(".row").animate({"left":"0px"},1000);
+           
+    },
+  });
+
+
   Template.map.rendered = function (){
         map = L.mapbox.map('map', 'heshan0131.h074i536');
         map_ready = true;
@@ -64,7 +100,8 @@ if (Meteor.isClient) {
           iconRetinaUrl: 'icon_circle.png',
           iconSize: [15, 15],
           iconAnchor: [7, 7],
-          popupAnchor: [-3, -76],
+          popupAnchor: [-3, -76]
+
         });
 
         circleIcon_g = L.icon({
@@ -72,23 +109,23 @@ if (Meteor.isClient) {
           iconRetinaUrl: 'icon_circle.png',
           iconSize: [15, 15],
           iconAnchor: [7, 7],
-          popupAnchor: [-3, -76],
+          popupAnchor: [-3, -76]
         });
 
         Loc_Icon_b = L.icon({
           iconUrl: 'icon_b.png',
           iconRetinaUrl: 'icon_b.png',
-          iconSize: [26, 40],
+          iconSize: [26, 52],
           iconAnchor: [13, 40],
-          popupAnchor: [-3, -76],
+          popupAnchor: [-3, -76]
         });
 
         Loc_Icon_g = L.icon({
           iconUrl: 'icon_g.png',
           iconRetinaUrl: 'icon_g.png',
-          iconSize: [26, 40],
+          iconSize: [26, 52],
           iconAnchor: [13, 40],
-          popupAnchor: [-3, -76],
+          popupAnchor: [-3, -76]          
         });
 
 
@@ -99,6 +136,12 @@ if (Meteor.isClient) {
                     title: "Drag me to guess"
                 }).addTo(map);
 
+        map.on('click', function(e){
+          var mouse_position = e.latlng;
+          marker.setLatLng(mouse_position);
+        });
+
+
   }
 
   Template.panel.events({
@@ -107,6 +150,7 @@ if (Meteor.isClient) {
       switch(state){
         case 'GUESS':
           check_guess();
+          
           state = 'NEXT';
         break;
         case 'NEXT':
@@ -120,6 +164,7 @@ if (Meteor.isClient) {
   });
 
   function check_guess(){
+      pano.disableDefaultUI = false; 
       var marker_loc = marker.getLatLng();      
       var pano_loc = pano.getPosition();
       pano_latlng = L.latLng(pano_loc["d"], pano_loc["e"]);
@@ -156,25 +201,29 @@ if (Meteor.isClient) {
       var polyline = L.polyline([marker_loc,pano_latlng], {color: 'red'}).addTo(map);
 
       // zoom the map to the polyline
-      map.fitBounds(polyline.getBounds());      
+      map.fitBounds(polyline.getBounds().pad(0.07)); 
+      get_places(pano_loc["d"], pano_loc["e"]);     
 
   }
 
   function prompt_new_guess(){
-   
+
+      var center = map.getCenter();
+
       var pcount = Locations.find().count();
       var pick = Math.floor(Math.random()*pcount);
       var next_location = Locations.findOne({index:pick});
       if(next_location == "undefined")
         console.log("Houston, we have a problem");
       pano.setPosition(new google.maps.LatLng(next_location['lat'],next_location['lng'])); 
+      pano.disableDefaultUI=true; 
 
       $("path.leaflet-clickable").remove();
       $("img[src='icon_g.png']").remove();
       $("img[src='icon_b.png']").remove();    
       
       // new marker
-      marker = L.marker([42.381, -71.106], {
+      marker = L.marker(center, {
                     icon: Loc_Icon_b,
                     draggable: true,
                     title: "Drag me to guess"
@@ -187,6 +236,16 @@ if (Meteor.isClient) {
       $("#guess").val("Guess!");      
       $("#guess").css("background-color","#E16C4E");
       $("#message").css("display","none");
+  }
+
+  function get_places(lat,lng){
+      var lat = lat.toString();
+      var lng = lng.toString();
+      
+      $.getJSON('https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='+ lat + ','+lng +'&radius=100&sensor=false&key=AIzaSyDg6ii7P9b5YtGJaC9ArE6lPU-RXLa-mrA', function(data) {
+        console.log(data);
+
+      });
   }
 
 }
