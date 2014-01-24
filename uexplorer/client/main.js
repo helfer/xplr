@@ -122,15 +122,17 @@ if (Meteor.isClient) {
       $("#message").css("display","block");
       $("#guess").val("Next");      
       $("#guess").css("background-color","#3BB98C");
-      
-      Guesses.insert({
-        user:Meteor.userId(),
-        lat:marker_loc.lat,
-        lng:marker_loc.lng,
-        real_lat:pano_loc["d"],
-        real_lng:pano_loc["e"],
-        score:distance
-      });
+     
+      if(Meteor.user()){ 
+          Guesses.insert({
+            user:Meteor.userId(),
+            lat:marker_loc.lat,
+            lng:marker_loc.lng,
+            real_lat:pano_loc["d"],
+            real_lng:pano_loc["e"],
+            score:distance
+          });
+      }
 
       var answer = L.marker(pano_latlng, {
             icon: Loc_Icon_g,
