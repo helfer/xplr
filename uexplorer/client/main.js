@@ -1,25 +1,31 @@
 if (Meteor.isClient) {
   var marker, pano, map;
+  var map_ready = false;
   var state = 'GUESS';
 
   Meteor.subscribe('guesses');
   Meteor.subscribe('locations');
 
-  /* Deps.autorun(function () {
+  Deps.autorun(function () {
     //draw them points :)
     var gu = Guesses.find().fetch();
-        console.log('outorun'); 
-        _.each(gu,function(g){
-            console.log(g.real_lng,g.real_lat);
-            var boo = L.marker([g.real_lng, g.real_lat], {
-                        icon: L.mapbox.marker.icon({
-                            'marker-color': '#000000'
-                        }),
-                        draggable: false,
-                    }).addTo(map);
-            console.log(boo);
-        });
-  });*/
+    if(!map_ready){
+        console.log("map_ready",map_ready);
+        return;
+    }
+    console.log('outorun'); 
+    _.each(gu,function(g){
+        console.log(g.real_lat,g.real_lng);
+        var color = g.score < 150 ? '#00FF00':'#FF0000';
+        var boo = L.marker([g.real_lat, g.real_lng], {
+                    icon: L.mapbox.marker.icon({
+                        'marker-color': color
+                    }),
+                    draggable: false,
+                }).addTo(map);
+        console.log(boo);
+    });
+  });
 
   Template.streetview.rendered = function (){
     if(!this._rendered) {
@@ -39,8 +45,8 @@ if (Meteor.isClient) {
   }
 
   Template.map.rendered = function (){
-
         map = L.mapbox.map('map', 'heshan0131.h074i536');
+        map_ready = true;
 
         //add marker  
         marker = L.marker([42.381, -71.106], {
@@ -94,7 +100,7 @@ if (Meteor.isClient) {
         lng:marker_loc.lng,
         real_lat:pano_loc["d"],
         real_lng:pano_loc["e"],
-        score:0
+        score:distance
       });
 
       var answer = L.marker(pano_latlng, {
@@ -103,7 +109,6 @@ if (Meteor.isClient) {
             }),
             draggable: false
         }).addTo(map);
-
       // create a red polyline from an arrays of LatLng points
       var polyline = L.polyline([marker_loc,pano_latlng], {color: 'red'}).addTo(map);
 
