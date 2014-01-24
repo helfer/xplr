@@ -2,6 +2,11 @@ if (Meteor.isClient) {
   var marker, pano, map;
   var state = 'GUESS';
 
+
+
+
+
+
   Meteor.subscribe('guesses');
   Meteor.subscribe('locations');
 
@@ -26,11 +31,35 @@ if (Meteor.isClient) {
 
         map = L.mapbox.map('map', 'heshan0131.h074i536');
 
+          circleIcon = L.icon({
+            iconUrl: 'icon_circle.png',
+            iconRetinaUrl: 'icon_circle.png',
+            iconSize: [15, 15],
+            iconAnchor: [7, 7],
+            popupAnchor: [-3, -76],
+
+          });
+
+          Loc_Icon_b = L.icon({
+            iconUrl: 'icon_b.png',
+            iconRetinaUrl: 'icon_b.png',
+            iconSize: [26, 40],
+            iconAnchor: [13, 40],
+            popupAnchor: [-3, -76],
+          });
+
+          Loc_Icon_g = L.icon({
+            iconUrl: 'icon_g.png',
+            iconRetinaUrl: 'icon_g.png',
+            iconSize: [26, 40],
+            iconAnchor: [13, 40],
+            popupAnchor: [-3, -76],
+          });
+
+
         //add marker  
         marker = L.marker([42.381, -71.106], {
-                    icon: L.mapbox.marker.icon({
-                        'marker-color': '#e16c4e'
-                    }),
+                    icon: Loc_Icon_b,
                     draggable: true,
                     title: "Drag me to guess"
                 }).addTo(map);
@@ -58,7 +87,7 @@ if (Meteor.isClient) {
   function check_guess(){
       var marker_loc = marker.getLatLng();      
       var pano_loc = pano.getPosition();
-      var pano_latlng = L.latLng(pano_loc["d"], pano_loc["e"]);
+      pano_latlng = L.latLng(pano_loc["d"], pano_loc["e"]);
       var distance = parseInt(marker_loc.distanceTo(pano_latlng));
       var msg;
 
@@ -82,9 +111,7 @@ if (Meteor.isClient) {
       });
 
       var answer = L.marker(pano_latlng, {
-            icon: L.mapbox.marker.icon({
-                'marker-color': '#3BB98C'
-            }),
+            icon: Loc_Icon_g,
             draggable: false
         }).addTo(map);
 
@@ -99,15 +126,19 @@ if (Meteor.isClient) {
   function prompt_new_guess(){
 
       $(".leaflet-overlay-pane").empty();
-      $(".leaflet-marker-pane").empty();
-
+      //$(".leaflet-marker-pane").empty();
+      $("img[src='icon_g.png']").remove();
+      $("img[src='icon_b.png']").remove();    
+      
+      // new marker
       marker = L.marker([42.381, -71.106], {
-                    icon: L.mapbox.marker.icon({
-                        'marker-color': '#e16c4e'
-                    }),
+                    icon: Loc_Icon_b,
                     draggable: true,
                     title: "Drag me to guess"
                 }).addTo(map);
+
+      //answer.setIcon(circleIcon);
+      var dot = L.marker(pano_latlng, {icon: circleIcon}).addTo(map);
 
       $("#guess").val("Guess!");      
       $("#guess").css("background-color","#E16C4E");
