@@ -5,6 +5,7 @@ if (Meteor.isClient) {
   marker = null;
   pano = null;
   map = null;
+  pano_start_loc = null;
   var map_ready = false;
   var state = 'GUESS';
   var last_guess;
@@ -66,9 +67,15 @@ if (Meteor.isClient) {
         var lng = -71.09245089365557;
         var lat = 42.36345602184655;
         var point = new google.maps.LatLng(lat,lng);
+        pano_start_loc = point;
+
         var panoramaOptions = {
             position:point,
-            disableDefaultUI:true 
+            addressControl: false,
+            linksControl: true,
+            panControl: true,
+            zoomControl:true,
+            enableCloseButton: false
         };
         var myDOMobj = document.getElementById("streetview");
         pano = new google.maps.StreetViewPanorama(myDOMobj, panoramaOptions);
@@ -92,8 +99,15 @@ if (Meteor.isClient) {
 
 
   Template.map.rendered = function (){
-        map = L.mapbox.map('map', 'heshan0131.h074i536');
+        map = L.mapbox.map('map', 'heshan0131.h074i536', {
+            doubleClickZoom: false
+        });
+        
         map_ready = true;
+
+        map.on('dblclick', function(e) {
+            map.setView(e.latlng, map.getZoom() + 1);
+        });
 
         circleIcon = L.icon({
           iconUrl: 'icon_circle.png',
@@ -117,7 +131,7 @@ if (Meteor.isClient) {
           iconUrl: 'icon_p_b.png',
           iconRetinaUrl: 'icon_p_b.png',
           iconSize: [24, 42],
-          iconAnchor: [24, 40],
+          iconAnchor: [12, 42],
           popupAnchor: [-3, -76]
         });
 
@@ -149,8 +163,6 @@ if (Meteor.isClient) {
           var mouse_position = e.latlng;
           marker.setLatLng(mouse_position);
         });
-
-
   }
 
   Template.panel.events({
@@ -167,13 +179,16 @@ if (Meteor.isClient) {
           state = 'GUESS';
         break;
       }
+  },   
+   
+   'click #return':function(){
+      pano.setPosition(pano_start_loc);
+   }   
            
-    },
-
   });
 
   function check_guess(){
-      pano.disableDefaultUI = false; 
+      
       var marker_loc = marker.getLatLng();      
       var pano_loc = pano.getPosition();
       pano_latlng = L.latLng(pano_loc["d"], pano_loc["e"]);
@@ -187,9 +202,10 @@ if (Meteor.isClient) {
       else if (distance < 1000) msg = "OMG...You are only " + distance + " meters away!";
 
       $("#message").text(msg);
-      $("#message").css("display","block");
+      $("#message").css("visibility","visible");
       $("#guess").val("Next");      
       $("#guess").css("background-color","#3BB98C");
+      $(".gmnoprint svg text").css("display","block");
      
       if(Meteor.user()){ 
           Guesses.insert({
@@ -224,7 +240,9 @@ if (Meteor.isClient) {
       var next_location = Locations.findOne({index:pick});
       if(next_location == "undefined")
         console.log("Houston, we have a problem");
-      pano.setPosition(new google.maps.LatLng(next_location['lat'],next_location['lng'])); 
+
+      pano.setPosition(new google.maps.LatLng(next_location['lat'],next_location['lng']));
+      pano_start_loc =  pano.getPosition();
       pano.disableDefaultUI=true; 
 
       $("path.leaflet-clickable").remove();
@@ -244,7 +262,7 @@ if (Meteor.isClient) {
 
       $("#guess").val("Guess!");      
       $("#guess").css("background-color","#E16C4E");
-      $("#message").css("display","none");
+      $("#message").css("visibility","hidden");
   }
 
   function get_places(lat,lng){
