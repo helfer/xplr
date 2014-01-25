@@ -112,18 +112,27 @@ if (Meteor.isClient) {
           popupAnchor: [-3, -76]
         });
 
+
+        mark_Icon_b = L.icon({
+          iconUrl: 'icon_p_b.png',
+          iconRetinaUrl: 'icon_p_b.png',
+          iconSize: [24, 42],
+          iconAnchor: [24, 40],
+          popupAnchor: [-3, -76]
+        });
+
         Loc_Icon_b = L.icon({
-          iconUrl: 'icon_b.png',
-          iconRetinaUrl: 'icon_b.png',
-          iconSize: [26, 52],
+          iconUrl: 'marker_b.png',
+          iconRetinaUrl: 'marker_b.png',
+          iconSize: [26, 43],
           iconAnchor: [13, 40],
           popupAnchor: [-3, -76]
         });
 
         Loc_Icon_g = L.icon({
-          iconUrl: 'icon_g.png',
-          iconRetinaUrl: 'icon_g.png',
-          iconSize: [26, 52],
+          iconUrl: 'marker_g.png',
+          iconRetinaUrl: 'marker_g.png',
+          iconSize: [26, 43],
           iconAnchor: [13, 40],
           popupAnchor: [-3, -76]          
         });
@@ -131,7 +140,7 @@ if (Meteor.isClient) {
 
         //add marker  
         marker = L.marker([42.381, -71.106], {
-                    icon: Loc_Icon_b,
+                    icon: mark_Icon_b,
                     draggable: true,
                     title: "Drag me to guess"
                 }).addTo(map);
@@ -219,12 +228,12 @@ if (Meteor.isClient) {
       pano.disableDefaultUI=true; 
 
       $("path.leaflet-clickable").remove();
-      $("img[src='icon_g.png']").remove();
-      $("img[src='icon_b.png']").remove();    
+      $("img[src='marker_g.png']").remove();
+      $("img[src='icon_p_b.png']").remove();    
       
       // new marker
       marker = L.marker(center, {
-                    icon: Loc_Icon_b,
+                    icon: mark_Icon_b,
                     draggable: true,
                     title: "Drag me to guess"
                 }).addTo(map);

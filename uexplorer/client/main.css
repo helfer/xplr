@@ -108,7 +108,7 @@ input {
 	-webkit-appearance: none;
 	display: inline-block;
 	text-align: center;
-	border-radius: 3px
+	border-radius: 3px;
 	font-weight:300;
 }
 input:hover {
@@ -234,7 +234,6 @@ input:hover {
 #login-sign-in-link:hover{
 	background-color:#E16C4E;
 	color:#ffffff;
-
 }
 
 
@@ -275,6 +274,15 @@ input:hover {
 	border: 0px solid #1b1e2d;
 	box-shadow: none;
 }
+
+#login-buttons .login-button, .accounts-dialog .login-button :hover{
+	background-color: #D65238;
+}
+
+#login-buttons .login-button, .accounts-dialog .login-button :active{
+	background-color: #D65238;
+}
+
 
 .accounts-dialog .additional-link {
 	margin-top:6px;
