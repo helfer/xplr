@@ -109,6 +109,10 @@ if (Meteor.isClient) {
   Template.streetview.events({
     'click #play': function (){
       var place = autocomplete.getPlace();
+      if(place == undefined){
+        alert("Please enter a city! Shan, please make this prettier :)");
+        return;
+      }
       Session.set("current_place",place);
       var vp = place.geometry.viewport;
       console.log(place);
