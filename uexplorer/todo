@@ -1,0 +1,11 @@
+
+* subscribe to location id, (add some location data)
+    * in publish, server checks if location already in cache
+        * if yes, server does nothing (or refreshes cache)
+        * if no, server lets client subscribe, but fetches data from API.
+* as subscription results pour in, start populating places.
+
+
+new collections:
+> places
+> found_places

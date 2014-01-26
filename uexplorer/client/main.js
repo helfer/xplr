@@ -1,9 +1,48 @@
 
 
 if (Meteor.isClient) {
+
+  load_map = function(){
+
+    var lng = -71.09245089365557;
+    var lat = 42.36345602184655;
+    var point = new google.maps.LatLng(lat,lng);
+    pano_start_loc = point;
+
+    var panoramaOptions = {
+        position:point,
+        addressControl: false,
+        linksControl: true,
+        panControl: true,
+        zoomControl:true,
+        enableCloseButton: false
+    };
+    var myDOMobj = document.getElementById("streetview");
+    pano = new google.maps.StreetViewPanorama(myDOMobj, panoramaOptions);
+    panosvc = new google.maps.StreetViewService();
+
+    var placesearch = document.getElementById("placesearch");
+    /*var opts = {
+        types: ['(cities)'],
+        componentRestrictions: {country: 'us'}
+    }*/ 
+    autocomplete = new google.maps.places.Autocomplete(
+    /** @type {HTMLInputElement} */(document.getElementById('autocomplete')),
+    {
+      types: ['(cities)'],
+      componentRestrictions: {country: 'us'}
+    });
+
+    console.log('auto start');
+  }
+
+  map_rendered = false;
+
   
   marker = null;
   pano = null;
+  panosvc = null;
+  autocomplete = null;
   map = null;
   pano_start_loc = null;
   var map_ready = false;
@@ -63,28 +102,22 @@ if (Meteor.isClient) {
   Template.streetview.rendered = function (){
     if(!this._rendered) {
         this._rendered = true;
-
-        var lng = -71.09245089365557;
-        var lat = 42.36345602184655;
-        var point = new google.maps.LatLng(lat,lng);
-        pano_start_loc = point;
-
-        var panoramaOptions = {
-            position:point,
-            addressControl: false,
-            linksControl: true,
-            panControl: true,
-            zoomControl:true,
-            enableCloseButton: false
-        };
-        var myDOMobj = document.getElementById("streetview");
-        pano = new google.maps.StreetViewPanorama(myDOMobj, panoramaOptions);
-
+          $.getScript("https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyD0jX52108t9mXy9L9_FysYCF6KN1_triE&sensor=false&callback=load_map");
     }
   }
 
   Template.streetview.events({
     'click #play': function (){
+      var place = autocomplete.getPlace();
+      if(place == undefined){
+        alert("Please enter a city! Shan, please make this prettier :)");
+        return;
+      }
+      Session.set("current_place",place);
+      var vp = place.geometry.viewport;
+      console.log(place);
+      console.log(vp.ta.d,vp.ia.d);
+      map.fitBounds([[vp.ta.d,vp.ia.d],[vp.ta.b,vp.ia.b]]);
       $(".row").animate({"left":"-900px"},1000);
            
     },
@@ -231,17 +264,23 @@ if (Meteor.isClient) {
 
   }
 
+
+  function get_random_location(){
+    var pcount = Locations.find().count();
+    var pick = Math.floor(Math.random()*pcount);
+    var next_location = Locations.findOne({index:pick});
+    if(next_location == "undefined")
+        console.log("Houston, we have a problem");
+    //var pr = panosvc.getPanoramaByLocation(loc);
+    return next_location
+   
+  }
+
   function prompt_new_guess(){
 
       var center = map.getCenter();
 
-      var pcount = Locations.find().count();
-      var pick = Math.floor(Math.random()*pcount);
-      var next_location = Locations.findOne({index:pick});
-      if(next_location == "undefined")
-        console.log("Houston, we have a problem");
-
-   
+      var next_location = get_random_location();
       pano.setPosition(new google.maps.LatLng(next_location['lat'],next_location['lng']));
       pano_start_loc =  pano.getPosition();
       pano.disableDefaultUI=true; 
