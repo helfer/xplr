@@ -1,31 +1,31 @@
 
 <template name="streetview">
     <div id="row1" class="row" >
-        <div id="intro" style="width: 900px; height: 320px;">
+        <div id="intro" style="width: 900px; height: 380px;">
             <img src="intro.png" />
-            <div id="intro-overlay" style="width: 220px; height: 320px;">
+            <div id="intro-overlay" style="width: 220px; height: 400px;">
                 <p><img src="logo_s.png"/>  UrbanExplorer helps you get familiar with the city you live in through a fun and challenging game.</p>
                 <img id="icon_pl" src="icon_pl.png" />
                 <input type="button" class="inc" id="play" value="I want to play!" />
             </div>
             <p id="circle-text">Look at the street view<br><br>Make a guess on the map</p>    
         </div>
-        <div id="streetview" style="width: 900px; height: 320px;"></div>
+        <div id="streetview" style="width: 900px; height: 380px;"></div>
     </div>
 </template>
 
 <template name="map">
     <div id="row2" class="row" >
-        <div id="steps" style="width: 900px; height: 320px;">
+        <div id="steps" style="width: 900px; height: 280px;">
             {{>steps}}
         </div>
-        <div id="map" style="width: 680px; height: 320px;"></div>
+        <div id="map" style="width: 680px; height: 280px;"></div>
         {{> panel}}
     </div>    
 </template>
 
 <template name="panel">
-    <div id="panel" style="width: 220px; height: 320px;">
+    <div id="panel" style="width: 220px; height: 280px;">
         <div id="message" style="visibility:hidden">blah blah</div>
         <input type="button" class="inc" id="return" value="Back to start view" />
         <input type="button" class="inc" id="guess" value="Guess!" />

@@ -241,13 +241,17 @@ if (Meteor.isClient) {
       if(next_location == "undefined")
         console.log("Houston, we have a problem");
 
+   
       pano.setPosition(new google.maps.LatLng(next_location['lat'],next_location['lng']));
       pano_start_loc =  pano.getPosition();
       pano.disableDefaultUI=true; 
 
       $("path.leaflet-clickable").remove();
       $("img[src='marker_g.png']").remove();
-      $("img[src='icon_p_b.png']").remove();    
+      $("img[src='icon_p_b.png']").remove();
+      $(".gmnoprint svg text").css("display","none");
+
+         
       
       // new marker
       marker = L.marker(center, {

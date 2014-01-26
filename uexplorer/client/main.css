@@ -31,14 +31,16 @@ body { height: 100%;
 .row {
 	position:absolute;
 	width:1800px;
-	height:320px;
 	left:0px;
 }
 
+#row1 {
+	height:380px;
+}
 
 #row2 {
-
-	top:406px;
+	height:280px;
+	top:456px;
 }
 #intro,#steps {
 	position:relative;
@@ -51,7 +53,6 @@ body { height: 100%;
 }
 
 #steps ul li{
-	margin-top: 30px;
 	position: relative;
 	float: left;
 	width:168px;
@@ -64,8 +65,12 @@ body { height: 100%;
 	line-height: 44px;
 	font-size: 24px;
 	font-weight: 200;
-
 }	
+
+#steps ul li p{
+	margin-top: 4px;
+
+}
 
 #intro-overlay{
 	position:absolute;
@@ -119,7 +124,7 @@ input:hover {
 
 #header {
 	height:58px;
-	padding:12px 0 16px 0;
+	padding:8px 0 12px 0;
 }
 
 #header #logo:hover{
@@ -169,7 +174,7 @@ input:hover {
 }
 
 #message {
-	height:160px;
+	height:132px;
 	margin-top:20px;
 	margin-left: 30px;
 	margin-right:30px;
@@ -178,7 +183,7 @@ input:hover {
 
 .inc {
 	position:relative;
-	margin-top:20px;
+	margin-top:14px;
 	margin-left: 30px;	
 	width:160px;
 	height:40px;	
@@ -313,6 +318,7 @@ input:hover {
 *
 ********************************/
 
-.gmnoprint svg text{
+.gmnoprint svg text {
 	display:none;
 }
+
