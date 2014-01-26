@@ -2,6 +2,22 @@
 <template name="header">
     <div id="header">
         <img id="logo" src="logo.png"/>
+        <div id="menu">
+            <ul>
+                <a><li class="menu" id="menu-guess">
+                    <img src="nav_g.png"/>
+                    <label>Guess</label>
+                </li></a>
+                <a><li class="menu" id="menu-collect">
+                    <img src="nav_f.png"/>
+                    <label>Collect</label>
+                </li></a>
+                <a><li class="menu" id="menu-profile">
+                    <img src="nav_p.png"/>
+                    <label>Profile</label>
+                </li></a>                        
+            </ul> 
+        </div>           
         <div id="login-temp">
             {{loginButtons}}   
             <!--<a class="login-link-text" id="login-sign-in-link">Sign in ▾</a>

@@ -7,7 +7,13 @@ Template.header.events(
         },
         'click #signup': function(ev,template){
             console.log('signup');
+        },
+    
+        'mouseenter .menu': function(ev, template){
+            var source = $(this).find('img').attr('src');
+            console.log(source);
         }
+
     });
 
 /*

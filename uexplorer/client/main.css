@@ -124,11 +124,40 @@ input:hover {
 
 #header {
 	height:58px;
-	padding:8px 0 12px 0;
+	padding:6px 0 14px 0;
 }
 
+#header #logo{
+	position:relative;
+	float:left;
+}
 #header #logo:hover{
 	cursor:pointer;
+}
+
+#menu{
+	margin-top: 10px;
+	margin-left: 140px;
+	position:relative;
+	float:left;
+	
+}	
+
+#menu ul{
+	padding-left: 0px;
+	list-style: none;
+}
+
+#menu ul li{
+	position: relative;
+	float:left;
+	width:140px;
+}
+
+#menu ul li label{
+	font-size: 14px;
+	margin-left: 8px;
+	vertical-align: 50%;
 }
 .sig {
 	width:56px;
@@ -238,6 +267,10 @@ input:hover {
 
 .accounts-dialog input[type] {
 	height: 32px;
+}
+
+.accounts-dialog input[type]:hover{
+	cursor:text;
 }
 
 #login-sign-in-link {
