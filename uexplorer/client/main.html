@@ -6,7 +6,12 @@
             <div id="intro-overlay" style="width: 220px; height: 400px;">
                 <p><img src="logo_s.png"/>  UrbanExplorer helps you get familiar with the city you live in through a fun and challenging game.</p>
                 <img id="icon_pl" src="icon_pl.png" />
-                <input type="button" class="inc" id="play" value="I want to play!" />
+                <form>
+                    <div id="locationField">
+                      <input id="autocomplete" placeholder="Enter a city" type="text" />
+                    </div>
+                    <input type="button" class="inc" id="play" value="I want to play!" />
+                </form>
             </div>
             <p id="circle-text">Look at the street view<br><br>Make a guess on the map</p>    
         </div>
@@ -46,9 +51,9 @@
 
 <head>
   <title>uexplorer</title>
-    <script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD0jX52108t9mXy9L9_FysYCF6KN1_triE&sensor=false">
-    </script>
+    <!--<script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyD0jX52108t9mXy9L9_FysYCF6KN1_triE&sensor=false">
+    </script>-->
     <link href='//api.tiles.mapbox.com/mapbox.js/v1.6.0/mapbox.css' rel='stylesheet' />
     <script src='//api.tiles.mapbox.com/mapbox.js/v1.6.0/mapbox.js'></script>
 
