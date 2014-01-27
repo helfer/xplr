@@ -102,9 +102,9 @@ if (Meteor.isClient) {
       $("img[src='icon_g.png']").remove(); 
       //remove the guess locations
     }
-    console.log('outorun'); 
+    //console.log('outorun'); 
     _.each(gu,function(g){
-        console.log(g.real_lat,g.real_lng);
+        //console.log(g.real_lat,g.real_lng);
         var dotIcon = g.score < 150 ? circleIcon_g:circleIcon;
         var boo = L.marker([g.real_lat, g.real_lng], {
                     icon: dotIcon                  
@@ -124,7 +124,7 @@ if (Meteor.isClient) {
     }
   }
 
-  Template.streetview.events({
+  Template.map.events({
     'click #play': function (){
       var place = autocomplete.getPlace();
       if(place == undefined){
@@ -136,8 +136,23 @@ if (Meteor.isClient) {
       map.fitBounds([[vp.ta.d,vp.ia.d],[vp.ta.b,vp.ia.b]]);
       marker.setLatLng([place.geometry.location.d,place.geometry.location.e]);
       pano.setPosition(place.geometry.location);
-      $(".row").animate({"left":"-900px"},1000);
-           
+      
+      $("#intro-overlay").css("display","none");
+      $("#circle").animate({"top":"315px"},1000); 
+      $("#intro").animate({"height":"380px"},1000);
+      $("#top").animate({"height":"660px"},1000);
+
+      $("#intro2").animate({"top":"380px","height":"280px"},1000);         
+     
+      $("#intro-img").animate({"opacity":"0"},1000);
+      $("#steps").animate({"opacity":"0"},1000);
+
+
+      $("#intro2").animate({"left":"0px","width":"900px"},1000).delay(1000);  
+      $("#intro").animate({"width":"900px"},1000).delay(1000);
+      $("#intro-img-2").animate({"opacity":"0"},1000).delay(1000);
+      $("#circle").animate({"left":"725px"},1000).delay(1000);
+      $("#panel").animate({"left":"680px"},1000).delay(3000);
     },
   });
 
