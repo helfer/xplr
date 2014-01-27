@@ -15,7 +15,7 @@ if (Meteor.isClient) {
       if(place){
           console.log("place");
           console.log(place.formatted_address);
-          Meteor.subscribe("places",place.formatted_address,update_places());
+          Meteor.subscribe("places",place,update_places());
       }
   });
 
