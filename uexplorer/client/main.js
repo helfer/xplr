@@ -63,9 +63,10 @@ if (Meteor.isClient) {
   autocomplete = null;
   map = null;
   pano_start_loc = null;
+  map_start_bound = null;
   var map_ready = false;
   var state = 'GUESS';
-  var last_guess;
+  var last_guess = null;
 
   steps = [
     {"title":"Guess",
@@ -105,10 +106,12 @@ if (Meteor.isClient) {
     //console.log('outorun'); 
     _.each(gu,function(g){
         //console.log(g.real_lat,g.real_lng);
-        var dotIcon = g.score < 150 ? circleIcon_g:circleIcon;
-        var boo = L.marker([g.real_lat, g.real_lng], {
-                    icon: dotIcon                  
-                }).addTo(map);
+        //var dotIcon = g.score < 150 ? circleIcon_g:circleIcon;
+        if (g.score > 0 && g.score <= 150) {
+          var boo = L.marker([g.real_lat, g.real_lng], {
+                      icon: circleIcon_g                  
+                  }).addTo(map);
+        }
     });
   });
 
@@ -134,6 +137,8 @@ if (Meteor.isClient) {
       Session.set("current_place",place);
       var vp = place.geometry.viewport;
       map.fitBounds([[vp.ta.d,vp.ia.d],[vp.ta.b,vp.ia.b]]);
+      map.zoomIn();
+      map_start_bound = map.getBounds();
       marker.setLatLng([place.geometry.location.d,place.geometry.location.e]);
       pano.setPosition(place.geometry.location);
       pano_start_loc = pano.getPosition();
@@ -165,9 +170,26 @@ if (Meteor.isClient) {
 
   Template.header.events({
     'click #logo': function (){
-      $(".row").animate({"left":"0px"},1000);
+
+      $("#intro-img").css("display","block");
+      $("#intro-img-2").css("display","block");
+      $("#panel").animate({"left":"900px"},1000);
+      $("#circle").animate({"left":"385px"},1000);
+      $("#map").animate({"opacity":"0"},1000);
+      $("#intro").animate({"width":"450px"},1000);
+      $("#intro2").animate({"left":"450px","width":"450px"},1000);
+      $("#steps").animate({"opacity":"1"},1000);            
+
+      setTimeout(function(){$("#top").animate({"height":"320px"},1000);},1000); 
+      setTimeout(function(){$("#intro-overlay").css("display","block");},2000); 
+      $("#streetview").animate({"opacity":"0"},1000).delay(1000);         
+      $("#intro2").animate({"top":"0px","height":"320px"},1000).delay(2000);            
            
-    },
+
+      
+      $("#circle").animate({"top":"95px"},1000).delay(1000);  
+      $("#intro").animate({"height":"320px"},1000).delay(1000);             
+    }
   });
 
 
@@ -208,14 +230,15 @@ if (Meteor.isClient) {
           popupAnchor: [-3, -76]
         });
 
-        Loc_Icon_b = L.icon({
-          iconUrl: 'marker_b.png',
-          iconRetinaUrl: 'marker_b.png',
-          iconSize: [26, 43],
-          iconAnchor: [13, 40],
+        mark_Icon_guess = L.icon({
+          iconUrl: 'marker_r_guess.png',
+          iconRetinaUrl: 'marker_r_guess.png',
+          iconSize: [24, 40],
+          iconAnchor: [12, 37],
           popupAnchor: [-3, -76]
         });
 
+        /*
         Loc_Icon_g = L.icon({
           iconUrl: 'marker_g.png',
           iconRetinaUrl: 'marker_g.png',
@@ -223,15 +246,16 @@ if (Meteor.isClient) {
           iconAnchor: [13, 40],
           popupAnchor: [-3, -76]          
         });
+*/
 
-
-        //add marker  
+        //add marker 
+        
         marker = L.marker([42.381, -71.106], {
-                    icon: mark_Icon_b,
+                    icon: mark_Icon_guess,
                     draggable: true,
                     title: "Drag me to guess"
                 }).addTo(map);
-
+        
         map.on('click', function(e){
           var mouse_position = e.latlng;
           marker.setLatLng(mouse_position);
@@ -241,18 +265,14 @@ if (Meteor.isClient) {
   Template.panel.events({
     'click #guess': function (){
 
-      switch(state){
-        case 'GUESS':
-          check_guess();
-          
+          check_guess();        
           state = 'NEXT';
-        break;
-        case 'NEXT':
+    },
+
+    'click #next': function (){
           prompt_new_guess();
           state = 'GUESS';
-        break;
-      }
-  },   
+    },
    
    'click #return':function(){
       pano.setPosition(pano_start_loc);
@@ -283,8 +303,8 @@ if (Meteor.isClient) {
 
       $("#message").text(msg);
       $("#message").css("visibility","visible");
-      $("#guess").val("Next");      
-      $("#guess").css("background-color","#3BB98C");
+      $("#guess").css("display","none");
+      $("#next").css("display","block");
       $(".gmnoprint svg text").css("display","block");
      
       if(Meteor.user()){ 
@@ -299,7 +319,7 @@ if (Meteor.isClient) {
       }
 
       var answer = L.marker(pano_latlng, {
-            icon: Loc_Icon_g,
+            icon: mark_Icon_b,
             draggable: false
         }).addTo(map);
       // create a red polyline from an arrays of LatLng points
@@ -307,7 +327,7 @@ if (Meteor.isClient) {
 
       // zoom the map to the polyline
       map.fitBounds(polyline.getBounds().pad(0.07)); 
-      get_places(pano_loc["d"], pano_loc["e"]);     
+ 
 
   }
 
@@ -332,7 +352,7 @@ if (Meteor.isClient) {
 
       addr_container.css("display","none");
 
-
+      map.fitBounds(map_start_bound);
       var center = map.getCenter();
 
       var next_location = get_random_location();
@@ -343,35 +363,27 @@ if (Meteor.isClient) {
       $("path.leaflet-clickable").remove();
       $("img[src='marker_g.png']").remove();
       $("img[src='icon_p_b.png']").remove();
+      $("img[src='marker_r_guess.png']").remove();
       $(".gmnoprint svg text").css("display","none");
 
          
       
       // new marker
       marker = L.marker(center, {
-                    icon: mark_Icon_b,
+                    icon: mark_Icon_guess,
                     draggable: true,
                     title: "Drag me to guess"
                 }).addTo(map);
 
       //answer.setIcon(circleIcon);
-      var dotIcon = last_guess < 150 ? circleIcon_g:circleIcon;
-      var dot = L.marker(pano_latlng, {icon: dotIcon}).addTo(map);
-
-      $("#guess").val("Guess!");      
-      $("#guess").css("background-color","#E16C4E");
+      if (last_guess <= 150)
+      var dot = L.marker(pano_latlng, {icon: circleIcon_g}).addTo(map);
+    
+      $("#guess").css("display","block");
+      $("#next").css("display","none");
       $("#message").css("visibility","hidden");
   }
 
-  function get_places(lat,lng){
-      var lat = lat.toString();
-      var lng = lng.toString();
-      
-      $.getJSON('https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='+ lat + ','+lng +'&radius=100&sensor=false&key=AIzaSyDg6ii7P9b5YtGJaC9ArE6lPU-RXLa-mrA', function(data) {
-        console.log(data);
-
-      });
-  }
 
 }
 if (Meteor.isServer) {

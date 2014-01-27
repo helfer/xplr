@@ -1,17 +1,17 @@
 /* CSS declarations go here */
+@import url("//hello.myfonts.net/count/27f1bb");
 
-.TradeGothicLTPro-Light { 
-	font-family: TradeGothicLTPro-Light;
-	font-weight: normal;
-	font-style: normal;
-}
+  
+@font-face {font-family: 'TradeGothicLTPro-Light';
+src: url('/27F1BB_0_0.eot');src: url('/27F1BB_0_0.eot?#iefix') format('embedded-opentype'),url('/27F1BB_0_0.woff') format('woff'),url('/27F1BB_0_0.ttf') format('truetype');}
+
 
 html { height: 100% }
 body { height: 100%; 
 		margin: 0; 
 		padding: 0; 
 		background-color: #F4F6F6; 
-		font-family: 'Helvetica Neue', Helvetica, Arial, default;
+		font-family: 'TradeGothicLTPro-Light';
 		color:#58595B;
 		font-size:13px;
 }
@@ -224,6 +224,7 @@ input:hover {
 }
 
 #intro-overlay #autocomplete{
+	border:1px solid #999;
 	color:#58595B;
 	font-size:13px;
 	padding:0 10px 0 10px;
@@ -236,12 +237,9 @@ input:hover {
 	z-index: 999;
 }
 
-
-
-
 #message {
-	height:132px;
-	margin-top:20px;
+	height:72px;
+	margin-top:80px;
 	margin-left: 30px;
 	margin-right:30px;
 	font-size:14px;	
@@ -251,8 +249,8 @@ input:hover {
 	padding:0;
 	position:relative;
 	margin-top:14px;
-	margin-left: 30px;	
-	width:160px;
+	margin-left:28px;	
+	width:150px;
 	height:36px;	
 	color:#ffffff;
 	font-size: 14px;
@@ -264,11 +262,20 @@ input:hover {
 }
 
 #play{
+	width:170px;
 	margin-top: 0px;
 }
 
 #guess,#play:hover{
 	background-color: #D65238;
+}
+
+#next{
+	background-color:#3BB98C;
+}
+
+#next:hover{
+	background-color:#0CA369;
 }
 
 #return{
@@ -278,15 +285,6 @@ input:hover {
 #return:hover{
 	background-color: #006884;
 }
-
-#next {
-	background-color: #3BB98C;
-}
-
-#next :hover{
-	background-color: #0CA369;
-}
-
 
 .accounts-dialog {
 	border: 0px solid #777777;
