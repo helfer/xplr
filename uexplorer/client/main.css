@@ -161,13 +161,13 @@ input:hover {
 #streetview{
 	position:absolute;
 	top:0;
-	z-index:-1;	
+	opacity:0;
 }
 
 #map {
 	position:absolute;
 	top:0;
-	z-index:-1;
+	opacity:0;
 }
 
 #top{

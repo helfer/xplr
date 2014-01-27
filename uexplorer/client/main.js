@@ -143,16 +143,22 @@ if (Meteor.isClient) {
       $("#top").animate({"height":"660px"},1000);
 
       $("#intro2").animate({"top":"380px","height":"280px"},1000);         
-     
-      $("#intro-img").animate({"opacity":"0"},1000);
+      $("#streetview").animate({"opacity":"1"},1000);         
       $("#steps").animate({"opacity":"0"},1000);
 
 
       $("#intro2").animate({"left":"0px","width":"900px"},1000).delay(1000);  
       $("#intro").animate({"width":"900px"},1000).delay(1000);
-      $("#intro-img-2").animate({"opacity":"0"},1000).delay(1000);
+      $("#map").animate({"opacity":"1"},1000).delay(1000);      
       $("#circle").animate({"left":"725px"},1000).delay(1000);
       $("#panel").animate({"left":"680px"},1000).delay(3000);
+
+      function displaynone(){
+          $("#intro-img").css("display","none");
+          $("#intro-img-2").css("display","none");
+      }
+
+      setTimeout(displaynone,2000);
     },
   });
 
