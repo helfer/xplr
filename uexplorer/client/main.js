@@ -25,11 +25,11 @@ if (Meteor.isClient) {
     var lng = -71.09245089365557;
     var lat = 42.36345602184655;
     var point = new google.maps.LatLng(lat,lng);
-    pano_start_loc = point;
+    
 
     var panoramaOptions = {
         //position:point,
-        addressControl: false,
+        addressControl: true,
         linksControl: true,
         panControl: true,
         zoomControl:true,
@@ -136,6 +136,7 @@ if (Meteor.isClient) {
       map.fitBounds([[vp.ta.d,vp.ia.d],[vp.ta.b,vp.ia.b]]);
       marker.setLatLng([place.geometry.location.d,place.geometry.location.e]);
       pano.setPosition(place.geometry.location);
+      pano_start_loc = pano.getPosition();
       
       $("#intro-overlay").css("display","none");
       $("#circle").animate({"top":"315px"},1000); 
@@ -143,16 +144,22 @@ if (Meteor.isClient) {
       $("#top").animate({"height":"660px"},1000);
 
       $("#intro2").animate({"top":"380px","height":"280px"},1000);         
-     
-      $("#intro-img").animate({"opacity":"0"},1000);
+      $("#streetview").animate({"opacity":"1"},1000);         
       $("#steps").animate({"opacity":"0"},1000);
 
 
       $("#intro2").animate({"left":"0px","width":"900px"},1000).delay(1000);  
       $("#intro").animate({"width":"900px"},1000).delay(1000);
-      $("#intro-img-2").animate({"opacity":"0"},1000).delay(1000);
+      $("#map").animate({"opacity":"1"},1000).delay(1000);      
       $("#circle").animate({"left":"725px"},1000).delay(1000);
       $("#panel").animate({"left":"680px"},1000).delay(3000);
+
+      function displaynone(){
+          $("#intro-img").css("display","none");
+          $("#intro-img-2").css("display","none");
+      }
+
+      setTimeout(displaynone,2000);
     },
   });
 
@@ -254,7 +261,14 @@ if (Meteor.isClient) {
   });
 
   function check_guess(){
-      
+      //display address in streetview
+
+      var addr_container = $(".gm-style div").filter(function() {
+                  return $(this).css('left') == '88px';
+               });
+
+      addr_container.css("display","block");
+
       var marker_loc = marker.getLatLng();      
       var pano_loc = pano.getPosition();
       pano_latlng = L.latLng(pano_loc["d"], pano_loc["e"]);
@@ -310,6 +324,14 @@ if (Meteor.isClient) {
   }
 
   function prompt_new_guess(){
+
+      //hide address
+      var addr_container = $(".gm-style div").filter(function() {
+                  return $(this).css('left') == '88px';
+               });
+
+      addr_container.css("display","none");
+
 
       var center = map.getCenter();
 
