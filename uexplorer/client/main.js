@@ -15,7 +15,7 @@ if (Meteor.isClient) {
       if(place){
           console.log("place");
           console.log(place.formatted_address);
-          Meteor.subscribe("places",place.formatted_address,update_places());
+          Meteor.subscribe("places",place,update_places());
       }
   });
 
@@ -333,9 +333,9 @@ if (Meteor.isClient) {
 
 
   function get_random_location(){
-    var pcount = Locations.find().count();
+    var pcount = Places.find().count();
     var pick = Math.floor(Math.random()*pcount);
-    var next_location = Locations.findOne({index:pick});
+    var next_location = Places.findOne({index:pick});
     if(next_location == "undefined")
         console.log("Houston, we have a problem");
     //var pr = panosvc.getPanoramaByLocation(loc);
@@ -356,6 +356,7 @@ if (Meteor.isClient) {
       var center = map.getCenter();
 
       var next_location = get_random_location();
+      console.log('name: ' + next_location.name);
       pano.setPosition(new google.maps.LatLng(next_location['lat'],next_location['lng']));
       pano_start_loc =  pano.getPosition();
       pano.disableDefaultUI=true; 
