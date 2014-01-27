@@ -393,3 +393,8 @@ input:hover {
 	display:none;
 }
 
+
+.gm-style div[style*="z-index: 1; margin: 10px; position: absolute; left: 88px; top: 0px;"] {
+	display:none;
+}
+

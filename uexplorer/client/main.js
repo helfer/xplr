@@ -25,11 +25,11 @@ if (Meteor.isClient) {
     var lng = -71.09245089365557;
     var lat = 42.36345602184655;
     var point = new google.maps.LatLng(lat,lng);
-    pano_start_loc = point;
+    
 
     var panoramaOptions = {
         //position:point,
-        addressControl: false,
+        addressControl: true,
         linksControl: true,
         panControl: true,
         zoomControl:true,
@@ -136,6 +136,7 @@ if (Meteor.isClient) {
       map.fitBounds([[vp.ta.d,vp.ia.d],[vp.ta.b,vp.ia.b]]);
       marker.setLatLng([place.geometry.location.d,place.geometry.location.e]);
       pano.setPosition(place.geometry.location);
+      pano_start_loc = pano.getPosition();
       
       $("#intro-overlay").css("display","none");
       $("#circle").animate({"top":"315px"},1000); 
@@ -260,7 +261,14 @@ if (Meteor.isClient) {
   });
 
   function check_guess(){
-      
+      //display address in streetview
+
+      var addr_container = $(".gm-style div").filter(function() {
+                  return $(this).css('left') == '88px';
+               });
+
+      addr_container.css("display","block");
+
       var marker_loc = marker.getLatLng();      
       var pano_loc = pano.getPosition();
       pano_latlng = L.latLng(pano_loc["d"], pano_loc["e"]);
@@ -316,6 +324,14 @@ if (Meteor.isClient) {
   }
 
   function prompt_new_guess(){
+
+      //hide address
+      var addr_container = $(".gm-style div").filter(function() {
+                  return $(this).css('left') == '88px';
+               });
+
+      addr_container.css("display","none");
+
 
       var center = map.getCenter();
 
