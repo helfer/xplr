@@ -1,11 +1,5 @@
 
-* subscribe to location id, (add some location data)
-    * in publish, server checks if location already in cache
-        * if yes, server does nothing (or refreshes cache)
-        * if no, server lets client subscribe, but fetches data from API.
-* as subscription results pour in, start populating places.
-
-
-new collections:
-> places
-> found_places
+* store formatted_address on server
+* on client, do a position lookup for the formatted_address and then use that coordinate
+    (that way, I hope we won't end up in stores)
+* display more 'places' results on the client side. fetch them with nearby search.
