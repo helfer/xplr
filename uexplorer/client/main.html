@@ -1,33 +1,52 @@
 
-<template name="streetview">
-    <div id="row1" class="row" >
-        <div id="intro" style="width: 900px; height: 380px;">
-            <img src="intro.png" />
-            <div id="intro-overlay" style="width: 220px; height: 400px;">
-                <p><img src="logo_s.png"/>  UrbanExplorer helps you get familiar with the city you live in through a fun and challenging game.</p>
-                <img id="icon_pl" src="icon_pl.png" />
-                <form>
-                    <div id="locationField">
-                      <input id="autocomplete" placeholder="Enter a city" type="text" />
-                    </div>
-                    <input type="button" class="inc" id="play" value="I want to play!" />
-                </form>
-            </div>
-            <p id="circle-text">Look at the street view<br><br>Make a guess on the map</p>    
-        </div>
-        <div id="streetview" style="width: 900px; height: 380px;"></div>
+<template name="top">
+    <div id="top" style="width:1120px; height:auto">
+        {{> streetview}}
+        {{> map}}
+        {{> circle}}
+
+    </div>    
+</template> 
+<template name="bottom">
+    <div id="steps">
+        {{>steps}}
     </div>
+</template>     
+
+<template name="streetview">
+    <div id="intro" style="width: 450px; height: 320px; overflow:hidden">
+        <div id="streetview" style="width: 900px; height: 380px;"></div> 
+        <img id="intro-img" src="intro1_f.png" />         
+    </div>
+
 </template>
 
 <template name="map">
-    <div id="row2" class="row" >
-        <div id="steps" style="width: 900px; height: 280px;">
-            {{>steps}}
-        </div>
+    <div id="intro2" style="width: 450px; height: 320px; overflow:hidden">
         <div id="map" style="width: 680px; height: 280px;"></div>
+        <img id="intro-img-2" src="intro2.png" />
+        <div id="intro-overlay" style="width: 220px; height: 320px;">
+            <p><img src="logo_s.png"/>  UrbanExplorer helps you get familiar with the city you live in through a fun and challenging game.</p>
+            
+            <form>
+                <div id="locationField">
+                    <input id="autocomplete" class="inc" placeholder="Enter a city" type="text" />
+                    <img id="icon_pl" src="icon_pl.png" />
+                    <input type="button" class="inc" id="play" value="I want to play!" />
+                </div>
+            </form>
+        </div>
         {{> panel}}
+        
     </div>    
 </template>
+
+<template name="circle">
+    <div id="circle">
+        <img src="intro_circle.png" />
+        <p id="circle-text">Look at the street view<br><br>Make a guess on the map</p> 
+    </div>    
+</template>    
 
 <template name="panel">
     <div id="panel" style="width: 220px; height: 280px;">
@@ -63,8 +82,8 @@
 <body>
     <div id="container">        
         {{> header}}
-        {{> streetview}}
-        {{> map}}
+        {{> top}}
+        {{> bottom}}
     </div>
 </body>
 
