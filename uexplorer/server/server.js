@@ -42,6 +42,31 @@ Meteor.startup(function() {
     
         //for later, publish only the locations within someone's area of interest
     });
+
+    Meteor.publish("places", function(city) {
+        console.log('city');
+        console.log(city);
+        return;
+        var GooglePlaces = Meteor.require("googleplaces");
+        var gplaces = new GooglePlaces("AIzaSyDg6ii7P9b5YtGJaC9ArE6lPU-RXLa-mrA","json");
+        console.log(gplaces);
+        gplaces.textSearch({
+            query: 'Restaurants in ' + city,
+            opennow:true
+        }, function(response) {
+          console.log("search count: ", response.results.length);
+          _.each(response.results,function(p){
+            console.log(p.name + " " + JSON.stringify(p.geometry.location));
+          });
+        /*
+          gplaces.details({reference: response.results[0].reference}, function(err, response) {
+            console.log("search details: ", response.result.website);
+            // search details:  http://www.vermonster.com/
+          });*/
+        });
+
+        return Places.find({});
+    });
  
 
 });

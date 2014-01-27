@@ -2,6 +2,24 @@
 
 if (Meteor.isClient) {
 
+
+  update_places = function(){
+    console.log('subscription complete');
+  }
+
+  //subscribe to places, when city is updated.
+  //this function runs automatically, when current_place changes.
+  //subscribe/unsubscribe is magic in deps autorun, no need to worry about it.
+  Deps.autorun(function(){
+      var place = Session.get("current_place");
+      if(place){
+          console.log("place");
+          console.log(place.formatted_address);
+          Meteor.subscribe("places",place.formatted_address,update_places());
+      }
+  });
+
+
   load_map = function(){
 
     var lng = -71.09245089365557;
@@ -10,7 +28,7 @@ if (Meteor.isClient) {
     pano_start_loc = point;
 
     var panoramaOptions = {
-        position:point,
+        //position:point,
         addressControl: false,
         linksControl: true,
         panControl: true,
@@ -115,9 +133,9 @@ if (Meteor.isClient) {
       }
       Session.set("current_place",place);
       var vp = place.geometry.viewport;
-      console.log(place);
-      console.log(vp.ta.d,vp.ia.d);
       map.fitBounds([[vp.ta.d,vp.ia.d],[vp.ta.b,vp.ia.b]]);
+      marker.setLatLng([place.geometry.location.d,place.geometry.location.e]);
+      pano.setPosition(place.geometry.location);
       $(".row").animate({"left":"-900px"},1000);
            
     },
