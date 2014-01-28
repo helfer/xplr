@@ -48,24 +48,27 @@ Template.header.events(
         'click #logo': function (){
 
           Session.set("mode","welcome");
-          $("#intro-img").css("display","block");
-          $("#intro-img-2").css("display","block");
-          $("#panel").animate({"left":"900px"},1000);
-          $("#circle").animate({"left":"385px"},1000);
-          $("#map").animate({"opacity":"0"},1000);
-          $("#intro").animate({"width":"450px"},1000);
-          $("#intro2").animate({"left":"450px","width":"450px"},1000);
-          $("#steps").animate({"opacity":"1"},1000);            
+              $(".circle-text-2").css("display","none");
+              $("#back-btn").css("display","none");
+              $("#achievement").animate({"height":"0px"},1000);
 
-          setTimeout(function(){$("#top").animate({"height":"320px"},1000);},1000); 
-          setTimeout(function(){$("#intro-overlay").css("display","block");},2000); 
-          $("#streetview").animate({"opacity":"0"},1000).delay(1000);         
-          $("#intro2").animate({"top":"0px","height":"320px"},1000).delay(2000);            
-               
+              $("#intro-img").css("display","block");
+              $("#intro-img-2").css("display","block");
+              $("#panel").animate({"left":"900px"},1000);
+              $("#circle").animate({"left":"385px","width":"130px", "height":"130px", "top":"95px"},1000);
+              $("#map").animate({"opacity":"0"},1000);
+              $("#intro").animate({"width":"450px"},1000);
+              $("#intro2").animate({"left":"450px","width":"450px"},1000);
+              $("#steps").animate({"opacity":"1"},1000);            
 
-          
-          $("#circle").animate({"top":"95px"},1000).delay(1000);  
-          $("#intro").animate({"height":"320px"},1000).delay(1000);             
+              setTimeout(function(){$("#circle-text").css("display","block");},1000); 
+              setTimeout(function(){$("#top").animate({"height":"320px"},1000);},1000); 
+              setTimeout(function(){$("#intro-overlay").css("display","block");},2000); 
+              $("#streetview").animate({"opacity":"0"},1000).delay(1000);         
+              $("#intro2").animate({"top":"0px","height":"320px"},1000).delay(2000);            
+              
+              $("#circle").animate({"top":"95px"},1000).delay(1000);  
+              $("#intro").animate({"height":"320px"},1000).delay(1000);                
         }
 
     });
