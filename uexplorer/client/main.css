@@ -588,6 +588,10 @@ line-height: 2.7;
 	float:left;
 	margin-left: 4px;
 }
+#ranking ul li .rank{
+	width:15px;
+	margin-left: 4px;
+}
 
 #ranking ul li .username{
 	width:100px;

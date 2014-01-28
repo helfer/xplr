@@ -52,13 +52,17 @@
 
 <template name="panel">
     <div id="panel" style="width: 220px; height: 280px;">
-        <div id="message" style="visibility:hidden">blah blah</div>
+        <div id="message" style="visibility:hidden"></div>
         <div id="score">
             {{> score}}
-        </div>    
-        <input type="button" class="inc" id="guess" value="Guess!" />
-        <input type="button" class="inc" id="next" value="Next" style="display:none"/>
-        <input type="button" class="inc" id="final" value="Final" style="display:none"/>
+        </div> 
+
+        {{#if isguess}}   
+            <input type="button" class="inc" id="guess" value="Guess!" />
+        {{/if}}    
+            <input type="button" class="inc" id="next" value="Next" style="display:none"/>
+            <input type="button" class="inc" id="final" value="Final" style="display:none"/>
+
     </div>    
 </template>
 

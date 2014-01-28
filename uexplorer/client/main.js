@@ -357,6 +357,16 @@ if (Meteor.isClient) {
         });
   }
 
+  Template.panel.isguess = function(){
+   
+      if(Session.get("mode") == "guess"){
+          
+          return true;
+      } else {
+          return false;
+      }
+  }
+
   Template.panel.events({
     'click #guess': function (){
 
