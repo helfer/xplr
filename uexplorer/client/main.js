@@ -293,8 +293,8 @@ if (Meteor.isClient) {
         });
 
         mark_Icon_guess = L.icon({
-          iconUrl: 'marker_r_guess.png',
-          iconRetinaUrl: 'marker_r_guess.png',
+          iconUrl: 'marker_b_guess.png',
+          iconRetinaUrl: 'marker_b_guess.png',
           iconSize: [24, 40],
           iconAnchor: [12, 37],
           popupAnchor: [-3, -76]
@@ -469,7 +469,7 @@ if (Meteor.isClient) {
       $("path.leaflet-clickable").remove();
       $("img[src='marker_g.png']").remove();
       $("img[src='icon_p_b.png']").remove();
-      $("img[src='marker_r_guess.png']").remove();
+      $("img[src='marker_b_guess.png']").remove();
       $(".gmnoprint svg text").css("display","none");
 
          

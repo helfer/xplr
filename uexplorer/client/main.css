@@ -234,7 +234,6 @@ input:hover {
 	position:relative;
 	left: 138px;
 	top: 7px;
-	z-index: 999;
 }
 
 #message {
@@ -378,6 +377,89 @@ input:hover {
 .accounts-dialog .additional-link {
 	margin-top:6px;
 	font-size: 85%;
+}
+/*******************************
+*
+*   achievement
+*
+********************************/
+
+#achievement {
+	position:absolute;
+	top:78px;
+	overflow: hidden;
+	background-color: #ffffff;
+}
+
+#achievement .col{
+	position:relative;
+	float:left;
+	width:122px;
+	padding:16px 14px 16px 14px;
+	border-right: 1px solid #F4F6F6;
+}
+
+#achievement .title{
+	vertical-align: 70%;
+	margin-left: 4px;
+}
+
+
+#achievement ul{
+	list-style: none;
+	padding:0;
+}
+
+#achievement li a{
+	margin-left:4px;
+	vertical-align: 50%;
+	font-size: 12px;
+	color: #989898;
+}
+
+#achievement li a:hover{
+	cursor: pointer;
+	color: #E16C4E;
+}
+
+#profile li img{
+	visibility: hidden;
+}
+
+#collections ul li{
+	width:116px;
+	position:relative;
+	float:left;
+	text-align: center;
+	margin-right:24px;
+	margin-left:24px;
+}
+
+#collections ul li img[src="collection.png"]{
+	width:116px;
+	height:116px;
+}
+#collections ul li .sticker{
+	
+	width:116px;
+	height:116px;
+	top:0;
+	left:0;
+}
+#collections ul li .sticker img{
+	width:20px;
+	height:20px;
+	position:absolute;
+}
+
+#collections ul li label{
+	line-height: 30px;
+}
+
+#ranking{
+	position:relative;
+	float:left;
+	padding:16px 14px 16px 14px;
 }
 
 

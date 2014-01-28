@@ -1,0 +1,83 @@
+<template name="achievement">
+    <div id="achievement" style="width:900px; height:380px">
+    	<div id="profile" class="col" style="width:122px; height:380px">
+    	    <div id="user" >
+    	    	<img src="nav_p_hover.png" />
+    	    	<label class="title">Shan</label>  			
+    		</div>
+    		{{> cities}}
+    	</div>
+    	<div id="collections" class="col" style="width:500px; height:380px">
+    	    <div >
+    	    	<img src="nav_f_hover.png" />
+    	    	<label class="title">Collections</label>  			
+    		</div>
+    		<div id="user-collections">
+    			<ul>
+    				<li>
+  					
+    					<div id="collection-resto" class="sticker">
+    						<img src="sticker_resto.png" style="top:0px; left:24px"/>
+    						<img src="sticker_0.png" style="top:0px; left:48px"/>
+    						<img src="sticker_0.png" style="top:0px; left:72px"/>
+    						<img src="sticker_0.png" style="top:24px; left:0px"/>
+    						<img src="sticker_0.png" style="top:24px; left:24px"/>
+    						<img src="sticker_0.png" style="top:24px; left:48px"/>    						
+    					</div>
+    					<label>Restaurant</label>	
+    				</li>
+    				<li>
+    					<div id="collection-cafe" class="sticker">
+    					</div>	
+    					<label>Coffee & Tea</label>
+    				</li>
+    				<li>
+    					<div id="collection-shop" class="sticker">
+    					</div>
+    					<label>Shopping</label>
+    				</li>
+    				<li>
+    					<div id="collection-bars" class="sticker">
+    					</div>
+    					<label>Bar & Nightlife</label>
+    				</li>
+    				<li>
+    					<div id="collection-arts" class="sticker">
+    					</div>
+    					<label>Art & Entertainment</label>
+    				</li>
+    				<li>
+    					<div id="collection-educ" class="sticker">
+    					</div>
+    					<label>Education</label>
+    				</li> 				    				    				    				
+    			</ul>	
+    		</div>	
+    	</div>
+    	<div id="ranking">
+    		<div >
+    	    	<img src="nav_g_hover.png" />
+    	    	<label class="title">Score board</label>  			
+    		</div>
+    	</div>	
+    </div>    
+</template> 
+
+<template name="cities">
+		<ul>
+			<li><img src="icon_point_r.png"/><a>Cambridge, MA</a></li>
+			<li><img src="icon_point_r.png"/><a>Boston, MA</a></li>
+			<li><img src="icon_point_r.png"/><a>New York, NY</a></li>	
+			<li><img src="icon_point_r.png"/><a>San Francisco, CA</a></li>	
+		</ul>	
+</template> 
+
+<template name="rankings">
+		<ul>
+
+			<li id="rank-1"><p>1</p><img src="avartar_m.png"/><p id="name-1">Shalan</p><p id="score-1" class="score">657</p></li>
+			<li id="rank-2"><p>1</p><img src="avartar_f.png"/><p id="name-2">Shalan</p><p id="score-2" class="score">657</p></li>
+			<li id="rank-3"><p>1</p><img src="avartar_m.png"/><p id="name-3">Shalan</p><p id="score-3" class="score">657</p></li>
+
+		</ul>	
+</template> 
