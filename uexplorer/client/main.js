@@ -216,8 +216,9 @@ if (Meteor.isClient) {
       map.zoomIn();
       map_start_bound = map.getBounds();
       marker.setLatLng([place.geometry.location.d,place.geometry.location.e]);
-      pano.setPosition(place.geometry.location);
-      pano_start_loc = pano.getPosition();
+      //pano.setPosition(place.geometry.location);
+      //pano_start_loc = pano.getPosition();
+      generate_next_location();
       
       $("#intro-overlay").css("display","none");
       $("#circle").animate({"top":"315px"},1000); 
@@ -247,7 +248,7 @@ if (Meteor.isClient) {
 
       //start count time
       totalSeconds = 0;
-      round = 1;
+      round = 0;
       $("#rounds").text(round);
       setTimeout(setTime,6000);
       TimerId = setInterval(setTime, 1000);
@@ -404,14 +405,18 @@ if (Meteor.isClient) {
       last_guess = distance;
       var msg;
 
-      var score = distance;
+      var score = Math.max(1,Math.ceil(Math.max(0,500-distance)*Math.max(5,(20/(totalSeconds+1)))));
       totalScore += score;
 
       if (distance > 4000) msg = "No comment...You are " + distance + " meters away!";
       else if (distance <= 4000 && distance > 2000) msg = "Oops...You are " + distance + " meters away!";
-      else if (distance <= 2000 && distance > 1000) msg = "Not bad...You are " + distance + " meters away!";
-      else if (distance <= 1000 && distance > 200) msg = "Good job...You are just " + distance + " meters away!";
-      else if (distance <= 200) msg = "OMG...You are only " + distance + " meters away!";
+      else if (distance <= 2000 && distance > 300) msg = "Not bad...You are " + distance + " meters away!";
+      else if (distance <= 300 && distance > 100) msg = "Good job...You are just " + distance + " meters away!";
+      else if (distance <= 100) msg = "Wow! You are only " + distance + " meters away!";
+
+      //answer.setIcon(circleIcon);
+      if (last_guess <= 100)
+      var dot = L.marker(pano_latlng, {icon: circleIcon_g}).addTo(map);
       
       //display score
       $("#score ul li:nth-child(" + round+ ")").css("visibility","visible");
@@ -452,15 +457,29 @@ if (Meteor.isClient) {
 
         $("#final").css("display","block");
         $("#final").val("Total:" + totalScore + " Next game");
-        //set to 0
-        round = 0;
-        totalScore = 0;
-
+ 
         //check if user signed-in
         if(!Meteor.user()){
-            alert("Sign-in to keep track of your score :)");
-        }  
+            alert("Sign-in to keep track of your score next time :)");
+        } else {
+            if(Scores.find({'user':Meteor.userId(),'city':Session.get("current_place").id}).count() == 0){
+                Scores.insert({'user':Meteor.userId(),'score':totalScore,'city':Session.get("current_place").id});
+            } else {
+                var best = Scores.find({'user':Meteor.userId(),'city':Session.get("current_place").id},{sort: {score: -1}}).fetch()[0];
+                console.log("best " + best.score + " now " + totalScore);
+                if(totalScore > best.score){
+                    console.log("new high score");
+                    Scores.update({_id:best._id},{"$set" : {"score":totalScore}});
+                    $("#final").val("New high score! - Next");
+                } else {
+                    console.log("leider nein");
+                }
+            }
+        } 
 
+       //set to 0
+        round = 0;
+        totalScore = 0;
       }   
   }
 
@@ -502,12 +521,9 @@ if (Meteor.isClient) {
       map.fitBounds(map_start_bound);
       var center = map.getCenter();
 
-      console.log('bi');
       if(Meteor.userId()){
-        console.log('ba');
         var c = Visits.find({'place_id':next_location.place_id}).count();
         if(c == 0){
-            console.log('bo');
             console.log(next_location);
             var visit = {
                 'user':Meteor.userId(),
@@ -575,9 +591,6 @@ if (Meteor.isClient) {
                     title: "Drag me to guess"
                 }).addTo(map);
 
-      //answer.setIcon(circleIcon);
-      if (last_guess <= 150)
-      var dot = L.marker(pano_latlng, {icon: circleIcon_g}).addTo(map);
     
       $("#guess").css("display","block");
       $("#next").css("display","none");
