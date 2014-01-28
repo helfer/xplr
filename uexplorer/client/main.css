@@ -401,7 +401,7 @@ input:hover {
 	border-radius: 3px;
 	padding: 16px 16px;
 	margin: -8px -12px 0 -12px;
-	width: 198px;
+	width: 188px;
 	color:#58595B;
 	font-size:13px;
 	
@@ -419,18 +419,17 @@ input:hover {
 	text-align: center;
 	padding-top:10px;
 	width:56px;
-	height:22px;
-	background-color:#ffffff;
-	border-radius: 3px 0 0 3px;
-	font-size:11px;	
+	font-size:13px;	
 	position:relative;
 	float:right;
 	
 }
+#login-buttons {
+line-height: 2.7;
+}
 
 #login-sign-in-link:hover{
-	background-color:#E16C4E;
-	color:#ffffff;
+	color:#E16C4E;
 }
 
 
@@ -451,6 +450,7 @@ input:hover {
 }
 
 #login-buttons .login-button, .accounts-dialog .login-button {
+	font-family: "TradeGothicLTPro-Light";
 	margin-top:24px;
 	height:18px;
 	cursor: pointer;
@@ -541,6 +541,8 @@ input:hover {
 	text-align: center;
 	margin-right:24px;
 	margin-left:24px;
+	margin-bottom:10px;
+
 }
 
 #collections ul li img[src="collection.png"]{
@@ -570,6 +572,34 @@ input:hover {
 	padding:16px 14px 16px 14px;
 }
 
+#ranking ul li{
+	height:30px;
+	margin-left: 8px;
+}
+#ranking ul li span{
+	position:relative;
+	float:left;
+	vertical-align: 30%;
+	line-height:30px;
+}
+
+#ranking ul li img{
+	position:relative;
+	float:left;
+	margin-left: 4px;
+}
+
+#ranking ul li .username{
+	width:100px;
+	margin-left: 4px;
+}
+
+#ranking ul li .userscore{
+	font-size: 15px;
+	color:#E16C4E;
+	margin-left: 4px;
+}
+
 
 /*******************************
 *
@@ -584,5 +614,23 @@ input:hover {
 
 .gm-style div[style*="z-index: 1; margin: 10px; position: absolute; left: 88px; top: 0px;"] {
 	display:none;
+}
+
+#content label{
+	font-weight: 400;
+	color:#2A2D33;
+}
+
+#content #rating{
+	color:#E16C4E;
+}
+
+
+#content #price{
+	color:#ECC932;
+}
+#content .detail{
+	margin-top:4px;
+	margin-bottom:6px;
 }
 

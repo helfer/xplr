@@ -25,7 +25,7 @@ if (Meteor.isClient) {
 
   //todo: remove old markers from map.
   get_nearby_markers = function(point){
-    placesvc.nearbySearch({location:point,radius:150}, placesvc_callback);
+    placesvc.nearbySearch({location:point,radius:75}, placesvc_callback);
   }
 
   placesvc_callback = function(results,status){
@@ -60,8 +60,47 @@ if (Meteor.isClient) {
         position: place.geometry.location
       });
 
+      console.log(place);
+
+      var detail_price = '';
+        if(place.price_level) {
+          detail_price = '<label>Price level:</label><p id="price" class="detail">'
+          for (var p=0; p<place.price_level-1; p++){
+            detail_price +="$";
+          }
+            detail_price +='</p>';
+      }
+
+      var detail_rating ='';
+      if(place.rating){
+        detail_rating  = '<label>Rating:</label>' +
+        '<p id="rating" class="detail">' + place.rating + '</p>';
+      }
+
+      var detail_types =''
+      if(place.types){
+        detail_types ='<label>Type:</label><p id="type" class="detail">';
+        for(var i=0; i<place.types.length; i++){
+            detail_types += place.types[i];
+            if (i < place.types.length-1) {detail_types += ", ";}
+              
+        }
+        detail_types +='</p>'; 
+      }
+      var infoContentString = '<div id="content">'+
+      '<div id="siteNotice">'+
+      
+        '<p id="name" style="color:#E16C4E;font-weight:bold">' + place.name + '</p>'+
+        detail_types +
+        '<label>Address:</label>' +
+        '<p id="name" class="detail">' + place.vicinity + '</p>'+
+          detail_rating + detail_price +
+      '</div>'+
+      '</div>';
+
+
       google.maps.event.addListener(marker, 'click', function() {
-        infowindow.setContent(place.name);
+        infowindow.setContent(infoContentString);
         infowindow.open(pano, this);
       });
     }
@@ -140,12 +179,12 @@ if (Meteor.isClient) {
       "description":"Find out where the pictures were taken.",
       "image":"Guess.png",
       "color":"#E16C4E"},
-    {"title":"Explore",
+    {"title":"Discover",
       "description":"Discover places you didn’t know.",
       "image":"Explore.png",
       "color":"#28AFC3"},
-    {"title":"Share",
-      "description":"Tell your friends about your achievements.",
+    {"title":"Collect",
+      "description":"Collect your achievements, share with others.",
       "image":"Share.png",
       "color":"#E3E478"}
   ];
@@ -198,11 +237,15 @@ if (Meteor.isClient) {
 
   Template.map.events({
     'click #play': function (){
+       
       var place = autocomplete.getPlace();
       if(place == undefined){
-        alert("Please enter a city! Shan, please make this prettier :)");
+        $("#autocomplete").css("border","1px solid #D65238");
+        $("#autocomplete").css("visibility","hidden");
+        setTimeout(function(){$("#autocomplete").css("visibility","visible");},100);
         return;
       }
+      Session.set("mode","guess");
       Session.set("current_place",place);
       document.getElementById("autocomplete").value = "";
       if(Meteor.userId()){
@@ -255,36 +298,6 @@ if (Meteor.isClient) {
     },
   });
 
-  /*
-  Template.header.events({
-    'click #logo': function (){
-      $(".circle-text-2").css("display","none");
-      $("#back-btn").css("display","none");
-      $("#achievement").animate({"height":"0px"},1000);
-
-      $("#intro-img").css("display","block");
-      $("#intro-img-2").css("display","block");
-      $("#panel").animate({"left":"900px"},1000);
-      $("#circle").animate({"left":"385px","width":"130px", "height":"130px", "top":"95px"},1000);
-      $("#map").animate({"opacity":"0"},1000);
-      $("#intro").animate({"width":"450px"},1000);
-      $("#intro2").animate({"left":"450px","width":"450px"},1000);
-      $("#steps").animate({"opacity":"1"},1000);            
-
-      setTimeout(function(){$("#circle-text").css("display","block");},1000); 
-      setTimeout(function(){$("#top").animate({"height":"320px"},1000);},1000); 
-      setTimeout(function(){$("#intro-overlay").css("display","block");},2000); 
-      $("#streetview").animate({"opacity":"0"},1000).delay(1000);         
-      $("#intro2").animate({"top":"0px","height":"320px"},1000).delay(2000);            
-           
-
-      
-      $("#circle").animate({"top":"95px"},1000).delay(1000);  
-      $("#intro").animate({"height":"320px"},1000).delay(1000);             
-    }
-  });*/
-
-
   Template.map.rendered = function (){
         map = L.mapbox.map('map', 'heshan0131.h074i536', {
             doubleClickZoom: false
@@ -329,16 +342,6 @@ if (Meteor.isClient) {
           iconAnchor: [12, 37],
           popupAnchor: [-3, -76]
         });
-
-        /*
-        Loc_Icon_g = L.icon({
-          iconUrl: 'marker_g.png',
-          iconRetinaUrl: 'marker_g.png',
-          iconSize: [26, 43],
-          iconAnchor: [13, 40],
-          popupAnchor: [-3, -76]          
-        });
-*/
 
         //add marker 
         
@@ -398,6 +401,7 @@ if (Meteor.isClient) {
       //var pano_loc = pano.getPosition();
       var pano_cur_loc = pano.getPosition();
       pano_latlng = L.latLng(pano_cur_loc["d"], pano_cur_loc["e"]);
+      
       get_nearby_markers(pano_start_loc);
       
       var distance = parseInt(marker_loc.distanceTo(pano_latlng));
