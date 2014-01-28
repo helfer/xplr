@@ -51,15 +51,13 @@
 </template>    
 
 <template name="panel">
-    <div id="panel" style="width: 220px; height: 280px;">
+    <div id="panel" style="width: 220px; height: 280px;left:900px">
         <div id="message" style="visibility:hidden"></div>
         <div id="score">
             {{> score}}
         </div> 
-
-        {{#if isguess}}   
-            <input type="button" class="inc" id="guess" value="Guess!" />
-        {{/if}}    
+        {{>guessbutton}}
+ 
             <input type="button" class="inc" id="next" value="Next" style="display:none"/>
             <input type="button" class="inc" id="final" value="Final" style="display:none"/>
 
@@ -77,6 +75,12 @@
       {{/each}}
     </ul>
 </template>
+
+<template name="guessbutton">
+    {{#if isguess}}  
+    <input type="button" class="inc" id="guess" value="Guess!" />
+    {{/if}} 
+</template>    
 
 <template name="score">
     <ul>
