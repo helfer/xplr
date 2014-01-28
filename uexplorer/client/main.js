@@ -150,6 +150,7 @@ if (Meteor.isClient) {
 
 
   Meteor.subscribe('guesses');
+  Meteor.subscribe('scores');
   Meteor.subscribe('locations');
   Meteor.subscribe('cityvisits');
 

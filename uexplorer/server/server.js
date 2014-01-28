@@ -74,6 +74,26 @@ Meteor.startup(function() {
         }
     });
 
+    Meteor.publish("scores", function () {
+    	return Scores.find();
+    });
+
+    Scores.allow({
+        'insert': function(userId,doc){
+            return userId == doc.user;
+        },
+        'update': function(userId, doc, fields, modifier) {
+            return userId == doc.user;
+        }
+    });
+
+    Scores.deny({
+      update: function (userId, docs, fields, modifier) {
+        // can't change user
+        return _.contains(fields, 'user');
+      }
+    });
+
     Meteor.publish("visits", function (city) {
     	return Visits.find({user: this.userId,'city':city.id});
     });
