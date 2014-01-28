@@ -5,7 +5,7 @@ Visits = new Meteor.Collection("visits"); //user 'visits' to places
 
 
 
-categories = ['resto','cafe','shop','arts'];
+categories = ['resto','cafe','shop','arts'];//this link to the client side code, don't change them without notice...
 google_queries = {
     'resto':['Restaurant',['restaurant']],
     'cafe':['Coffee Tea',['cafe','bakery']],

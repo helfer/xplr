@@ -25,6 +25,14 @@ if (Meteor.isClient) {
     var lng = -71.09245089365557;
     var lat = 42.36345602184655;
     var point = new google.maps.LatLng(lat,lng);
+    var myDOMobj = document.getElementById("streetview");
+
+    var gmapOptions = {
+      center: point,
+      zoom: 18,
+      streetViewControl: true
+    };
+    gmap = new google.maps.Map(myDOMobj,gmapOptions);
     
 
     var panoramaOptions = {
@@ -35,9 +43,12 @@ if (Meteor.isClient) {
         zoomControl:true,
         enableCloseButton: false
     };
-    var myDOMobj = document.getElementById("streetview");
-    pano = new google.maps.StreetViewPanorama(myDOMobj, panoramaOptions);
-    panosvc = new google.maps.StreetViewService();
+
+    //pano = new google.maps.StreetViewPanorama(myDOMobj, panoramaOptions);
+    pano = gmap.getStreetView();
+    pano.setPosition(point);
+    pano.setVisible(true);
+    //panosvc = new google.maps.StreetViewService();
 
     var placesearch = document.getElementById("placesearch");
     /*var opts = {
@@ -62,6 +73,7 @@ if (Meteor.isClient) {
   panosvc = null;
   autocomplete = null;
   map = null;
+  gmap = null;
   pano_start_loc = null;
   map_start_bound = null;
   var map_ready = false;
@@ -156,14 +168,13 @@ if (Meteor.isClient) {
       $("#intro2").animate({"left":"0px","width":"900px"},1000).delay(1000);  
       $("#intro").animate({"width":"900px"},1000).delay(1000);
       $("#map").animate({"opacity":"1"},1000).delay(1000);      
-      $("#circle").animate({"left":"725px"},1000).delay(1000);
+      $("#circle").animate({"left":"900px"},1000).delay(1000);
       $("#panel").animate({"left":"680px"},1000).delay(3000);
 
       function displaynone(){
           $("#intro-img").css("display","none");
           $("#intro-img-2").css("display","none");
       }
-
       setTimeout(displaynone,2000);
     },
   });
@@ -357,9 +368,41 @@ if (Meteor.isClient) {
 
       var next_location = get_random_location();
       console.log('name: ' + next_location.name);
-      pano.setPosition(new google.maps.LatLng(next_location['lat'],next_location['lng']));
+      console.log(next_location);
+      var place_loc = new google.maps.LatLng(next_location['lat'],next_location['lng']);
+      pano.setPosition(place_loc);
       pano_start_loc =  pano.getPosition();
-      pano.disableDefaultUI=true; 
+      
+      var cafeMarkerImage = new google.maps.MarkerImage('/marker_coffee.png');
+          cafeMarkerImage.size = new google.maps.Size(26,34);
+          cafeMarkerImage.scaledSize = new google.maps.Size(26,34);
+
+      //next_location.category    
+      // Here put a place marker on the map
+      var placeMarker = new google.maps.Marker({
+          position: place_loc,
+          map: gmap,
+          icon: cafeMarkerImage,
+          title: next_location.name
+      });
+
+      var contentString = '<div id="content">'+
+      '<div id="siteNotice">'+
+      
+        '<h1 id="firstHeading" class="firstHeading">' + next_location.name + '</h1>'+
+      
+      '</div>'+
+      '</div>';
+
+       var infowindow = new google.maps.InfoWindow({
+            content: contentString
+        });
+
+        google.maps.event.addListener(placeMarker, 'click', function() {
+          infowindow.open(pano,placeMarker);
+        });
+
+
 
       $("path.leaflet-clickable").remove();
       $("img[src='marker_g.png']").remove();
