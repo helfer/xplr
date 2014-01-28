@@ -2,6 +2,7 @@
 
 if (Meteor.isClient) {
 
+  Session.set("mode","welcome");
 
   update_places = function(){
     console.log('subscription complete');
@@ -254,6 +255,7 @@ if (Meteor.isClient) {
     },
   });
 
+  /*
   Template.header.events({
     'click #logo': function (){
       $(".circle-text-2").css("display","none");
@@ -280,7 +282,7 @@ if (Meteor.isClient) {
       $("#circle").animate({"top":"95px"},1000).delay(1000);  
       $("#intro").animate({"height":"320px"},1000).delay(1000);             
     }
-  });
+  });*/
 
 
   Template.map.rendered = function (){

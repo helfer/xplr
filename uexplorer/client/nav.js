@@ -12,14 +12,14 @@ Template.header.events(
         'mouseenter .menu': function(ev, template){
             var src = ev.target.children[0].src;
             if (src.indexOf("hover") == -1){
-                var new_src = src.replace(".png","_hover.png");
+                var new_src = src.replace("_inactive.png","_hover.png");
                 ev.target.children[0].src = new_src;
             }    
         },
 
         'mouseleave .menu': function(ev, template){
             var src = ev.target.children[0].src;
-            var new_src = src.replace("_hover.png",".png");
+            var new_src = src.replace("_hover.png","_inactive.png");
             ev.target.children[0].src = new_src;
         },
 
@@ -30,20 +30,56 @@ Template.header.events(
 
         'click #menu-achievement': function(ev,template){
             console.log('achievement');
+            Session.set("mode","achievement");
             $("#achievement").animate({"height":"380px"},1000);
         },
 
         'click #menu-guess': function(ev,template){
             console.log('guess');
+            Session.set("mode","guess");
             $("#achievement").animate({"height":"0px"},1000);
         },
 
         'click #menu-collect': function(ev,template){
-            console.log('guess');
+            console.log('collect');
+            Session.set("mode","collect");
             $("#achievement").animate({"height":"0px"},1000);
+        },
+        'click #logo': function (){
+
+          Session.set("mode","welcome");
+          $("#intro-img").css("display","block");
+          $("#intro-img-2").css("display","block");
+          $("#panel").animate({"left":"900px"},1000);
+          $("#circle").animate({"left":"385px"},1000);
+          $("#map").animate({"opacity":"0"},1000);
+          $("#intro").animate({"width":"450px"},1000);
+          $("#intro2").animate({"left":"450px","width":"450px"},1000);
+          $("#steps").animate({"opacity":"1"},1000);            
+
+          setTimeout(function(){$("#top").animate({"height":"320px"},1000);},1000); 
+          setTimeout(function(){$("#intro-overlay").css("display","block");},2000); 
+          $("#streetview").animate({"opacity":"0"},1000).delay(1000);         
+          $("#intro2").animate({"top":"0px","height":"320px"},1000).delay(2000);            
+               
+
+          
+          $("#circle").animate({"top":"95px"},1000).delay(1000);  
+          $("#intro").animate({"height":"320px"},1000).delay(1000);             
         }
 
     });
+
+Template.header.isactive = function(name){
+    console.log("isactive " + name + " " + Session.get("mode"));
+    if(Session.get("mode") == name){
+        console.log("return hoverrrrrrr");
+        return "_active";
+    } else {
+        return "_inactive";
+    }
+}
+
 
 /*
     Accounts.createUser({email: email, username: email,  password: pass}, function (error) {
