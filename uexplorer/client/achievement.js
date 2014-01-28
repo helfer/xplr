@@ -5,6 +5,10 @@ Template.achievement.username = function(){
     }
 }
 
+Template.achievement.cname = function(){
+    return Session.get("current_place").name;
+}
+
 Template.city.events(
     {   
         'mouseenter li': function(ev, template){
@@ -30,10 +34,13 @@ Template.collections.categories = function(){
 
 
 Template.stickers.visits = function(cat){
+    console.log("looking for " + cat);
     var n = Visits.find({'cat':cat}).fetch();
     _.each(n,function(x,i){
         x.index = i;
     });
+    console.log("returning " + n.length);
+    console.log(n);
     return n;
 }
 

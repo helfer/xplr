@@ -11,7 +11,7 @@ categories = ['resto','cafe','shop','arts'];//this link to the client side code,
 cat_titles = [
     {cat:'resto',name:'Restaurant'},
     {cat:'cafe',name:'Coffee & Tea'},
-    {cat:'bar',name:'Bars & Nightlife'},
+    {cat:'bars',name:'Bars & Nightlife'},
     {cat:'educ',name:'Education'},
     {cat:'arts',name:'Entertainment'},
     {cat:'shop',name:'Shopping'},
@@ -33,3 +33,4 @@ google_queries = {
         'movie_theater',
         'stadium',
         'zoo']]};
+//add bars and educ!!
