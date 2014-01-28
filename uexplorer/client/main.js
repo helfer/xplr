@@ -21,8 +21,6 @@ if (Meteor.isClient) {
       }
   });
 
-
-
   //todo: remove old markers from map.
   get_nearby_markers = function(point){
     placesvc.nearbySearch({location:point,radius:75}, placesvc_callback);
@@ -245,7 +243,7 @@ if (Meteor.isClient) {
         setTimeout(function(){$("#autocomplete").css("visibility","visible");},100);
         return;
       }
-      Session.set("mode","guess");
+      
       Session.set("current_place",place);
       document.getElementById("autocomplete").value = "";
       if(Meteor.userId()){
@@ -294,7 +292,7 @@ if (Meteor.isClient) {
       $("#rounds").text(round);
       setTimeout(setTime,6000);
       TimerId = setInterval(setTime, 1000);
-
+      Session.set("mode","guess");
     },
   });
 
