@@ -56,7 +56,8 @@ if (Meteor.isClient) {
 
   map_rendered = false;
 
-  
+
+  pservice = null;  
   marker = null;
   pano = null;
   panosvc = null;
@@ -290,8 +291,8 @@ if (Meteor.isClient) {
       addr_container.css("display","block");
 
       var marker_loc = marker.getLatLng();      
-      var pano_loc = pano.getPosition();
-      pano_latlng = L.latLng(pano_loc["d"], pano_loc["e"]);
+      //var pano_loc = pano.getPosition();
+      pano_latlng = L.latLng(pano_start_loc["d"], pano_start_loc["e"]);
       var distance = parseInt(marker_loc.distanceTo(pano_latlng));
       last_guess = distance;
       var msg;
