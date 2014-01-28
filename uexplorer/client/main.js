@@ -20,6 +20,52 @@ if (Meteor.isClient) {
   });
 
 
+
+  //todo: remove old markers from map.
+  get_nearby_markers = function(point){
+    placesvc.nearbySearch({location:point,radius:150}, placesvc_callback);
+  }
+
+  placesvc_callback = function(results,status){
+      console.log(status);
+      if (status == google.maps.places.PlacesServiceStatus.OK) {
+        console.log("results: " + results.length);
+        for (var i = 0; i < results.length; i++) {
+          var place = results[i];
+          createMarker(results[i]);
+        }
+      }
+  }
+
+  make_panosvc_cb = function(next_location){
+
+    return function(result,status){
+        console.log('panostatus ' + status);
+        if(status == "OK"){
+            console.log(result);
+            prompt_new_guess(next_location,result.location.latLng);
+        } else {
+            generate_next_location();
+        }
+    }
+  }
+
+  //just to test, copied from google developers
+    function createMarker(place) {
+      var placeLoc = place.geometry.location;
+      var marker = new google.maps.Marker({
+        map: gmap,
+        position: place.geometry.location
+      });
+
+      google.maps.event.addListener(marker, 'click', function() {
+        infowindow.setContent(place.name);
+        infowindow.open(pano, this);
+      });
+    }
+
+
+
   load_map = function(){
 
     var lng = -71.09245089365557;
@@ -48,7 +94,9 @@ if (Meteor.isClient) {
     pano = gmap.getStreetView();
     pano.setPosition(point);
     pano.setVisible(true);
-    //panosvc = new google.maps.StreetViewService();
+    panosvc = new google.maps.StreetViewService();
+    placesvc = new google.maps.places.PlacesService(gmap);
+    infowindow = new google.maps.InfoWindow();
 
     var placesearch = document.getElementById("placesearch");
     /*var opts = {
@@ -67,13 +115,16 @@ if (Meteor.isClient) {
 
   map_rendered = false;
 
-  
+
+  pservice = null;  
   marker = null;
   pano = null;
   panosvc = null;
+  placesvc = null;
   autocomplete = null;
   map = null;
   gmap = null;
+  infowindow = null;
   pano_start_loc = null;
   map_start_bound = null;
   var map_ready = false;
@@ -281,7 +332,7 @@ if (Meteor.isClient) {
     },
 
     'click #next': function (){
-          prompt_new_guess();
+          generate_next_location();
           state = 'GUESS';
     },
    
@@ -301,8 +352,9 @@ if (Meteor.isClient) {
       addr_container.css("display","block");
 
       var marker_loc = marker.getLatLng();      
-      var pano_loc = pano.getPosition();
-      pano_latlng = L.latLng(pano_loc["d"], pano_loc["e"]);
+      //var pano_loc = pano.getPosition();
+      pano_latlng = L.latLng(pano_start_loc["d"], pano_start_loc["e"]);
+      get_nearby_markers(pano_start_loc);
       var distance = parseInt(marker_loc.distanceTo(pano_latlng));
       last_guess = distance;
       var msg;
@@ -349,14 +401,27 @@ if (Meteor.isClient) {
     var next_location = Places.findOne({index:pick});
     if(next_location == "undefined")
         console.log("Houston, we have a problem");
-    //var pr = panosvc.getPanoramaByLocation(loc);
     return next_location
    
   }
 
-  function prompt_new_guess(){
+  function generate_next_location(){
 
-      //hide address
+       var next_location = get_random_location();
+      console.log('name: ' + next_location.name);
+      console.log(next_location);
+
+      var panosvc_cb = make_panosvc_cb(next_location);
+
+      var place_loc = new google.maps.LatLng(next_location['lat'],next_location['lng']);
+      panosvc.getPanoramaByLocation(place_loc,100,panosvc_cb);
+ }
+
+
+ //the coordinates of next_location may not be exactly those of place_loc
+ //this happens when no nearby panorama is returned.
+ function prompt_new_guess(next_location,place_loc){
+     //hide address
       var addr_container = $(".gm-style div").filter(function() {
                   return $(this).css('left') == '88px';
                });
@@ -366,10 +431,9 @@ if (Meteor.isClient) {
       map.fitBounds(map_start_bound);
       var center = map.getCenter();
 
-      var next_location = get_random_location();
-      console.log('name: ' + next_location.name);
-      console.log(next_location);
-      var place_loc = new google.maps.LatLng(next_location['lat'],next_location['lng']);
+
+      //var place_loc = new google.maps.LatLng(next_location['lat'],next_location['lng']);
+      pano = gmap.getStreetView();
       pano.setPosition(place_loc);
       pano_start_loc =  pano.getPosition();
       
@@ -394,11 +458,9 @@ if (Meteor.isClient) {
       '</div>'+
       '</div>';
 
-       var infowindow = new google.maps.InfoWindow({
-            content: contentString
-        });
 
         google.maps.event.addListener(placeMarker, 'click', function() {
+          infowindow.setContent(contentString);
           infowindow.open(pano,placeMarker);
         });
 

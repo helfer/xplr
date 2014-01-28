@@ -8,10 +8,10 @@ var POI = [{"lat": 42.36674376745008, "lng": -71.10622062455482, "addr_id": 564,
 var make_cb = function(city,cat,offset){
     return function(response) {
           console.log("search count: ", response.results.length);
-          console.log("result: ", JSON.stringify(response.results[0]));
+          //console.log("result: ", JSON.stringify(response.results[0]));
           _.each(response.results,function(p,i){
             console.log(p.name + " " + JSON.stringify(p.geometry.location));
-            console.log('offset ' + offset + ' total ' + (offset + i));
+            //console.log('offset ' + offset + ' total ' + (offset + i));
             Places.insert({
                 'city_id':city.id,
                 'place_id':p.id,
