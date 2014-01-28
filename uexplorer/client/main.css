@@ -569,7 +569,7 @@ line-height: 2.7;
 #ranking{
 	position:relative;
 	float:left;
-	padding:16px 14px 16px 14px;
+	padding:16px 14px 0 14px;
 }
 
 #ranking ul li{
