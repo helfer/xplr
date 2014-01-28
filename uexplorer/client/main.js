@@ -68,6 +68,62 @@ if (Meteor.isClient) {
 
 
 
+  update_markers = function(pano_cur_loc){
+          pano_latlng = L.latLng(pano_cur_loc["d"], pano_cur_loc["e"]);
+          var littleguy = L.marker(pano_latlng, {
+                icon: mark_Icon_b,
+                draggable: false
+            }).addTo(map);
+
+        var places = Places.find().fetch();
+        _.each(places,function(p){
+            console.log(p);
+            var item_latlng = L.latLng(p.lat, p.lng);
+            var distance = parseInt(item_latlng.distanceTo(pano_latlng));
+            console.log(distance);
+            if(distance < 1000){
+                console.log('adding_marker');
+                  var cafeMarkerImage = new google.maps.MarkerImage('/marker_'+p.category+'.png');
+                  cafeMarkerImage.size = new google.maps.Size(26,34);
+                  cafeMarkerImage.scaledSize = new google.maps.Size(26,34);
+
+              //next_location.category    
+              // Here put a place marker in street view
+              var placeMarker = new google.maps.Marker({
+                  position: new google.maps.LatLng(p.lat,p.lng),
+                  map: gmap,
+                  icon: cafeMarkerImage,
+                  title: p.name + " (click to collect!)"
+              });
+
+                var mark_Icon_tmp = L.icon({
+                          iconUrl: '/marker_'+p.category+'.png',
+                          iconRetinaUrl: '/marker_'+p.category+'.png',
+                          iconSize: [26, 34],
+                          iconAnchor: [13, 34],
+                          popupAnchor: [-3, -76]
+                });
+
+
+              //here put a place marker on the map
+                var littleguy = L.marker(item_latlng, {
+                                icon: mark_Icon_tmp,
+                                draggable: false
+                            }).addTo(map);
+
+
+
+
+            }
+            //if place is within 500m, show icon on map and in street view
+            //add listener to marker, that when clicked is collected
+        });
+
+
+
+  }
+
+
   load_map = function(){
 
     var lng = -71.09245089365557;
@@ -113,7 +169,28 @@ if (Meteor.isClient) {
       componentRestrictions: {country: 'us'}
     });
 
-    console.log('auto start');
+
+
+      ///////////////////////////// code for collect mode ///////////////////////////
+      google.maps.event.addListener(pano, 'position_changed', function() {
+         console.log("moved!");
+        if(Session.get("mode") != "collect"){
+            //check if we're guessing or viewing right now.
+            return;
+        }
+             console.log('yah');
+          $("img[src='icon_p_b.png']").remove();
+          var pano_cur_loc = pano.getPosition();
+
+          update_markers(pano_cur_loc);
+
+      });
+
+
+
+
+
+
   }
 
   map_rendered = false;
@@ -544,7 +621,7 @@ if (Meteor.isClient) {
       pano.setOptions({'enableCloseButton':false});
       pano_start_loc =  pano.getPosition();
       
-      var cafeMarkerImage = new google.maps.MarkerImage('/marker_coffee.png');
+      var cafeMarkerImage = new google.maps.MarkerImage('/marker_'+next_location.category+'.png');
           cafeMarkerImage.size = new google.maps.Size(26,34);
           cafeMarkerImage.scaledSize = new google.maps.Size(26,34);
 

@@ -23,7 +23,7 @@ Template.city.events(
             var src = ev.target.children[0].style.visibility="hidden";
         },
         'click a': function(ev, template){
-            console.log(template);
+            //console.log(template);
             Session.set("current_place",template.data.place);
         }
     });
@@ -38,13 +38,13 @@ Template.collections.categories = function(){
 
 
 Template.stickers.visits = function(cat){
-    console.log("looking for " + cat);
+    //console.log("looking for " + cat);
     var n = Visits.find({'cat':cat}).fetch();
     _.each(n,function(x,i){
         x.index = i;
     });
-    console.log("returning " + n.length);
-    console.log(n);
+    //console.log("returning " + n.length);
+    //console.log(n);
     return n;
 }
 
@@ -73,10 +73,10 @@ for (var n=0; n<20; n++){
 }
 
 Handlebars.registerHelper('fora', function(from, to, incr, block) {
-    console.log("for",from,to,incr);
+    //console.log("for",from,to,incr);
     var accum = '';
     for(var i = from; i < to; i += incr){
-        console.log("i " + i);
+        //console.log("i " + i);
         accum += block.fn(i);
     }
     return accum;
