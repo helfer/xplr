@@ -539,8 +539,9 @@ if (Meteor.isClient) {
         if(!Meteor.user()){
             alert("Sign-in to keep track of your score next time :)");
         } else {
+            console.log('insert userid');
             if(Scores.find({'user':Meteor.userId(),'city':Session.get("current_place").id}).count() == 0){
-                Scores.insert({'user':Meteor.userId(),'score':totalScore,'city':Session.get("current_place").id});
+                Scores.insert({'user':Meteor.userId(),'name':Meteor.user().username,'score':totalScore,'city':Session.get("current_place").id});
             } else {
                 var best = Scores.find({'user':Meteor.userId(),'city':Session.get("current_place").id},{sort: {score: -1}}).fetch()[0];
                 console.log("best " + best.score + " now " + totalScore);
