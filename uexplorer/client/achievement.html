@@ -1,8 +1,13 @@
-<template name="achievement">
-    
+
+<template name="apage">
     <div id="achievement" style="width:900px; height:0px">
-    
-        <div id="profile" class="col" style="width:122px; height:348px">
+        {{>achievement}}
+</template>
+
+
+
+<template name="achievement">
+    	<div id="profile" class="col" style="width:122px; height:348px">
     	    <div id="user" >
     	    	<img src="nav_p_hover.png" />
     	    	<label class="title">{{username}}</label>  			
@@ -72,8 +77,12 @@
 
 <template name="rankings">
 		<ul>
-
-			<li id="rank-1"><span class="rank">1</span><img src="avartar_m.png"/><span  class="username" id="name-1">Shalan</span><span id="score-1" class="userscore">657</span></li>
+            {{#each getranks}}
+                {{>rankitem}}
+            {{else}}
+                <li>No scores yet</li>
+            {{/each}}
+			<!--<li id="rank-1"><span class="rank">1</span><img src="avartar_m.png"/><span  class="username" id="name-1">Shalan</span><span id="score-1" class="userscore">657</span></li>
             <li id="rank-1"><span class="rank">2</span><img src="avartar_m.png"/><span  class="username" id="name-1">Steven</span><span id="score-1" class="userscore">557</span></li>
             <li id="rank-1"><span class="rank">3</span><img src="avartar_m.png"/><span  class="username" id="name-1">Shan</span><span id="score-1" class="userscore">494</span></li>
             <li id="rank-1"><span class="rank">4</span><img src="avartar_m.png"/><span  class="username" id="name-1">Jonas</span><span id="score-1" class="userscore">361</span></li>
@@ -82,7 +91,12 @@
             <li id="rank-1"><span class="rank">7</span><img src="avartar_m.png"/><span  class="username" id="name-1">Jojo</span><span id="score-1" class="userscore">281</span></li>
             <li id="rank-1"><span class="rank">8</span><img src="avartar_m.png"/><span  class="username" id="name-1">Eva</span><span id="score-1" class="userscore">250</span></li>
             <li id="rank-1"><span class="rank">9</span><img src="avartar_m.png"/><span  class="username" id="name-1">Chiyuan</span><span id="score-1" class="userscore">224</span></li>
-            <li id="rank-1"><span class="rank">10</span><img src="avartar_m.png"/><span  class="username" id="name-1">Davide</span><span id="score-1" class="userscore">213</span></li>
+            <li id="rank-1"><span class="rank">10</span><img src="avartar_m.png"/><span  class="username" id="name-1">Davide</span><span id="score-1" class="userscore">213</span></li>-->
 
 		</ul>	
 </template> 
+
+
+<template name="rankitem">
+			<li id="rank-1"><span class="rank">{{rank}}</span><img src="avartar_m.png"/><span  class="username" id="name-1">{{name}}</span><span id="score-1" class="userscore">{{score}}</span></li>
+</template>

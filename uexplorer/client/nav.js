@@ -43,7 +43,10 @@ Template.header.events(
         'click #menu-collect': function(ev,template){
             console.log('collect');
             Session.set("mode","collect");
-            $("#achievement").animate({"height":"0px"},1000);
+          $("path.leaflet-clickable").remove();
+          $("img[src='marker_g.png']").remove();
+          $("img[src='icon_p_b.png']").remove();
+          $("img[src='marker_b_guess.png']").remove();
         },
         'click #logo': function (){
 

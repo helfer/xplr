@@ -7,7 +7,7 @@ Scores = new Meteor.Collection("scores"); //scores from the guessing game, guess
 
 
 
-categories = ['resto','cafe','shop','arts'];//this link to the client side code, don't change them without notice...
+categories = ['resto','cafe','shop','arts','bars','educ'];//this link to the client side code, don't change them without notice...
 cat_titles = [
     {cat:'resto',name:'Restaurant'},
     {cat:'cafe',name:'Coffee & Tea'},
@@ -26,6 +26,16 @@ google_queries = {
         'convenience_store',
         'clothing_store',
         'electronics_store']],
+    'bars':['Nightlife',[
+        'bar',
+        'casino',
+        'nightclub'
+    ]],
+    'educ':['University School Library',[
+        'university',
+        'school',
+        'library'
+    ]],
     'arts':['Entertainment',[
         'aquarium',
         'casino',

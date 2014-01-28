@@ -58,7 +58,7 @@ if (Meteor.isClient) {
         position: place.geometry.location
       });
 
-      console.log(place);
+      //console.log(place);
 
       var detail_price = '';
         if(place.price_level) {
@@ -89,7 +89,7 @@ if (Meteor.isClient) {
       '<div id="siteNotice">'+
       
         '<p id="name" style="color:#E16C4E;font-weight:bold">' + place.name + '</p>'+
-        detail_types +
+        //detail_types +
         '<label>Address:</label>' +
         '<p id="name" class="detail">' + place.vicinity + '</p>'+
           detail_rating + detail_price +
@@ -103,6 +103,77 @@ if (Meteor.isClient) {
       });
     }
 
+
+
+  update_markers = function(pano_cur_loc){
+          pano_latlng = L.latLng(pano_cur_loc["d"], pano_cur_loc["e"]);
+          var littleguy = L.marker(pano_latlng, {
+                icon: mark_Icon_b,
+                draggable: false
+            }).addTo(map);
+
+        var places = Places.find().fetch();
+        _.each(places,function(p){
+            //console.log(p);
+            var item_latlng = L.latLng(p.lat, p.lng);
+            var distance = parseInt(item_latlng.distanceTo(pano_latlng));
+            //console.log(distance);
+            if(distance < 200){
+                console.log('adding_marker');
+                  var cafeMarkerImage = new google.maps.MarkerImage('/marker_'+p.category+'.png');
+                  cafeMarkerImage.size = new google.maps.Size(26,34);
+                  cafeMarkerImage.scaledSize = new google.maps.Size(26,34);
+
+              //next_location.category    
+              // Here put a place marker in street view
+              var placeMarker = new google.maps.Marker({
+                  position: new google.maps.LatLng(p.lat,p.lng),
+                  map: gmap,
+                  icon: cafeMarkerImage,
+                  title: p.name + " (click to collect!)"
+              });
+
+                var mark_Icon_tmp = L.icon({
+                          iconUrl: '/marker_'+p.category+'.png',
+                          iconRetinaUrl: '/marker_'+p.category+'.png',
+                          iconSize: [26, 34],
+                          iconAnchor: [13, 34],
+                          popupAnchor: [-3, -76]
+                });
+
+
+              //here put a place marker on the map
+                var littleguy = L.marker(item_latlng, {
+                                icon: mark_Icon_tmp,
+                                draggable: false
+                            }).addTo(map);
+
+
+
+
+
+         if(Meteor.userId()){
+                var c = Visits.find({'place_id':p.place_id}).count();
+                if(c == 0){ 
+                    var visit = { 
+                        'user':Meteor.userId(),
+                        'city':Session.get("current_place").id,
+                        'place_id':p.place_id,
+                        'cat':next_location.category,
+                        'place':next_location
+                    };  
+                    console.log(visit);
+                    Visits.insert(visit);
+                }   
+      }   
+   }
+            //if place is within 500m, show icon on map and in street view
+            //add listener to marker, that when clicked is collected
+        });
+
+
+
+  }
 
 
   load_map = function(){
@@ -150,7 +221,28 @@ if (Meteor.isClient) {
       componentRestrictions: {country: 'us'}
     });
 
-    console.log('auto start');
+
+
+      ///////////////////////////// code for collect mode ///////////////////////////
+      google.maps.event.addListener(pano, 'position_changed', function() {
+         console.log("moved!");
+        if(Session.get("mode") != "collect"){
+            //check if we're guessing or viewing right now.
+            return;
+        }
+             console.log('yah');
+          $("img[src='icon_p_b.png']").remove();
+          var pano_cur_loc = pano.getPosition();
+
+          update_markers(pano_cur_loc);
+
+      });
+
+
+
+
+
+
   }
 
   map_rendered = false;
@@ -257,8 +349,9 @@ if (Meteor.isClient) {
       map.zoomIn();
       map_start_bound = map.getBounds();
       marker.setLatLng([place.geometry.location.d,place.geometry.location.e]);
-      pano.setPosition(place.geometry.location);
-      pano_start_loc = pano.getPosition();
+      //pano.setPosition(place.geometry.location);
+      //pano_start_loc = pano.getPosition();
+      generate_next_location();
       
       $("#intro-overlay").css("display","none");
       $("#circle").animate({"top":"315px"},1000); 
@@ -288,7 +381,7 @@ if (Meteor.isClient) {
 
       //start count time
       totalSeconds = 0;
-      round = 1;
+      round = 0;
       $("#rounds").text(round);
       setTimeout(setTime,6000);
       TimerId = setInterval(setTime, 1000);
@@ -416,14 +509,18 @@ if (Meteor.isClient) {
       last_guess = distance;
       var msg;
 
-      var score = distance;
+      var score = Math.max(1,Math.ceil(Math.max(0,500-distance)*Math.max(5,(20/(totalSeconds+1)))));
       totalScore += score;
 
       if (distance > 4000) msg = "No comment...You are " + distance + " meters away!";
       else if (distance <= 4000 && distance > 2000) msg = "Oops...You are " + distance + " meters away!";
-      else if (distance <= 2000 && distance > 1000) msg = "Not bad...You are " + distance + " meters away!";
-      else if (distance <= 1000 && distance > 200) msg = "Good job...You are just " + distance + " meters away!";
-      else if (distance <= 200) msg = "OMG...You are only " + distance + " meters away!";
+      else if (distance <= 2000 && distance > 300) msg = "Not bad...You are " + distance + " meters away!";
+      else if (distance <= 300 && distance > 100) msg = "Good job...You are just " + distance + " meters away!";
+      else if (distance <= 100) msg = "Wow! You are only " + distance + " meters away!";
+
+      //answer.setIcon(circleIcon);
+      if (last_guess <= 100)
+      var dot = L.marker(pano_latlng, {icon: circleIcon_g}).addTo(map);
       
       //display score
       $("#score ul li:nth-child(" + round+ ")").css("visibility","visible");
@@ -464,15 +561,30 @@ if (Meteor.isClient) {
 
         $("#final").css("display","block");
         $("#final").val("Total:" + totalScore + " Next game");
-        //set to 0
-        round = 0;
-        totalScore = 0;
-
+ 
         //check if user signed-in
         if(!Meteor.user()){
-            alert("Sign-in to keep track of your score :)");
-        }  
+            alert("Sign-in to keep track of your score next time :)");
+        } else {
+            console.log('insert userid');
+            if(Scores.find({'user':Meteor.userId(),'city':Session.get("current_place").id}).count() == 0){
+                Scores.insert({'user':Meteor.userId(),'name':Meteor.user().username,'score':totalScore,'city':Session.get("current_place").id});
+            } else {
+                var best = Scores.find({'user':Meteor.userId(),'city':Session.get("current_place").id},{sort: {score: -1}}).fetch()[0];
+                console.log("best " + best.score + " now " + totalScore);
+                if(totalScore > best.score){
+                    console.log("new high score");
+                    Scores.update({_id:best._id},{"$set" : {"score":totalScore}});
+                    $("#final").val("New high score! - Next");
+                } else {
+                    console.log("leider nein");
+                }
+            }
+        } 
 
+       //set to 0
+        round = 0;
+        totalScore = 0;
       }   
   }
 
@@ -514,12 +626,9 @@ if (Meteor.isClient) {
       map.fitBounds(map_start_bound);
       var center = map.getCenter();
 
-      console.log('bi');
       if(Meteor.userId()){
-        console.log('ba');
         var c = Visits.find({'place_id':next_location.place_id}).count();
         if(c == 0){
-            console.log('bo');
             console.log(next_location);
             var visit = {
                 'user':Meteor.userId(),
@@ -540,7 +649,7 @@ if (Meteor.isClient) {
       pano.setOptions({'enableCloseButton':false});
       pano_start_loc =  pano.getPosition();
       
-      var cafeMarkerImage = new google.maps.MarkerImage('/marker_coffee.png');
+      var cafeMarkerImage = new google.maps.MarkerImage('/marker_'+next_location.category+'.png');
           cafeMarkerImage.size = new google.maps.Size(26,34);
           cafeMarkerImage.scaledSize = new google.maps.Size(26,34);
 
@@ -587,9 +696,6 @@ if (Meteor.isClient) {
                     title: "Drag me to guess"
                 }).addTo(map);
 
-      //answer.setIcon(circleIcon);
-      if (last_guess <= 150)
-      var dot = L.marker(pano_latlng, {icon: circleIcon_g}).addTo(map);
     
       $("#guess").css("display","block");
       $("#next").css("display","none");

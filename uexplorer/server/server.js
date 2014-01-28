@@ -7,10 +7,10 @@ var POI = [{"lat": 42.36674376745008, "lng": -71.10622062455482, "addr_id": 564,
 
 var make_cb = function(city,cat,offset){
     return function(response) {
-          console.log("search count: ", response.results.length);
+          //console.log("search count: ", response.results.length);
           //console.log("result: ", JSON.stringify(response.results[0]));
           _.each(response.results,function(p,i){
-            console.log(p.name + " " + JSON.stringify(p.geometry.location));
+            //console.log(p.name + " " + JSON.stringify(p.geometry.location));
             //console.log('offset ' + offset + ' total ' + (offset + i));
             Places.insert({
                 'city_id':city.id,
@@ -113,13 +113,13 @@ Meteor.startup(function() {
     });
 
     Meteor.publish("places", function(city) {
-        console.log('city');
-        console.log(city);
+        //console.log('city');
+        //console.log(city);
 
         if(Places.findOne({'city_id':city.id}) == undefined){
             fetch_google_places(city);
         } else {
-            console.log("places already fetched");
+            //console.log("places already fetched");
         }
         return Places.find({'city_id':city.id});
     });
@@ -136,7 +136,7 @@ Meteor.startup(function() {
                             "Everything is broken! " + 
                             "Your life is ruined!";
 
-              console.log(message, e.stack);
+              //console.log(message, e.stack);
             });
 
             gquery = google_queries[cat][0]  + " " + city.name;

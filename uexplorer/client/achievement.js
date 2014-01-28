@@ -23,7 +23,7 @@ Template.city.events(
             var src = ev.target.children[0].style.visibility="hidden";
         },
         'click a': function(ev, template){
-            console.log(template);
+            //console.log(template);
             Session.set("current_place",template.data.place);
         }
     });
@@ -38,13 +38,13 @@ Template.collections.categories = function(){
 
 
 Template.stickers.visits = function(cat){
-    console.log("looking for " + cat);
+    //console.log("looking for " + cat);
     var n = Visits.find({'cat':cat}).fetch();
     _.each(n,function(x,i){
         x.index = i;
     });
-    console.log("returning " + n.length);
-    console.log(n);
+    //console.log("returning " + n.length);
+    //console.log(n);
     return n;
 }
 
@@ -55,6 +55,19 @@ Template.stickers.minusvisits = function(cat){
 Template.stickers.position = function(i,o){
     return "top:"+sticker_grid[i+o]['top'] + "px; left:" + sticker_grid[i+o]['left'] + "px;";
 }
+
+Template.rankings.getranks = function(){
+    if(Session.get("current_place")){
+        var cc = Session.get("current_place").id;
+        var sc = Scores.find({'city':cc},{sort: {score:-1},limit:10}).fetch();
+        _.each(sc,function(s,i){
+            console.log(JSON.stringify(s) + " rank " + i);
+            s.rank = i+1;
+        });
+        return sc;
+    }
+}
+
 //sticker image location
 sticker_grid=[];
 for (var n=0; n<20; n++){
@@ -73,10 +86,10 @@ for (var n=0; n<20; n++){
 }
 
 Handlebars.registerHelper('fora', function(from, to, incr, block) {
-    console.log("for",from,to,incr);
+    //console.log("for",from,to,incr);
     var accum = '';
     for(var i = from; i < to; i += incr){
-        console.log("i " + i);
+        //console.log("i " + i);
         accum += block.fn(i);
     }
     return accum;
