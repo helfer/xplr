@@ -6,7 +6,11 @@ Template.achievement.username = function(){
 }
 
 Template.achievement.cname = function(){
-    return Session.get("current_place").name;
+    if(Session.get("current_place")){
+        return Session.get("current_place").name;
+    } else {
+        return "";
+    }
 }
 
 Template.city.events(
