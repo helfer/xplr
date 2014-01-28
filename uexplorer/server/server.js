@@ -58,6 +58,54 @@ Meteor.startup(function() {
         //use geohashing for that, it could be very useful.
     });
 
+    Guesses.allow({
+        'insert': function(userId,doc){
+            return userId == doc.user;
+        }
+    });
+
+    Meteor.publish("cityvisits", function () {
+    	return CityVisits.find({user: this.userId});
+    });
+
+    CityVisits.allow({
+        'insert': function(userId,doc){
+            return userId == doc.user;
+        }
+    });
+
+    Meteor.publish("scores", function () {
+    	return Scores.find();
+    });
+
+    Scores.allow({
+        'insert': function(userId,doc){
+            return userId == doc.user;
+        },
+        'update': function(userId, doc, fields, modifier) {
+            return userId == doc.user;
+        }
+    });
+
+    Scores.deny({
+      update: function (userId, docs, fields, modifier) {
+        // can't change user
+        return _.contains(fields, 'user');
+      }
+    });
+
+    Meteor.publish("visits", function (city) {
+    	return Visits.find({user: this.userId,'city':city.id});
+    });
+
+    Visits.allow({
+        'insert': function(userId,doc){
+            return userId == doc.user;
+        }
+    });
+
+
+
     Meteor.publish("locations", function () {
     	return Locations.find({}); //for now, publish all locations
     

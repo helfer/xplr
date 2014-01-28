@@ -1,5 +1,15 @@
 
-Template.cities.events(
+Template.achievement.username = function(){
+    if(Meteor.user()){
+        return Meteor.user().username;
+    }
+}
+
+Template.achievement.cname = function(){
+    return Session.get("current_place").name;
+}
+
+Template.city.events(
     {   
         'mouseenter li': function(ev, template){
             var src = ev.target.children[0].style.visibility="visible";
@@ -8,10 +18,41 @@ Template.cities.events(
         'mouseleave li': function(ev, template){
             var src = ev.target.children[0].style.visibility="hidden";
         },
+        'click a': function(ev, template){
+            console.log(template);
+            Session.set("current_place",template.data.place);
+        }
     });
 
+Template.cities.visited = function(){
+    return CityVisits.find().fetch();
+}
+
+Template.collections.categories = function(){
+    return cat_titles;
+}
+
+
+Template.stickers.visits = function(cat){
+    console.log("looking for " + cat);
+    var n = Visits.find({'cat':cat}).fetch();
+    _.each(n,function(x,i){
+        x.index = i;
+    });
+    console.log("returning " + n.length);
+    console.log(n);
+    return n;
+}
+
+Template.stickers.minusvisits = function(cat){
+    return Visits.find({'cat':cat}).count();
+}
+
+Template.stickers.position = function(i,o){
+    return "top:"+sticker_grid[i+o]['top'] + "px; left:" + sticker_grid[i+o]['left'] + "px;";
+}
 //sticker image location
-var sticker_grid=[];
+sticker_grid=[];
 for (var n=0; n<20; n++){
     if (n<3)
         sticker_grid.push({"top":0 ,"left":24*(n+1)});
@@ -26,3 +67,20 @@ for (var n=0; n<20; n++){
     else if(n>=17)
         sticker_grid.push({"top":96 ,"left":24*(n-16)});              
 }
+
+Handlebars.registerHelper('fora', function(from, to, incr, block) {
+    console.log("for",from,to,incr);
+    var accum = '';
+    for(var i = from; i < to; i += incr){
+        console.log("i " + i);
+        accum += block.fn(i);
+    }
+    return accum;
+});
+
+Handlebars.registerHelper('times', function(n, block) {
+    var accum = '';
+    for(var i = 0; i < n; ++i)
+        accum += block.fn(i);
+    return accum;
+});

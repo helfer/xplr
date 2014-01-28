@@ -2,6 +2,7 @@
 
 if (Meteor.isClient) {
 
+  Session.set("mode","welcome");
 
   update_places = function(){
     console.log('subscription complete');
@@ -16,6 +17,7 @@ if (Meteor.isClient) {
           console.log("place");
           console.log(place.formatted_address);
           Meteor.subscribe("places",place,update_places());
+          Meteor.subscribe('visits',place);
       }
   });
 
@@ -92,6 +94,7 @@ if (Meteor.isClient) {
 
     //pano = new google.maps.StreetViewPanorama(myDOMobj, panoramaOptions);
     pano = gmap.getStreetView();
+    pano.setOptions({'enableCloseButton':false});
     pano.setPosition(point);
     pano.setVisible(true);
     panosvc = new google.maps.StreetViewService();
@@ -149,7 +152,9 @@ if (Meteor.isClient) {
 
 
   Meteor.subscribe('guesses');
+  Meteor.subscribe('scores');
   Meteor.subscribe('locations');
+  Meteor.subscribe('cityvisits');
 
   Deps.autorun(function () {
     //draw them points :)
@@ -199,6 +204,13 @@ if (Meteor.isClient) {
         return;
       }
       Session.set("current_place",place);
+      document.getElementById("autocomplete").value = "";
+      if(Meteor.userId()){
+          var count = CityVisits.find({'city':place.id}).count();
+          if(count == 0){
+              CityVisits.insert({'city':place.id,'name':place.name,'place':place,'user':Meteor.userId()});
+          }
+      }
       var vp = place.geometry.viewport;
       map.fitBounds([[vp.ta.d,vp.ia.d],[vp.ta.b,vp.ia.b]]);
       map.zoomIn();
@@ -243,6 +255,7 @@ if (Meteor.isClient) {
     },
   });
 
+  /*
   Template.header.events({
     'click #logo': function (){
       $(".circle-text-2").css("display","none");
@@ -269,7 +282,7 @@ if (Meteor.isClient) {
       $("#circle").animate({"top":"95px"},1000).delay(1000);  
       $("#intro").animate({"height":"320px"},1000).delay(1000);             
     }
-  });
+  });*/
 
 
   Template.map.rendered = function (){
@@ -417,8 +430,8 @@ if (Meteor.isClient) {
             user:Meteor.userId(),
             lat:marker_loc.lat,
             lng:marker_loc.lng,
-            real_lat:pano_loc["d"],
-            real_lng:pano_loc["e"],
+            real_lat:pano_start_loc["d"],
+            real_lng:pano_start_loc["e"],
             score:distance
           });
       }
@@ -489,10 +502,30 @@ if (Meteor.isClient) {
       map.fitBounds(map_start_bound);
       var center = map.getCenter();
 
+      console.log('bi');
+      if(Meteor.userId()){
+        console.log('ba');
+        var c = Visits.find({'place_id':next_location.place_id}).count();
+        if(c == 0){
+            console.log('bo');
+            console.log(next_location);
+            var visit = {
+                'user':Meteor.userId(),
+                'city':Session.get("current_place").id,
+                'place_id':next_location.place_id,
+                'cat':next_location.category,
+                'place':next_location
+            };
+            console.log(visit);
+            Visits.insert(visit);
+        }
+      }
+
 
       //var place_loc = new google.maps.LatLng(next_location['lat'],next_location['lng']);
       pano = gmap.getStreetView();
       pano.setPosition(place_loc);
+      pano.setOptions({'enableCloseButton':false});
       pano_start_loc =  pano.getPosition();
       
       var cafeMarkerImage = new google.maps.MarkerImage('/marker_coffee.png');
