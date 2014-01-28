@@ -252,7 +252,7 @@ if (Meteor.isClient) {
       $("#intro-img").css("display","block");
       $("#intro-img-2").css("display","block");
       $("#panel").animate({"left":"900px"},1000);
-      $("#circle").animate({"left":"385px","width":"130px", "height":"130px", "top":"315px"},1000);
+      $("#circle").animate({"left":"385px","width":"130px", "height":"130px", "top":"95px"},1000);
       $("#map").animate({"opacity":"0"},1000);
       $("#intro").animate({"width":"450px"},1000);
       $("#intro2").animate({"left":"450px","width":"450px"},1000);

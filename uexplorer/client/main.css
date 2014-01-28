@@ -133,6 +133,9 @@ input:hover {
 }
 
 #circle{
+	width:130px;
+	height:130px;
+	z-index: 998;
 	position: absolute;
 	left:385px;
 	top:95px;
@@ -489,6 +492,7 @@ input:hover {
 ********************************/
 
 #achievement {
+	z-index: 999;
 	position:absolute;
 	top:78px;
 	overflow: hidden;
