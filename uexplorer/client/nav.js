@@ -86,7 +86,30 @@ Template.header.isactive = function(name){
     }
 }
 
+Template.header.loggedin = function(){
+    if(Meteor.userId()){
+        return true;
+    } else {
+        return false;
+    }
+}
 
+Template.header.rendered = function (){
+    if(Session.get("mode") == "welcome"){
+        $("#menu-collect").css("visibility","hidden");
+        $("#menu-achievement").css("visibility","hidden");
+        $("#menu-guess").css("visibility","hidden");
+    } else {
+        if(Meteor.userId()){
+            $("#menu-collect").css("visibility","visible");
+            $("#menu-achievement").css("visibility","visible");
+            $("#menu-guess").css("visibility","visible");
+        } else {
+            $("#menu-guess").css("visibility","visible");
+        }
+    }
+
+}
 /*
     Accounts.createUser({email: email, username: email,  password: pass}, function (error) {
       if (error) {

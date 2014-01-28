@@ -52,13 +52,17 @@
 
 <template name="panel">
     <div id="panel" style="width: 220px; height: 280px;">
-        <div id="message" style="visibility:hidden">blah blah</div>
+        <div id="message" style="visibility:hidden"></div>
         <div id="score">
             {{> score}}
-        </div>    
-        <input type="button" class="inc" id="guess" value="Guess!" />
-        <input type="button" class="inc" id="next" value="Next" style="display:none"/>
-        <input type="button" class="inc" id="final" value="Final" style="display:none"/>
+        </div> 
+
+        {{#if isguess}}   
+            <input type="button" class="inc" id="guess" value="Guess!" />
+        {{/if}}    
+            <input type="button" class="inc" id="next" value="Next" style="display:none"/>
+            <input type="button" class="inc" id="final" value="Final" style="display:none"/>
+
     </div>    
 </template>
 
@@ -92,7 +96,6 @@
     </script>-->
     <link href='//api.tiles.mapbox.com/mapbox.js/v1.6.0/mapbox.css' rel='stylesheet' />
     <script src='//api.tiles.mapbox.com/mapbox.js/v1.6.0/mapbox.js'></script>
-
 </head>
 
 
@@ -103,5 +106,22 @@
         {{> bottom}}
         {{> achievement}}
     </div>
+<div id="override_javascript_alert"></div>
+
+<script>
+    window.alert = function(message) {
+        $('#override_javascript_alert').text(message).dialog({
+            modal:true,
+            title:'Message',
+            buttons: {
+                'OK':function(){
+                    $(this).dialog('close');
+                }
+            }
+        });
+    };
+</script>
+
+
 </body>
 

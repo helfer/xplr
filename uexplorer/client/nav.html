@@ -4,18 +4,21 @@
         <img id="logo" src="logo.png"/>
         <div id="menu">
             <ul>
-                <a><li class="menu" id="menu-guess">
-                    <img src="nav_g{{isactive "guess"}}.png"/>
-                    <label>Guess</label>
-                </li></a>
-                <a><li class="menu" id="menu-collect">
-                    <img src="nav_f{{isactive "collect"}}.png"/>
-                    <label>Collect</label>
-                </li></a>
-                <a><li class="menu" id="menu-achievement">
-                    <img src="nav_p{{isactive "achievement"}}.png"/>
-                    <label>Achievement</label>
-                </li></a>                        
+                {{#if loggedin}}
+                    <a><li class="menu" id="menu-guess" style="visibility:visible">
+                        <img src="nav_g{{isactive "guess"}}.png"/>
+                        <label>Guess</label>
+                    </li></a>
+                
+                    <a><li class="menu" id="menu-collect" style="visibility:visible">
+                        <img src="nav_f{{isactive "collect"}}.png"/>
+                        <label>Collect</label>
+                    </li></a>
+                    <a><li class="menu" id="menu-achievement" style="visibility:visible">
+                        <img src="nav_p{{isactive "achievement"}}.png"/>
+                        <label>Achievement</label>
+                    </li></a>
+                {{/if}}                        
             </ul> 
         </div>           
         <div id="login-temp">
