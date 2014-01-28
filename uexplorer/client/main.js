@@ -81,7 +81,7 @@ if (Meteor.isClient) {
             var item_latlng = L.latLng(p.lat, p.lng);
             var distance = parseInt(item_latlng.distanceTo(pano_latlng));
             console.log(distance);
-            if(distance < 1000){
+            if(distance < 200){
                 console.log('adding_marker');
                   var cafeMarkerImage = new google.maps.MarkerImage('/marker_'+p.category+'.png');
                   cafeMarkerImage.size = new google.maps.Size(26,34);
