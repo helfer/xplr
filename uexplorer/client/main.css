@@ -138,6 +138,11 @@ input:hover {
 	top:95px;
 }
 
+#circle img{
+	width:inherit;
+	height:inherit;
+}
+
 #circle #circle-text {
 	position:absolute;
 	top:0;
@@ -151,12 +156,53 @@ input:hover {
 	line-height: 20px;
 }
 
-#panel {
+#circle .circle-text-2{
+	position:absolute;
+	display:none;
+	color: #ffffff;
+}
+#circle #clock,#circle #rounds{
+
+	width:80px;
+	top:0;
+	text-align: center;	
+	margin-top: 14px;
+	font-size: 19px;
+	font-weight: bold;
+}
+
+#circle #rounds{
+	text-align: right;
+	width:40px;
+	top:35px;
+}
+
+#circle #totalrounds{
+	text-align: left;
+	top:55px;
+	left:40px;
+}
+
+#circle #back-btn{
 	position:absolute;
 	top:0px;
-	left:900px;
-	background-color:#ffffff;
+	left:100px;
+	width:60px;
+	height:60px;
+	border-radius: 40px;
+	background-color: #039ED5;
+	color:#ffffff;
+	text-align: center;
+	font-size: 14px;
+	font-weight:bold;
+	padding:10px;
+	line-height: 20px;
 }
+
+#circle #back-btn:hover{
+	cursor: pointer;
+	background-color: #006884
+}	
 
 #streetview{
 	position:absolute;
@@ -236,12 +282,66 @@ input:hover {
 	top: 7px;
 }
 
-#message {
-	height:72px;
-	margin-top:80px;
+#panel {
+	position:absolute;
+	top:0px;
+	left:900px;
+	background-color:#ffffff;
+}
+
+#panel #message {
+	height:32px;
+	margin-top:20px;
 	margin-left: 30px;
 	margin-right:30px;
 	font-size:14px;	
+}
+#panel #score{
+	height:140px;
+}
+
+#panel #score ul{
+	margin-left: 30px;
+	list-style: none;
+	padding:0;
+
+}
+
+#panel #score ul li{
+	position:relative;
+	float:left;
+	width:180px;
+	height:28px;
+	visibility: hidden;
+}
+#panel #score ul li img{
+	position: relative;
+	float:left;
+}	
+
+#panel #score ul li .second{
+	line-height: 25px;
+	position:relative;
+	float:left;
+	width:36px;
+	text-align: right;
+}
+#panel #score ul li .meter{
+	line-height: 25px;
+	position:relative;
+	float:left;
+	width:50px;
+	text-align: right;
+}
+#panel #score ul li .score{
+	line-height: 25px;
+	position:relative;
+	float:left;
+	width:52px;
+	text-align: right;
+	font-size:17px;
+	color:#D65238;
+	font-weight: bold;
 }
 
 .inc {
@@ -249,10 +349,11 @@ input:hover {
 	position:relative;
 	margin-top:14px;
 	margin-left:28px;	
-	width:150px;
+	width:152px;
 	height:36px;	
 	color:#ffffff;
 	font-size: 14px;
+	padding:0 10px 0 10px;
 }
 
 #guess,#play {
@@ -269,12 +370,15 @@ input:hover {
 	background-color: #D65238;
 }
 
-#next{
+#next,#final{
 	background-color:#3BB98C;
 }
 
-#next:hover{
+#next,#final:hover{
 	background-color:#0CA369;
+}
+#guess,#return,#next,#final{
+	width:164px;
 }
 
 #return{

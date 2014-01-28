@@ -117,7 +117,8 @@ if (Meteor.isClient) {
 
   map_rendered = false;
 
-
+  round = null;
+  totalScore = 0;
   pservice = null;  
   marker = null;
   pano = null;
@@ -226,33 +227,49 @@ if (Meteor.isClient) {
       $("#streetview").animate({"opacity":"1"},1000);         
       $("#steps").animate({"opacity":"0"},1000);
 
+      setTimeout(function(){$("#circle-text").css("display","none");
+                            },1000); 
 
       $("#intro2").animate({"left":"0px","width":"900px"},1000).delay(1000);  
       $("#intro").animate({"width":"900px"},1000).delay(1000);
       $("#map").animate({"opacity":"1"},1000).delay(1000);      
-      $("#circle").animate({"left":"900px"},1000).delay(1000);
+      $("#circle").animate({"left":"698px", "width":"80px", "height":"80px", "top":"285px"},1000).delay(1000);
       $("#panel").animate({"left":"680px"},1000).delay(3000);
 
       function displaynone(){
           $("#intro-img").css("display","none");
           $("#intro-img-2").css("display","none");
+          $(".circle-text-2").css("display","block");
+          $("#back-btn").css("display","block");
       }
       setTimeout(displaynone,2000);
+
+      //start count time
+      totalSeconds = 0;
+      round = 1;
+      $("#rounds").text(round);
+      setTimeout(setTime,6000);
+      TimerId = setInterval(setTime, 1000);
+
     },
   });
 
   Template.header.events({
     'click #logo': function (){
+      $(".circle-text-2").css("display","none");
+      $("#back-btn").css("display","none");
+      $("#achievement").animate({"height":"0px"},1000);
 
       $("#intro-img").css("display","block");
       $("#intro-img-2").css("display","block");
       $("#panel").animate({"left":"900px"},1000);
-      $("#circle").animate({"left":"385px"},1000);
+      $("#circle").animate({"left":"385px","width":"130px", "height":"130px", "top":"315px"},1000);
       $("#map").animate({"opacity":"0"},1000);
       $("#intro").animate({"width":"450px"},1000);
       $("#intro2").animate({"left":"450px","width":"450px"},1000);
       $("#steps").animate({"opacity":"1"},1000);            
 
+      setTimeout(function(){$("#circle-text").css("display","block");},1000); 
       setTimeout(function(){$("#top").animate({"height":"320px"},1000);},1000); 
       setTimeout(function(){$("#intro-overlay").css("display","block");},2000); 
       $("#streetview").animate({"opacity":"0"},1000).delay(1000);         
@@ -345,16 +362,29 @@ if (Meteor.isClient) {
     'click #next': function (){
           generate_next_location();
           state = 'GUESS';
-    },
+    }, 
+
+    'click #final': function (){
+          generate_next_location();
+          state = 'GUESS';
+    } 
+           
+  });
+
+  Template.circle.events({
    
-   'click #return':function(){
+   'click #back-btn':function(){
       pano.setPosition(pano_start_loc);
    }   
            
   });
 
+
   function check_guess(){
       //display address in streetview
+      clearInterval(TimerId);
+      //display score
+      
 
       var addr_container = $(".gm-style div").filter(function() {
                   return $(this).css('left') == '88px';
@@ -364,21 +394,33 @@ if (Meteor.isClient) {
 
       var marker_loc = marker.getLatLng();      
       //var pano_loc = pano.getPosition();
-      pano_latlng = L.latLng(pano_start_loc["d"], pano_start_loc["e"]);
+      var pano_cur_loc = pano.getPosition();
+      pano_latlng = L.latLng(pano_cur_loc["d"], pano_cur_loc["e"]);
       get_nearby_markers(pano_start_loc);
+      
       var distance = parseInt(marker_loc.distanceTo(pano_latlng));
       last_guess = distance;
       var msg;
 
+      var score = distance;
+      totalScore += score;
+
       if (distance > 4000) msg = "No comment...You are " + distance + " meters away!";
       else if (distance <= 4000 && distance > 2000) msg = "Oops...You are " + distance + " meters away!";
-      else if (distance <= 1000 && distance > 1000) msg = "Not bad...You are just " + distance + " meters away!";
-      else if (distance < 1000) msg = "OMG...You are only " + distance + " meters away!";
-
+      else if (distance <= 2000 && distance > 1000) msg = "Not bad...You are " + distance + " meters away!";
+      else if (distance <= 1000 && distance > 200) msg = "Good job...You are just " + distance + " meters away!";
+      else if (distance <= 200) msg = "OMG...You are only " + distance + " meters away!";
+      
+      //display score
+      $("#score ul li:nth-child(" + round+ ")").css("visibility","visible");
+      $("#score ul li:nth-child(" + round+ ")").find(".second").text(totalSeconds+"s");
+      $("#score ul li:nth-child(" + round+ ")").find(".meter").text(distance+"m");
+      $("#score ul li:nth-child(" + round+ ")").find(".score").text(score);
+      
       $("#message").text(msg);
       $("#message").css("visibility","visible");
       $("#guess").css("display","none");
-      $("#next").css("display","block");
+
       $(".gmnoprint svg text").css("display","block");
      
       if(Meteor.user()){ 
@@ -401,8 +443,23 @@ if (Meteor.isClient) {
 
       // zoom the map to the polyline
       map.fitBounds(polyline.getBounds().pad(0.07)); 
- 
 
+      //check if it is the final round:
+      if (round !== 5) $("#next").css("display","block");
+      else {//final round
+
+        $("#final").css("display","block");
+        $("#final").val("Total:" + totalScore + " Next game");
+        //set to 0
+        round = 0;
+        totalScore = 0;
+
+        //check if user signed-in
+        if(!Meteor.user()){
+            alert("Sign-in to keep track of your score :)");
+        }  
+
+      }   
   }
 
 
@@ -432,6 +489,7 @@ if (Meteor.isClient) {
  //the coordinates of next_location may not be exactly those of place_loc
  //this happens when no nearby panorama is returned.
  function prompt_new_guess(next_location,place_loc){
+
      //hide address
       var addr_container = $(".gm-style div").filter(function() {
                   return $(this).css('left') == '88px';
@@ -489,22 +547,25 @@ if (Meteor.isClient) {
       '</div>'+
       '</div>';
 
+      //add info window
+      google.maps.event.addListener(placeMarker, 'click', function() {
+        infowindow.setContent(contentString);
+        infowindow.open(pano,placeMarker);
+      });
 
-        google.maps.event.addListener(placeMarker, 'click', function() {
-          infowindow.setContent(contentString);
-          infowindow.open(pano,placeMarker);
-        });
+      //new round and start counting
+      round++;
+      $("#rounds").text(round);
+      totalSeconds = 0;
+      TimerId = setInterval(setTime, 1000);
 
-
-
+      //remove markers
       $("path.leaflet-clickable").remove();
       $("img[src='marker_g.png']").remove();
       $("img[src='icon_p_b.png']").remove();
       $("img[src='marker_b_guess.png']").remove();
       $(".gmnoprint svg text").css("display","none");
-
-         
-      
+    
       // new marker
       marker = L.marker(center, {
                     icon: mark_Icon_guess,
@@ -518,7 +579,24 @@ if (Meteor.isClient) {
     
       $("#guess").css("display","block");
       $("#next").css("display","none");
+      $("#final").css("display","none");
       $("#message").css("visibility","hidden");
+
+      //clear score record if round=1;
+      if (round == 1) $("#score ul li").css("visibility","hidden");
+  }
+
+  function setTime()
+  {
+      ++totalSeconds;
+      $("#clock").text( pad(parseInt(totalSeconds/60))+":"+pad(totalSeconds%60));
+  }
+
+  function pad(val)
+  {
+      var valString = val + "";
+      if(valString.length < 2) return "0" + valString;
+      else return valString;
   }
 
 
