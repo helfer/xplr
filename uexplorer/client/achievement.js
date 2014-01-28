@@ -55,6 +55,19 @@ Template.stickers.minusvisits = function(cat){
 Template.stickers.position = function(i,o){
     return "top:"+sticker_grid[i+o]['top'] + "px; left:" + sticker_grid[i+o]['left'] + "px;";
 }
+
+Template.rankings.getranks = function(){
+    if(Session.get("current_place")){
+        var cc = Session.get("current_place").id;
+        var sc = Scores.find({'city':cc},{sort: {score:-1},limit:10}).fetch();
+        _.each(sc,function(s,i){
+            console.log(JSON.stringify(s) + " rank " + i);
+            s.rank = i+1;
+        });
+        return sc;
+    }
+}
+
 //sticker image location
 sticker_grid=[];
 for (var n=0; n<20; n++){

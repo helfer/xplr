@@ -60,7 +60,7 @@ if (Meteor.isClient) {
         position: place.geometry.location
       });
 
-      console.log(place);
+      //console.log(place);
 
       var detail_price = '';
         if(place.price_level) {
@@ -91,7 +91,7 @@ if (Meteor.isClient) {
       '<div id="siteNotice">'+
       
         '<p id="name" style="color:#E16C4E;font-weight:bold">' + place.name + '</p>'+
-        detail_types +
+        //detail_types +
         '<label>Address:</label>' +
         '<p id="name" class="detail">' + place.vicinity + '</p>'+
           detail_rating + detail_price +
@@ -116,10 +116,10 @@ if (Meteor.isClient) {
 
         var places = Places.find().fetch();
         _.each(places,function(p){
-            console.log(p);
+            //console.log(p);
             var item_latlng = L.latLng(p.lat, p.lng);
             var distance = parseInt(item_latlng.distanceTo(pano_latlng));
-            console.log(distance);
+            //console.log(distance);
             if(distance < 200){
                 console.log('adding_marker');
                   var cafeMarkerImage = new google.maps.MarkerImage('/marker_'+p.category+'.png');
@@ -153,7 +153,22 @@ if (Meteor.isClient) {
 
 
 
-            }
+
+         if(Meteor.userId()){
+                var c = Visits.find({'place_id':p.place_id}).count();
+                if(c == 0){ 
+                    var visit = { 
+                        'user':Meteor.userId(),
+                        'city':Session.get("current_place").id,
+                        'place_id':p.place_id,
+                        'cat':next_location.category,
+                        'place':next_location
+                    };  
+                    console.log(visit);
+                    Visits.insert(visit);
+                }   
+      }   
+   }
             //if place is within 500m, show icon on map and in street view
             //add listener to marker, that when clicked is collected
         });
