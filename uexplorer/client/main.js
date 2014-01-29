@@ -1,6 +1,8 @@
 
 
 if (Meteor.isClient) {
+    markersArray = [];
+    TimerId = null;
 
   Session.set("mode","welcome");
 
@@ -12,6 +14,7 @@ if (Meteor.isClient) {
         //generate_next_location();
     }
   }
+
 
   //subscribe to places, when city is updated.
   //this function runs automatically, when current_place changes.
@@ -42,6 +45,14 @@ if (Meteor.isClient) {
       }
   }
 
+    clearOverlays = function(){
+      for (var i = 0; i < markersArray.length; i++ ) {
+        markersArray[i].setMap(null);
+      }
+      markersArray.length = 0;
+    }
+
+
   make_panosvc_cb = function(next_location){
 
     return function(result,status){
@@ -65,6 +76,7 @@ if (Meteor.isClient) {
 
       var markerinfo = addMarkerWindow(place);
       //console.log(place);
+      markersArray.push(marker);
       google.maps.event.addListener(marker, 'click', function() {
         infowindow.setContent(markerinfo);
         infowindow.open(pano, this);
@@ -504,6 +516,7 @@ if (Meteor.isClient) {
 
     'click #next': function (){
           generate_next_location();
+          clearOverlays();
           state = 'GUESS';
     }, 
 
@@ -800,7 +813,7 @@ if (Meteor.isClient) {
       if (round == 1) $("#score ul li").css("visibility","hidden");
   }
 
-  function setTime()
+  setTime = function()
   {
       ++totalSeconds;
       $("#clock").text( pad(parseInt(totalSeconds/60))+":"+pad(totalSeconds%60));
@@ -812,6 +825,23 @@ if (Meteor.isClient) {
       if(valString.length < 2) return "0" + valString;
       else return valString;
   }
+
+  Deps.autorun(function(){
+    if(Session.get("mode")){
+        if(Session.get("mode") != "guess"){
+            console.log("running");
+            //reset game, stop timer.
+            totalScore = 0;
+            round = 1;
+            if(TimerId != null){
+                clearInterval(TimerId);
+            }
+            totalSeconds = -1;
+            setTime();
+            $("#rounds").text(1);
+        }
+    }
+  });
 
 
 }

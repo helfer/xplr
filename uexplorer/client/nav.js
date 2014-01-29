@@ -56,6 +56,7 @@ Template.header.events(
             Session.set("mode","guess");
             $("#circle").css("display","block");
             $("#achievement").animate({"height":"0px"},1000);
+            TimerId = setInterval(setTime, 1000);
             clear_mapbox_marker();
         },
 
