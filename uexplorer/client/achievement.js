@@ -13,6 +13,36 @@ Template.achievement.cname = function(){
     }
 }
 
+Template.stickers.events(
+    {
+        'mouseenter img': function(ev, template){
+            if(ev.target.id){
+                var title = ev.target.title;
+                var id=ev.target.id;
+                var parentId = ev.target.parentNode.id;
+                var top = parseInt(ev.target.style.top.replace("px",""));
+                var left = parseInt(ev.target.style.left.replace("px",""));
+                var tooltip = '<span id="t-'+id+'" class="tooltip">' + title + '<span class="arrow"></span></span>';
+               
+
+                $("#"+parentId).append(tooltip);
+                var ttop = top - $("#t-"+id).height() - 10;
+                var tleft = left - 34;
+                $("#t-"+id).css("top",ttop);
+                $("#t-"+id).css("left",tleft);
+             }   
+        },
+
+        'mouseleave img': function(ev, template){
+            if(ev.target.id){
+                var id = ev.target.id;
+                $("#t-"+id).remove();
+            }    
+        },
+
+
+    });
+
 Template.city.events(
     {   
         'mouseenter li': function(ev, template){
@@ -54,7 +84,7 @@ Template.stickers.visits = function(cat){
         x.index = i;
     });
     //console.log("returning " + n.length);
-    //console.log(n);
+    console.log(n);
     return n;
 }
 

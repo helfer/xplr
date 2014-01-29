@@ -58,7 +58,7 @@
         <img src="sticker_0.png" style="{{position this 0}}"/>
     {{/times}}
     {{#each visits cat}}
-        <img src="sticker_{{../cat}}.png" style="{{position index 0}}"/>
+        <img id="{{place.place_id}}" title="{{place.name}}" src="sticker_{{cat}}.png" style="{{position index 0}}"/>
     {{/each}}
     <!-- <img src="sticker_resto.png" style="top:0px; left:24px"/>
     <img src="sticker_0.png" style="top:0px; left:48px"/>
