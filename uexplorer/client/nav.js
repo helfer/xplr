@@ -69,6 +69,15 @@ Template.header.events(
             $("img[src='icon_p_b.png']").remove();
             $("img[src='marker_b_guess.png']").remove();
             clear_mapbox_marker();
+
+            var pano_cur_loc = pano.getPosition();
+            pano_latlng = L.latLng(pano_cur_loc["d"], pano_cur_loc["e"]);
+            var littleguy = L.marker(pano_latlng, {
+                icon: mark_Icon_b,
+                draggable: false
+            }).addTo(map);
+
+
         },
         'click #logo': function (){
 

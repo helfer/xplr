@@ -245,7 +245,6 @@ if (Meteor.isClient) {
             //check if we're guessing or viewing right now.
             return;
         }
-             console.log('yah');
           $("img[src='icon_p_b.png']").remove();
           var pano_cur_loc = pano.getPosition();
 
