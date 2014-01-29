@@ -79,14 +79,21 @@
 </template>
 
 <template name="collect_panel">
-    hi, i'm a panel
-    {{#each missing_places}}
-        {{>justaplace}}
-    {{/each}}
+    Places nearby:
+    {{#with missing_places}}
+        <ul>
+        {{#each places}}
+            <li>
+            {{>justaplace}}
+            </li>
+        {{/each}}
+        </ul>
+        Still {{count}} places to find.
+    {{/with}}
 </template>
 
 <template name="justaplace">
-    {{name}}
+    {{name}} {{distance}}m
 </template>
 
 <template name="steps">

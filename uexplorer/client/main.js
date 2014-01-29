@@ -536,10 +536,21 @@ if (Meteor.isClient) {
     console.log("needlen " + needplaces.length);
 
     //now add distance and sort the places by distance!
+    var pano_cur_loc = Session.get("current_position");
+    console.log(pano_cur_loc);
+    var cp = L.latLng(pano_cur_loc["d"], pano_cur_loc["e"]);
+    _.each(needplaces,function(x){
+        var place_loc = L.latLng(x.lat,x.lng);
+        var distance = parseInt(place_loc.distanceTo(cp));
+        x.distance = distance;
+    });
 
+
+    needplaces.sort(function(a,b){return a.distance - b.distance;});
+    //_.each(needplaces,function(x){console.log(x.distance)});
 
     //return the places and total number still to find
-    return needplaces
+    return {'count':needplaces.length, 'places':needplaces.slice(0,5)}
   }
 
   Template.circle.events({
