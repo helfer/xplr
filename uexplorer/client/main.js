@@ -71,7 +71,7 @@ if (Meteor.isClient) {
       });
     }
 
-    function addMarkerWindow(place) {
+    addMarkerWindow = function(place){
         var detail_address = '';
         if(place.vicinity) {
            detail_address = '<label>Address:</label><p id="name" class="detail">' + place.vicinity + '</p>';
@@ -105,13 +105,13 @@ if (Meteor.isClient) {
         var infoContentString = '<div id="content">'+
         '<div id="siteNotice">'+
         
-          '<p id="name" style="color:#E16C4E;font-weight:bold">' + place.name + '</p>'+
+          '<p id="name">' + place.name + '</p>'+
               detail_address+ detail_rating + detail_price +
         '</div>'+
         '</div>';
 
         return infoContentString;
-      }
+      };
 
 
   //update marker in collection mode
@@ -683,7 +683,7 @@ if (Meteor.isClient) {
       var contentString = '<div id="content">'+
       '<div id="siteNotice">'+
       
-        '<h1 id="firstHeading" class="firstHeading">' + next_location.name + '</h1>'+
+        '<p id="name">' + next_location.name + '</p>'+
       
       '</div>'+
       '</div>';

@@ -56,6 +56,7 @@ Template.header.events(
             Session.set("mode","guess");
             $("#circle").css("display","block");
             $("#achievement").animate({"height":"0px"},1000);
+            clear_mapbox_marker();
         },
 
         'click #menu-collect': function(ev,template){
@@ -63,12 +64,15 @@ Template.header.events(
             Session.set("mode","collect");
             $("#circle").css("display","none");
             $("#achievement").animate({"height":"0px"},1000);
-          $("path.leaflet-clickable").remove();
-          $("img[src='marker_g.png']").remove();
-          $("img[src='icon_p_b.png']").remove();
-          $("img[src='marker_b_guess.png']").remove();
+            $("path.leaflet-clickable").remove();
+            $("img[src='marker_g.png']").remove();
+            $("img[src='icon_p_b.png']").remove();
+            $("img[src='marker_b_guess.png']").remove();
+            clear_mapbox_marker();
         },
         'click #logo': function (){
+
+            clear_mapbox_marker();
 
           Session.set("mode","welcome");
               $(".circle-text-2").css("display","none");
@@ -159,6 +163,16 @@ function add_mapbox_collection_marker(collected){
                 icon: mark_Icon_tmp,
                 draggable: false
             }).addTo(map);
+      
+            var html_temp = addMarkerWindow(p) ;
+
+            var popup_option = {};
+
+            marker_temp.bindPopup(html_temp,popup_option);
+
+            marker_temp.on('click', function(e) {
+              this.openPopup();
+            });
 
             collection_marker_group.push(marker_temp);
 

@@ -606,7 +606,7 @@ line-height: 2.7;
 
 /*******************************
 *
-*   panorama options
+*   map overlay options
 *
 ********************************/
 
@@ -617,6 +617,11 @@ line-height: 2.7;
 
 .gm-style div[style*="z-index: 1; margin: 10px; position: absolute; left: 88px; top: 0px;"] {
 	display:none;
+}
+
+#content #name{
+	color:#E16C4E;
+	font-weight:bold
 }
 
 #content label{
