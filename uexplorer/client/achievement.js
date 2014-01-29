@@ -16,10 +16,15 @@ Template.achievement.cname = function(){
 Template.city.events(
     {   
         'mouseenter li': function(ev, template){
+            if (Session.get("current_place").name == ev.target.id) return;
+            else
             var src = ev.target.children[0].style.visibility="visible";
+
         },
 
         'mouseleave li': function(ev, template){
+            if (Session.get("current_place").name == ev.target.id) return;
+            else
             var src = ev.target.children[0].style.visibility="hidden";
         },
         'click a': function(ev, template){
@@ -28,9 +33,14 @@ Template.city.events(
         }
     });
 
+Template.city.active = function(name){
+    return Session.get("current_place").name == name;
+}
+
 Template.cities.visited = function(){
     return CityVisits.find().fetch();
 }
+
 
 Template.collections.categories = function(){
     return cat_titles;

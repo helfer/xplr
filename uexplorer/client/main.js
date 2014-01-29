@@ -124,7 +124,7 @@ if (Meteor.isClient) {
             var distance = parseInt(item_latlng.distanceTo(pano_latlng));
             //console.log(distance);
             if(distance < 200){
-                console.log('adding_marker');
+                
                   var cafeMarkerImage = new google.maps.MarkerImage('/marker_'+p.category+'.png');
                   cafeMarkerImage.size = new google.maps.Size(26,34);
                   cafeMarkerImage.scaledSize = new google.maps.Size(26,34);
@@ -161,10 +161,6 @@ if (Meteor.isClient) {
                                 icon: mark_Icon_tmp,
                                 draggable: false
                             }).addTo(map);
-
-
-
-
 
          if(Meteor.userId()){
                 var c = Visits.find({'place_id':p.place_id}).count();
