@@ -82,7 +82,7 @@
     <div id="achieve_sum">
         <div id="summary" >
             <img src="nav_sum.png" />
-            <label class="title">Total</label>           
+            <label class="title">Summary</label>           
         </div>
         <ul>
         {{#each summary}}
@@ -93,25 +93,29 @@
 </template>
 
 <template name="collect_panel">
-    Find these places nearby to collect points!
+    <div id="message">Add these places nearby to your collection!</div>
+        
     {{#with missing_places}}
+        <div id="find-list">
         <ul>
         {{#each places}}
             <li>
             {{>justaplace}}
             </li>
         {{/each}}
-        </ul>
+        </ul></div>
+        <div id="notice">
         {{#if count}}
-            Already {{count}} places found!.
+            <span id="count">{{count}}</span><span>  places found already!</span>.
         {{else}}
-            Start finding places!
+            <span> finding places!</span>
         {{/if}}
+        </div>
     {{/with}}
 </template>
 
 <template name="justaplace">
-    {{name}} {{distance}}m
+    <span id="name">{{name}}</span><span id="distance">{{distance}}m</span>
 </template>
 
 <template name="steps">
