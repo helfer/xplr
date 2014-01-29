@@ -6,6 +6,11 @@ if (Meteor.isClient) {
 
   update_places = function(){
     console.log('subscription complete');
+    console.log("sessmode " + Session.get("mode"));
+
+    if(Session.get("mode") == "guess"){
+        generate_next_location();
+    }
   }
 
   //subscribe to places, when city is updated.
@@ -16,7 +21,7 @@ if (Meteor.isClient) {
       if(place){
           console.log("place");
           console.log(place.formatted_address);
-          Meteor.subscribe("places",place,update_places());
+          Meteor.subscribe("places",place,update_places);
           Meteor.subscribe('visits',place);
       }
   });
@@ -359,9 +364,11 @@ if (Meteor.isClient) {
       map.zoomIn();
       map_start_bound = map.getBounds();
       marker.setLatLng([place.geometry.location.d,place.geometry.location.e]);
+
+      //!! don't uncomment. let subscription callback handle next location! otherwise transition breaks.
       //pano.setPosition(place.geometry.location);
       //pano_start_loc = pano.getPosition();
-      generate_next_location();
+      //generate_next_location();
       
       $("#intro-overlay").css("display","none");
       $("#circle").animate({"top":"315px"},1000); 
@@ -601,9 +608,10 @@ if (Meteor.isClient) {
 
   function get_random_location(){
     var pcount = Places.find().count();
+    console.log("found n places " + pcount);
     var pick = Math.floor(Math.random()*pcount);
     var next_location = Places.findOne({index:pick});
-    if(next_location == "undefined")
+    if(next_location == undefined)
         console.log("Houston, we have a problem");
     return next_location
    
@@ -611,9 +619,9 @@ if (Meteor.isClient) {
 
   function generate_next_location(){
 
-       var next_location = get_random_location();
-      console.log('name: ' + next_location.name);
+      var next_location = get_random_location();
       console.log(next_location);
+      console.log('name: ' + next_location.name);
 
       var panosvc_cb = make_panosvc_cb(next_location);
 
