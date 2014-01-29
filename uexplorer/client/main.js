@@ -58,53 +58,58 @@ if (Meteor.isClient) {
         position: place.geometry.location
       });
 
+      var markerinfo = addMarkerWindow(place);
       //console.log(place);
-
-      var detail_price = '';
-        if(place.price_level) {
-          detail_price = '<label>Price level:</label><p id="price" class="detail">'
-          for (var p=0; p<place.price_level-1; p++){
-            detail_price +="$";
-          }
-            detail_price +='</p>';
-      }
-
-      var detail_rating ='';
-      if(place.rating){
-        detail_rating  = '<label>Rating:</label>' +
-        '<p id="rating" class="detail">' + place.rating + '</p>';
-      }
-
-      var detail_types =''
-      if(place.types){
-        detail_types ='<label>Type:</label><p id="type" class="detail">';
-        for(var i=0; i<place.types.length; i++){
-            detail_types += place.types[i];
-            if (i < place.types.length-1) {detail_types += ", ";}
-              
-        }
-        detail_types +='</p>'; 
-      }
-      var infoContentString = '<div id="content">'+
-      '<div id="siteNotice">'+
-      
-        '<p id="name" style="color:#E16C4E;font-weight:bold">' + place.name + '</p>'+
-        //detail_types +
-        '<label>Address:</label>' +
-        '<p id="name" class="detail">' + place.vicinity + '</p>'+
-          detail_rating + detail_price +
-      '</div>'+
-      '</div>';
-
-
       google.maps.event.addListener(marker, 'click', function() {
-        infowindow.setContent(infoContentString);
+        infowindow.setContent(markerinfo);
         infowindow.open(pano, this);
       });
     }
 
+    function addMarkerWindow(place) {
+        var detail_address = '';
+        if(place.vicinity) {
+           detail_address = '<label>Address:</label><p id="name" class="detail">' + place.vicinity + '</p>';
+        }
+
+        var detail_price = '';
+        if(place.price_level) {
+            detail_price = '<label>Price level:</label><p id="price" class="detail">'
+            for (var p = 0; p<place.price_level-1; p++){
+              detail_price +="$";
+            }
+              detail_price +='</p>';
+        }
+
+        var detail_rating ='';
+        if(place.rating){
+          detail_rating  = '<label>Rating:</label>' +
+          '<p id="rating" class="detail">' + place.rating + '</p>';
+        }
+
+        var detail_types =''
+        if(place.types){
+          detail_types ='<label>Type:</label><p id="type" class="detail">';
+          for(var i=0; i<place.types.length; i++){
+              detail_types += place.types[i];
+              if (i < place.types.length-1) {detail_types += ", ";}
+                
+          }
+          detail_types +='</p>'; 
+        }
+        var infoContentString = '<div id="content">'+
+        '<div id="siteNotice">'+
+        
+          '<p id="name" style="color:#E16C4E;font-weight:bold">' + place.name + '</p>'+
+              detail_address+ detail_rating + detail_price +
+        '</div>'+
+        '</div>';
+
+        return infoContentString;
+      }
 
 
+  //update marker in collection mode
   update_markers = function(pano_cur_loc){
           pano_latlng = L.latLng(pano_cur_loc["d"], pano_cur_loc["e"]);
           var littleguy = L.marker(pano_latlng, {
@@ -132,6 +137,15 @@ if (Meteor.isClient) {
                   icon: cafeMarkerImage,
                   title: p.name + " (click to collect!)"
               });
+
+                var markerinfo = addMarkerWindow(p);
+                markerinfo += "<label style='color:#E16C4E;font:15px;text-align:center'>Collected!</label>";
+                //console.log(place);
+                google.maps.event.addListener(placeMarker, 'click', function() {
+                  infowindow.setContent(markerinfo);
+                  infowindow.open(pano, this);
+                });
+
 
                 var mark_Icon_tmp = L.icon({
                           iconUrl: '/marker_'+p.category+'.png',
