@@ -174,7 +174,7 @@ if (Meteor.isClient) {
                         'user':Meteor.userId(),
                         'city':Session.get("current_place").id,
                         'place_id':p.place_id,
-                        'cat':next_location.category,
+                        'cat':p.category,
                         'place':next_location
                     };  
                     console.log(visit);
