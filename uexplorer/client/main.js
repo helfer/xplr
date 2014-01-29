@@ -174,7 +174,7 @@ if (Meteor.isClient) {
                                 };  
                                 console.log(visit);
                                 Visits.insert(visit);
-                                alert("collected " + p.name);
+                                //alert("collected " + p.name);
                             }   
                       }
                     });
@@ -430,7 +430,7 @@ if (Meteor.isClient) {
 
       //start count time
       totalSeconds = 0;
-      round = 0;
+      round = 1;
       $("#rounds").text(round);
       setTimeout(setTime,6000);
       TimerId = setInterval(setTime, 1000);
@@ -679,7 +679,7 @@ if (Meteor.isClient) {
  
         //check if user signed-in
         if(!Meteor.user()){
-            alert("Sign-in to keep track of your score next time :)");
+            //alert("Sign-in to keep track of your score next time :)");
         } else {
             console.log('insert userid');
             if(Scores.find({'user':Meteor.userId(),'city':Session.get("current_place").id}).count() == 0){
