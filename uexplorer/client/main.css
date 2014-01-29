@@ -298,11 +298,11 @@ input:hover {
 	margin-right:30px;
 	font-size:14px;	
 }
-#panel #score{
+#panel #score,#panel #find-list{
 	height:140px;
 }
 
-#panel #score ul{
+#panel #score ul,#panel #find-list ul{
 	margin-left: 30px;
 	list-style: none;
 	padding:0;
@@ -314,9 +314,14 @@ input:hover {
 	float:left;
 	width:180px;
 	height:28px;
+	
+}
+
+#panel #score ul li{
 	visibility: hidden;
 }
-#panel #score ul li img{
+
+#panel #score ul li img, #panel #find-list ul li img{
 	position: relative;
 	float:left;
 }	
@@ -342,6 +347,57 @@ input:hover {
 	width:52px;
 	text-align: right;
 	font-size:17px;
+	color:#D65238;
+	font-weight: bold;
+}
+
+#panel #find-list ul li #name{
+	font-size: 12px;
+	width:160px;
+	margin-top:2px;
+	margin-bottom: 0px;
+	position: relative;
+	float: left;
+	color:#404041;
+}
+
+#panel #notice #count{
+	line-height: 24px;
+	margin-top:2px;
+	margin-bottom: 0px;
+	margin-left: 0px;
+	position: relative;
+	float: left;
+	font-size:15px;
+	color:#D65238;
+	font-weight: bold;
+}
+
+#panel #notice{
+	line-height: 24px;
+	margin-top: 8px;
+	position: relative;
+	float: left;
+	margin-left: 30px;
+
+}
+
+#panel #notice span{
+	font:14px;
+	line-height: 29px;
+	position: relative;
+	float: left;
+	margin-left: 8px;
+}
+
+#panel #find-list ul li #distance{
+	margin-top:0px;
+	margin-bottom: 2px;
+	width: 160px;	
+	position:relative;
+	float:left;
+	width:52px;
+	font-size:13px;
 	color:#D65238;
 	font-weight: bold;
 }
