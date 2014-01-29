@@ -541,8 +541,17 @@ if (Meteor.isClient) {
   } 
   Template.panel.achievemode = function(){
     console.log('smode ' + Session.get("mode"));
-    return Session.get("mode") == "achieve";
+    return Session.get("mode") == "achievement";
   } 
+
+  Template.achieve_panel.summary = function(){
+    var ret = [];
+    for (i in cat_titles){
+      var n = Visits.find({'cat':cat_titles[i]['cat']}).count();
+      ret.push({name:cat_titles[i]['name'],count:n});
+    }
+    return ret;
+  }
 
   Template.collect_panel.missing_places = function(){
     var allplaces = Places.find({},{sort:{place_id:1}}).fetch();

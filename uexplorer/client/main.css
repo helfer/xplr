@@ -346,6 +346,20 @@ input:hover {
 	font-weight: bold;
 }
 
+#panel #achieve_sum {
+	padding: 16px 14px 16px 14px;
+}
+
+#panel #achieve_sum ul{
+	margin-left: 10px;
+	list-style: none;
+}
+
+#panel #achieve_sum li{
+	height:30px;
+}
+
+
 .inc {
 	padding:0;
 	position:relative;
@@ -506,7 +520,7 @@ line-height: 2.7;
 	border-right: 1px solid #F4F6F6;
 }
 
-#achievement .title{
+#achievement .title, #panel .title{
 	vertical-align: 70%;
 	margin-left: 4px;
 }

@@ -40,6 +40,13 @@ Template.stickers.events(
             }    
         },
 
+        'click img': function(ev, template){
+            if(ev.target.id){
+                var id = ev.target.id;
+                marker_group[id].openPopup();
+            }    
+        },
+
 
     });
 
@@ -60,11 +67,14 @@ Template.city.events(
         'click a': function(ev, template){
             //console.log(template);
             Session.set("current_place",template.data.place);
+            clear_mapbox_marker();
         }
     });
 
 Template.city.active = function(name){
-    return Session.get("current_place").name == name;
+    if(Session.get("current_place")){
+        return Session.get("current_place").name == name;
+    }
 }
 
 Template.cities.visited = function(){
@@ -84,7 +94,7 @@ Template.stickers.visits = function(cat){
         x.index = i;
     });
     //console.log("returning " + n.length);
-    console.log(n);
+    //console.log(n);
     return n;
 }
 
@@ -101,7 +111,7 @@ Template.rankings.getranks = function(){
         var cc = Session.get("current_place").id;
         var sc = Scores.find({'city':cc},{sort: {score:-1},limit:10}).fetch();
         _.each(sc,function(s,i){
-            console.log(JSON.stringify(s) + " rank " + i);
+            //console.log(JSON.stringify(s) + " rank " + i);
             s.rank = i+1;
         });
         return sc;
