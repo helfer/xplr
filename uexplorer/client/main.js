@@ -1,6 +1,8 @@
 
 
 if (Meteor.isClient) {
+    markersArray = [];
+    TimerId = null;
 
   Session.set("mode","welcome");
 
@@ -12,6 +14,7 @@ if (Meteor.isClient) {
         //generate_next_location();
     }
   }
+
 
   //subscribe to places, when city is updated.
   //this function runs automatically, when current_place changes.
@@ -42,6 +45,14 @@ if (Meteor.isClient) {
       }
   }
 
+    clearOverlays = function(){
+      for (var i = 0; i < markersArray.length; i++ ) {
+        markersArray[i].setMap(null);
+      }
+      markersArray.length = 0;
+    }
+
+
   make_panosvc_cb = function(next_location){
 
     return function(result,status){
@@ -65,6 +76,7 @@ if (Meteor.isClient) {
 
       var markerinfo = addMarkerWindow(place);
       //console.log(place);
+      markersArray.push(marker);
       google.maps.event.addListener(marker, 'click', function() {
         infowindow.setContent(markerinfo);
         infowindow.open(pano, this);
@@ -128,9 +140,9 @@ if (Meteor.isClient) {
             var item_latlng = L.latLng(p.lat, p.lng);
             var distance = parseInt(item_latlng.distanceTo(pano_latlng));
             //console.log(distance);
-            if(distance < 100){
+            if(distance < 150){
                 //show marker in street view only if really close
-                if(distance < 50){
+                if(distance < 75){
                       var cafeMarkerImage = new google.maps.MarkerImage('/marker_'+p.category+'.png');
                       cafeMarkerImage.size = new google.maps.Size(26,34);
                       cafeMarkerImage.scaledSize = new google.maps.Size(26,34);
@@ -504,6 +516,7 @@ if (Meteor.isClient) {
 
     'click #next': function (){
           generate_next_location();
+          clearOverlays();
           state = 'GUESS';
     }, 
 
@@ -809,7 +822,7 @@ if (Meteor.isClient) {
       if (round == 1) $("#score ul li").css("visibility","hidden");
   }
 
-  function setTime()
+  setTime = function()
   {
       ++totalSeconds;
       $("#clock").text( pad(parseInt(totalSeconds/60))+":"+pad(totalSeconds%60));
@@ -821,6 +834,23 @@ if (Meteor.isClient) {
       if(valString.length < 2) return "0" + valString;
       else return valString;
   }
+
+  Deps.autorun(function(){
+    if(Session.get("mode")){
+        if(Session.get("mode") != "guess"){
+            console.log("running");
+            //reset game, stop timer.
+            totalScore = 0;
+            round = 1;
+            if(TimerId != null){
+                clearInterval(TimerId);
+            }
+            totalSeconds = -1;
+            setTime();
+            $("#rounds").text(1);
+        }
+    }
+  });
 
 
 }
