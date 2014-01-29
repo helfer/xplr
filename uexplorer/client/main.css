@@ -351,14 +351,35 @@ input:hover {
 }
 
 #panel #achieve_sum ul{
-	margin-left: 10px;
 	list-style: none;
+	margin-left:0px;
+	padding:0;
 }
 
 #panel #achieve_sum li{
+	margin-left: 8px;
 	height:30px;
 }
 
+#panel #achieve_sum li span{
+	line-height: 30px;
+}
+
+#panel #achieve_sum li .s-name{
+	position:relative;
+	float:left;
+	width:120px;
+}
+
+#panel #achieve_sum li .s-count{
+	position:relative;
+	float:left;
+	line-height: 25px;
+	font-size:17px;
+	color:#D65238;
+	text-align: right;
+	font-weight: bold;
+}		
 
 .inc {
 	padding:0;
