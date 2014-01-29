@@ -140,9 +140,9 @@ if (Meteor.isClient) {
             var item_latlng = L.latLng(p.lat, p.lng);
             var distance = parseInt(item_latlng.distanceTo(pano_latlng));
             //console.log(distance);
-            if(distance < 100){
+            if(distance < 150){
                 //show marker in street view only if really close
-                if(distance < 50){
+                if(distance < 75){
                       var cafeMarkerImage = new google.maps.MarkerImage('/marker_'+p.category+'.png');
                       cafeMarkerImage.size = new google.maps.Size(26,34);
                       cafeMarkerImage.scaledSize = new google.maps.Size(26,34);
