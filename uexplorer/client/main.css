@@ -619,26 +619,67 @@ line-height: 2.7;
 	display:none;
 }
 
-#content #name{
-	color:#E16C4E;
-	font-weight:bold
+.gm-style .gm-style-iw div {
+	font-size: 12px;
 }
+
+.gm-style .gm-style-iw div #content #name{
+	font-size: 13px;
+}
+
+#content #name,#content #rating{
+	font-weight: bold;
+	color:#E16C4E;
+} 	
 
 #content label{
 	font-weight: 400;
 	color:#2A2D33;
 }
 
-#content #rating{
-	color:#E16C4E;
-}
-
-
 #content #price{
+	font-weight: bold;
 	color:#ECC932;
 }
 #content .detail{
 	margin-top:4px;
 	margin-bottom:6px;
+}
+
+.leaflet-popup-content {
+padding: 10px;
+
+}
+
+.leaflet-popup-content #content #name{
+	font-size: 11px;
+}
+
+/*******************************
+*
+*   tooltip
+*
+********************************/
+
+span.tooltip {
+	background: none repeat scroll 0 0 #009CC6;
+   	color: #FFFFFF;
+   	border-radius: 2px;	
+	font-size: 11px;
+	width:80px;
+	padding: 4px 3px 2px 5px;
+	position: absolute;
+	text-align: center;
+}
+span.arrow {
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	border-top: 7px solid #009CC6;
+	display: block;
+	height: 1px;
+	left: 32px;
+	position: relative;
+	top: 10px;
+	width: 1px;
 }
 

@@ -176,7 +176,10 @@ function add_mapbox_collection_marker(collected){
       
             var html_temp = addMarkerWindow(p) ;
 
-            var popup_option = {};
+            var popup_option = {
+
+              offset:L.point(0, -24)
+            };
 
             marker_temp.bindPopup(html_temp,popup_option);
 

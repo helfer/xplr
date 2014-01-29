@@ -74,7 +74,7 @@ if (Meteor.isClient) {
     addMarkerWindow = function(place){
         var detail_address = '';
         if(place.vicinity) {
-           detail_address = '<label>Address:</label><p id="name" class="detail">' + place.vicinity + '</p>';
+           detail_address = '<label>Address:</label><p id="address" class="detail">' + place.vicinity + '</p>';
         }
 
         var detail_price = '';
