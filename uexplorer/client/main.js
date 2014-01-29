@@ -247,8 +247,11 @@ if (Meteor.isClient) {
         }
           $("img[src='icon_p_b.png']").remove();
           var pano_cur_loc = pano.getPosition();
+          Session.set("current_position",pano_cur_loc);
 
           update_markers(pano_cur_loc);
+
+          //update places list.
 
       });
 
@@ -493,6 +496,51 @@ if (Meteor.isClient) {
     } 
            
   });
+
+  Template.panel.guessmode = function(){
+    console.log('smode ' + Session.get("mode"));
+    if(Session.get("mode") == "guess"){
+        console.log("true");
+        return true;
+    }
+    return false;
+  } 
+  Template.panel.collectmode = function(){
+    console.log('smode ' + Session.get("mode"));
+    return Session.get("mode") == "collect";
+  } 
+  Template.panel.achievemode = function(){
+    console.log('smode ' + Session.get("mode"));
+    return Session.get("mode") == "achieve";
+  } 
+
+  Template.collect_panel.missing_places = function(){
+    var allplaces = Places.find({},{sort:{place_id:1}}).fetch();
+    var hasplaces = Visits.find({},{sort:{place_id:1}}).fetch();
+    var needplaces = [];
+    for(ap in allplaces){
+        var good = true;
+        for(hp in hasplaces){
+            if(allplaces[ap].place_id == hasplaces[hp].place_id){
+                good = false;
+                break;
+            }
+            if(allplaces[ap].place_id < hasplaces[hp].place_id){
+                break;
+            }
+        }
+        if(good){
+            needplaces.push(allplaces[ap]);
+        }
+    }
+    console.log("needlen " + needplaces.length);
+
+    //now add distance and sort the places by distance!
+
+
+    //return the places and total number still to find
+    return needplaces
+  }
 
   Template.circle.events({
    

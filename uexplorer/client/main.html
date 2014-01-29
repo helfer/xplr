@@ -22,7 +22,9 @@
 
 <template name="map">
     <div id="intro2" style="width: 450px; height: 320px; overflow:hidden">
+        {{#constant}}
         <div id="map" style="width: 680px; height: 280px;"></div>
+        {{/constant}}
         <img id="intro-img-2" src="intro2.png" />
         <div id="intro-overlay" style="width: 220px; height: 320px;">
             <p><img src="logo_s.png"/>  UrbanExplorer helps you get familiar with the city you live in through a fun and challenging game.</p>
@@ -35,7 +37,7 @@
                 </div>
             </form>
         </div>
-        {{> panel}}
+        {{> outerpanel}}
         
     </div>    
 </template>
@@ -50,8 +52,14 @@
     </div>    
 </template>    
 
-<template name="panel">
+<template name="outerpanel">
     <div id="panel" style="width: 220px; height: 280px;left:900px">
+        {{>panel}}
+    </div>    
+</template>
+
+<template name="panel">
+    {{#if guessmode}}
         <div id="message" style="visibility:hidden"></div>
         <div id="score">
             {{> score}}
@@ -61,7 +69,24 @@
             <input type="button" class="inc" id="next" value="Next" style="display:none"/>
             <input type="button" class="inc" id="final" value="Final" style="display:none"/>
 
-    </div>    
+    {{/if}}
+    {{#if collectmode}}
+        {{>collect_panel}}    
+    {{/if}}
+    {{#if achievemode}}
+        achieve    
+    {{/if}}
+</template>
+
+<template name="collect_panel">
+    hi, i'm a panel
+    {{#each missing_places}}
+        {{>justaplace}}
+    {{/each}}
+</template>
+
+<template name="justaplace">
+    {{name}}
 </template>
 
 <template name="steps">
