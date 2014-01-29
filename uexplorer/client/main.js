@@ -9,7 +9,7 @@ if (Meteor.isClient) {
     console.log("sessmode " + Session.get("mode"));
 
     if(Session.get("mode") == "guess"){
-        generate_next_location();
+        //generate_next_location();
     }
   }
 
@@ -365,9 +365,10 @@ if (Meteor.isClient) {
       map_start_bound = map.getBounds();
       marker.setLatLng([place.geometry.location.d,place.geometry.location.e]);
 
+      pano.setPosition(place.geometry.location);
+      pano_start_loc = pano.getPosition();
       //!! don't uncomment. let subscription callback handle next location! otherwise transition breaks.
-      //pano.setPosition(place.geometry.location);
-      //pano_start_loc = pano.getPosition();
+      //actually, never mind, subscriptions aren't fast enough. need to use central location
       //generate_next_location();
       
       $("#intro-overlay").css("display","none");
