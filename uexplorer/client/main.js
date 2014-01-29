@@ -607,7 +607,7 @@ if (Meteor.isClient) {
     var pcount = Places.find().count();
     var pick = Math.floor(Math.random()*pcount);
     var next_location = Places.findOne({index:pick});
-    if(next_location == "undefined")
+    if(next_location == undefined)
         console.log("Houston, we have a problem");
     return next_location
    
@@ -616,8 +616,8 @@ if (Meteor.isClient) {
   function generate_next_location(){
 
        var next_location = get_random_location();
-      console.log('name: ' + next_location.name);
       console.log(next_location);
+      console.log('name: ' + next_location.name);
 
       var panosvc_cb = make_panosvc_cb(next_location);
 
