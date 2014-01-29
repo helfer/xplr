@@ -88,7 +88,11 @@
             </li>
         {{/each}}
         </ul>
-        Still {{count}} places to find.
+        {{#if count}}
+            Already {{count}} places found!.
+        {{else}}
+            Start finding places!
+        {{/if}}
     {{/with}}
 </template>
 

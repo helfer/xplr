@@ -128,29 +128,46 @@ if (Meteor.isClient) {
             var item_latlng = L.latLng(p.lat, p.lng);
             var distance = parseInt(item_latlng.distanceTo(pano_latlng));
             //console.log(distance);
-            if(distance < 200){
-                
-                  var cafeMarkerImage = new google.maps.MarkerImage('/marker_'+p.category+'.png');
-                  cafeMarkerImage.size = new google.maps.Size(26,34);
-                  cafeMarkerImage.scaledSize = new google.maps.Size(26,34);
+            if(distance < 100){
+                //show marker in street view only if really close
+                if(distance < 50){
+                      var cafeMarkerImage = new google.maps.MarkerImage('/marker_'+p.category+'.png');
+                      cafeMarkerImage.size = new google.maps.Size(26,34);
+                      cafeMarkerImage.scaledSize = new google.maps.Size(26,34);
 
-              //next_location.category    
-              // Here put a place marker in street view
-              var placeMarker = new google.maps.Marker({
-                  position: new google.maps.LatLng(p.lat,p.lng),
-                  map: gmap,
-                  icon: cafeMarkerImage,
-                  title: p.name + " (click to collect!)"
-              });
+                  //next_location.category    
+                  // Here put a place marker in street view
+                  var placeMarker = new google.maps.Marker({
+                      position: new google.maps.LatLng(p.lat,p.lng),
+                      map: gmap,
+                      icon: cafeMarkerImage,
+                      title: p.name + " (click to collect!)"
+                  });
 
-                var markerinfo = addMarkerWindow(p);
-                markerinfo += "<label style='color:#E16C4E;font:15px;text-align:center'>Collected!</label>";
-                //console.log(place);
-                google.maps.event.addListener(placeMarker, 'click', function() {
-                  infowindow.setContent(markerinfo);
-                  infowindow.open(pano, this);
-                });
+                    var markerinfo = addMarkerWindow(p);
+                    markerinfo += "<label style='color:#E16C4E;font:15px;text-align:center'>Collected!</label>";
+                    //console.log(place);
+                    google.maps.event.addListener(placeMarker, 'click', function() {
+                      infowindow.setContent(markerinfo);
+                      infowindow.open(pano, this);
+                      if(Meteor.userId()){
+                            var c = Visits.find({'place_id':p.place_id}).count();
+                            if(c == 0){ 
+                                var visit = { 
+                                    'user':Meteor.userId(),
+                                    'city':Session.get("current_place").id,
+                                    'place_id':p.place_id,
+                                    'cat':p.category,
+                                    'place':p
+                                };  
+                                console.log(visit);
+                                Visits.insert(visit);
+                                alert("collected " + p.name);
+                            }   
+                      }
+                    });
 
+                }
 
                 var mark_Icon_tmp = L.icon({
                           iconUrl: '/marker_'+p.category+'.png',
@@ -178,7 +195,7 @@ if (Meteor.isClient) {
                         'place':p
                     };  
                     console.log(visit);
-                    Visits.insert(visit);
+                    //Visits.insert(visit);
                 }   
       }   
    }
@@ -550,7 +567,7 @@ if (Meteor.isClient) {
     //_.each(needplaces,function(x){console.log(x.distance)});
 
     //return the places and total number still to find
-    return {'count':needplaces.length, 'places':needplaces.slice(0,5)}
+    return {'count':hasplaces.length, 'places':needplaces.slice(0,5)}
   }
 
   Template.circle.events({
@@ -715,7 +732,7 @@ if (Meteor.isClient) {
                 'place':next_location
             };
             console.log(visit);
-            Visits.insert(visit);
+            //Visits.insert(visit);
         }
       }
 
