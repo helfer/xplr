@@ -84,6 +84,12 @@ if (Meteor.isClient) {
     }
 
     addMarkerWindow = function(place){
+
+        var detail_title = '<p id="name">' + place.name + '</p>';
+        if(place.place_link){
+            detail_title = '<a href="http://www.w3schools.com/" target="_blank"><p id="name">' + detail_title+ '</p></a>';
+        }
+
         var detail_address = '';
         if(place.vicinity) {
            detail_address = '<label>Address:</label><p id="address" class="detail">' + place.vicinity + '</p>';
@@ -92,7 +98,7 @@ if (Meteor.isClient) {
         var detail_price = '';
         if(place.price_level) {
             detail_price = '<label>Price level:</label><p id="price" class="detail">'
-            for (var p = 0; p<place.price_level-1; p++){
+            for (var p = 0; p<place.price_level; p++){
               detail_price +="$";
             }
               detail_price +='</p>';
@@ -109,19 +115,16 @@ if (Meteor.isClient) {
           detail_types ='<label>Type:</label><p id="type" class="detail">';
           for(var i=0; i<place.types.length; i++){
               detail_types += place.types[i];
-              if (i < place.types.length-1) {detail_types += ", ";}
-                
+              if (i < place.types.length-1) {detail_types += ", ";}                
           }
           detail_types +='</p>'; 
         }
         var infoContentString = '<div id="content">'+
-        '<div id="siteNotice">'+
-        
-          '<p id="name">' + place.name + '</p>'+
+        '<div id="siteNotice">'+detail_title+
               detail_address+ detail_rating + detail_price +
         '</div>'+
         '</div>';
-
+        //<a href="http://www.w3schools.com/" target="_blank">Visit W3Schools!</a>
         return infoContentString;
       };
 
@@ -589,7 +592,7 @@ if (Meteor.isClient) {
     //_.each(needplaces,function(x){console.log(x.distance)});
 
     //return the places and total number still to find
-    return {'count':hasplaces.length, 'places':needplaces.slice(0,5)}
+    return {'count':hasplaces.length, 'places':needplaces.slice(0,4)}
   }
 
   Template.circle.events({
@@ -771,6 +774,7 @@ if (Meteor.isClient) {
 
       //next_location.category    
       // Here put a place marker on the map
+      /*
       var placeMarker = new google.maps.Marker({
           position: place_loc,
           map: gmap,
@@ -790,7 +794,7 @@ if (Meteor.isClient) {
       google.maps.event.addListener(placeMarker, 'click', function() {
         infowindow.setContent(contentString);
         infowindow.open(pano,placeMarker);
-      });
+      });*/
 
       //new round and start counting
       round++;
@@ -839,6 +843,7 @@ if (Meteor.isClient) {
     if(Session.get("mode")){
         if(Session.get("mode") != "guess"){
             console.log("running");
+            clearOverlays();
             //reset game, stop timer.
             totalScore = 0;
             round = 1;

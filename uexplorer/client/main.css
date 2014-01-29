@@ -18,10 +18,15 @@ body { height: 100%;
 :focus {
 	outline: none;
 }
+#wrapper{
+	overflow:scroll; 
+}
+
 #container {
 	width:900px;
 	height:100%;
 	overflow:hidden;
+
 	position:relative;
 	margin-left:auto;
 	margin-right:auto;
