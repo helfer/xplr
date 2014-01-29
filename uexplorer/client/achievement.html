@@ -46,7 +46,11 @@
 </template> 
 
 <template name="city">
-        <li><img src="icon_point_r.png"/><a>{{name}}</a></li>
+    {{#if active name}}    
+        <li id={{name}}><img src="icon_point_r.png" style="visibility:visible"/><a style="color:#E16C4E">{{name}}</a></li>
+        {{else}}
+        <li id={{name}}><img src="icon_point_r.png" style="visibility:hidden"/><a>{{name}}</a></li>
+    {{/if}}    
 </template>
 
 <template name="stickers">

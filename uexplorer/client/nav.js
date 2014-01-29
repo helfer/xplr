@@ -25,24 +25,40 @@ Template.header.events(
 
         'click .menu':function(ev,template){
             var src = ev.target;
-            console.log(src);
+            
         },
 
         'click #menu-achievement': function(ev,template){
             console.log('achievement');
             Session.set("mode","achievement");
+            $("#circle").css("display","none");
             $("#achievement").animate({"height":"380px"},1000);
+            //TODO write a function fo hide "panel content"
+
+            var visited_places = Visits.find({}).fetch();
+            _.each(visited_places,function(x,i){
+                //console.log(x);
+                //add_mapbox_collection_marker(x);
+            });
+
+
+
+            clear_mapbox_marker();
+            //add_mapbox_collect_marker();
         },
 
         'click #menu-guess': function(ev,template){
             console.log('guess');
             Session.set("mode","guess");
+            $("#circle").css("display","block");
             $("#achievement").animate({"height":"0px"},1000);
         },
 
         'click #menu-collect': function(ev,template){
             console.log('collect');
             Session.set("mode","collect");
+            $("#circle").css("display","none");
+            $("#achievement").animate({"height":"0px"},1000);
           $("path.leaflet-clickable").remove();
           $("img[src='marker_g.png']").remove();
           $("img[src='icon_p_b.png']").remove();
@@ -65,6 +81,7 @@ Template.header.events(
               $("#steps").animate({"opacity":"1"},1000);            
 
               setTimeout(function(){$("#circle-text").css("display","block");},1000); 
+              setTimeout(function(){$("#circle").css("display","block");},1000); 
               setTimeout(function(){$("#top").animate({"height":"320px"},1000);},1000); 
               setTimeout(function(){$("#intro-overlay").css("display","block");},2000); 
               $("#streetview").animate({"opacity":"0"},1000).delay(1000);         
@@ -108,6 +125,51 @@ Template.header.rendered = function (){
             $("#menu-guess").css("visibility","visible");
         }
     }
+
+}
+
+function clear_mapbox_marker(){
+    $("path.leaflet-clickable").remove();
+    $(".leaflet-marker-pane img").remove();
+}
+
+//move this somewhere else??
+function add_mapbox_collection_marker(collected){
+
+            var p = collected.place;
+            var item_latlng = L.latLng(p.lat, p.lng);
+            //console.log(distance);
+         
+                
+            var cafeMarkerImage = new google.maps.MarkerImage('/marker_'+p.category+'.png');
+            cafeMarkerImage.size = new google.maps.Size(26,34);
+            cafeMarkerImage.scaledSize = new google.maps.Size(26,34);
+
+              //next_location.category    
+              // Here put a place marker in street view
+              var placeMarker = new google.maps.Marker({
+                  position: new google.maps.LatLng(p.lat,p.lng),
+                  map: gmap,
+                  icon: cafeMarkerImage,
+                  title: p.name + " (click to collect!)"
+              });
+
+                var markerinfo = addMarkerWindow(p);
+                markerinfo += "<label style='color:#E16C4E;font:15px;text-align:center'>Collected!</label>";
+                //console.log(place);
+                google.maps.event.addListener(placeMarker, 'click', function() {
+                  infowindow.setContent(markerinfo);
+                  infowindow.open(pano, this);
+                });
+
+
+                var mark_Icon_tmp = L.icon({
+                          iconUrl: '/marker_'+p.category+'.png',
+                          iconRetinaUrl: '/marker_'+p.category+'.png',
+                          iconSize: [26, 34],
+                          iconAnchor: [13, 34],
+                          popupAnchor: [-3, -76]
+                });
 
 }
 /*
