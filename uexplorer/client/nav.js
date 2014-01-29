@@ -35,16 +35,20 @@ Template.header.events(
             $("#achievement").animate({"height":"380px"},1000);
             //TODO write a function fo hide "panel content"
 
+            clear_mapbox_marker();
+            collection_marker_group = [];
+            
             var visited_places = Visits.find({}).fetch();
             _.each(visited_places,function(x,i){
-                //console.log(x);
-                //add_mapbox_collection_marker(x);
+                console.log(x);
+                add_mapbox_collection_marker(x);
             });
 
+            //fit map to markers
+            var group = new L.featureGroup(collection_marker_group);
 
-
-            clear_mapbox_marker();
-            //add_mapbox_collect_marker();
+            map.fitBounds(group.getBounds());
+                       
         },
 
         'click #menu-guess': function(ev,template){
@@ -133,43 +137,30 @@ function clear_mapbox_marker(){
     $(".leaflet-marker-pane img").remove();
 }
 
-//move this somewhere else??
+//Here take each collected place add a marker on the mapbox map...
+//TODO: Merge this code with collect mode ?
+
 function add_mapbox_collection_marker(collected){
 
             var p = collected.place;
             var item_latlng = L.latLng(p.lat, p.lng);
             //console.log(distance);
-         
-                
-            var cafeMarkerImage = new google.maps.MarkerImage('/marker_'+p.category+'.png');
-            cafeMarkerImage.size = new google.maps.Size(26,34);
-            cafeMarkerImage.scaledSize = new google.maps.Size(26,34);
+            
+            //mapbox marker
+            var mark_Icon_tmp = L.icon({
+                      iconUrl: '/marker_'+p.category+'.png',
+                      iconRetinaUrl: '/marker_'+p.category+'.png',
+                      iconSize: [26, 34],
+                      iconAnchor: [13, 34],
+                      popupAnchor: [-3, -76]
+            });
 
-              //next_location.category    
-              // Here put a place marker in street view
-              var placeMarker = new google.maps.Marker({
-                  position: new google.maps.LatLng(p.lat,p.lng),
-                  map: gmap,
-                  icon: cafeMarkerImage,
-                  title: p.name + " (click to collect!)"
-              });
+            var marker_temp = L.marker(item_latlng, {
+                icon: mark_Icon_tmp,
+                draggable: false
+            }).addTo(map);
 
-                var markerinfo = addMarkerWindow(p);
-                markerinfo += "<label style='color:#E16C4E;font:15px;text-align:center'>Collected!</label>";
-                //console.log(place);
-                google.maps.event.addListener(placeMarker, 'click', function() {
-                  infowindow.setContent(markerinfo);
-                  infowindow.open(pano, this);
-                });
-
-
-                var mark_Icon_tmp = L.icon({
-                          iconUrl: '/marker_'+p.category+'.png',
-                          iconRetinaUrl: '/marker_'+p.category+'.png',
-                          iconSize: [26, 34],
-                          iconAnchor: [13, 34],
-                          popupAnchor: [-3, -76]
-                });
+            collection_marker_group.push(marker_temp);
 
 }
 /*
