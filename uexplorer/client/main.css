@@ -368,7 +368,7 @@ input:hover {
 #panel #achieve_sum li .s-name{
 	position:relative;
 	float:left;
-	width:120px;
+	width:140px;
 }
 
 #panel #achieve_sum li .s-count{
@@ -628,7 +628,7 @@ line-height: 2.7;
 }
 
 #ranking ul li .username{
-	width:100px;
+	width:90px;
 	margin-left: 4px;
 }
 
@@ -654,12 +654,20 @@ line-height: 2.7;
 	display:none;
 }
 
-.gm-style .gm-style-iw div {
-	font-size: 12px;
+.gm-style .gm-style-iw div #siteNotice{
+	height:auto;
+}
+
+.gm-style .gm-style-iw div #siteno #name{
+	font-size: 13px;
 }
 
 .gm-style .gm-style-iw div #content #name{
 	font-size: 13px;
+}
+
+.gm-style .gm-style-iw div #content {
+	height:auto;
 }
 
 #content #name,#content #rating{
