@@ -35,20 +35,7 @@ Template.header.events(
             $("#achievement").animate({"height":"380px"},1000);
             //TODO write a function fo hide "panel content"
 
-            clear_mapbox_marker();
-            collection_marker_group = [];
-            
-            var visited_places = Visits.find({}).fetch();
-            _.each(visited_places,function(x,i){
-                console.log(x);
-                add_mapbox_collection_marker(x);
-            });
-
-            //fit map to markers
-            var group = new L.featureGroup(collection_marker_group);
-
-            map.fitBounds(group.getBounds());
-                       
+            //update_map_collection_marker();                       
         },
 
         'click #menu-guess': function(ev,template){
@@ -146,7 +133,7 @@ Template.header.rendered = function (){
 
 }
 
-function clear_mapbox_marker(){
+clear_mapbox_marker = function(){
     $("path.leaflet-clickable").remove();
     $(".leaflet-marker-pane img").remove();
 }
@@ -154,42 +141,75 @@ function clear_mapbox_marker(){
 //Here take each collected place add a marker on the mapbox map...
 //TODO: Merge this code with collect mode ?
 
-function add_mapbox_collection_marker(collected){
+add_mapbox_collection_marker = function(collected){
 
-            var p = collected.place;
-            var item_latlng = L.latLng(p.lat, p.lng);
-            //console.log(distance);
-            
-            //mapbox marker
-            var mark_Icon_tmp = L.icon({
-                      iconUrl: '/marker_'+p.category+'.png',
-                      iconRetinaUrl: '/marker_'+p.category+'.png',
-                      iconSize: [26, 34],
-                      iconAnchor: [13, 34],
-                      popupAnchor: [-3, -76]
-            });
-
-            var marker_temp = L.marker(item_latlng, {
-                icon: mark_Icon_tmp,
-                draggable: false
-            }).addTo(map);
+      var p = collected.place;
+      var item_latlng = L.latLng(p.lat, p.lng);
+      //console.log(distance);
       
-            var html_temp = addMarkerWindow(p) ;
+      //mapbox marker
+      var mark_Icon_tmp = L.icon({
+                iconUrl: '/marker_'+p.category+'.png',
+                iconRetinaUrl: '/marker_'+p.category+'.png',
+                iconSize: [26, 34],
+                iconAnchor: [13, 34],
+                popupAnchor: [-3, -76]
+      });
 
-            var popup_option = {
+      var marker_temp = L.marker(item_latlng, {
+          icon: mark_Icon_tmp,
+          draggable: false
+      }).addTo(map);
 
-              offset:L.point(0, -24)
-            };
+      var html_temp = addMarkerWindow(p) ;
 
-            marker_temp.bindPopup(html_temp,popup_option);
+      var popup_option = {
 
-            marker_temp.on('click', function(e) {
-              this.openPopup();
-            });
+        offset:L.point(0, -24)
+      };
 
-            collection_marker_group.push(marker_temp);
+      marker_temp.bindPopup(html_temp,popup_option);
+
+      marker_temp.on('click', function(e) {
+        this.openPopup();
+      });
+
+      collection_marker_group.push(marker_temp);
+      marker_group[p.place_id] = marker_temp;
+}
+
+
+
+update_map_collection_marker = function(){
+
+      clear_mapbox_marker();
+
+
+      console.log("clear!");
+      collection_marker_group = [];
+
+      //for global collection markers, click a different city set back to empty
+      marker_group = {};
+
+  if(Session.get("mode") != "achievement"){
+    return;
+  }
+      
+      var visited_places = Visits.find({}).fetch();
+      _.each(visited_places,function(x,i){
+          //console.log(x);
+          add_mapbox_collection_marker(x);
+      });
+
+      //fit map to markers
+      var group = new L.featureGroup(collection_marker_group);
+
+      map.fitBounds(group.getBounds());
 
 }
+
+//autorun makes it run whenever a session or collection variable used inside the function changes
+Deps.autorun(function(){update_map_collection_marker();});
 /*
     Accounts.createUser({email: email, username: email,  password: pass}, function (error) {
       if (error) {

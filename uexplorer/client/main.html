@@ -74,8 +74,22 @@
         {{>collect_panel}}    
     {{/if}}
     {{#if achievemode}}
-        achieve    
+        {{>achieve_panel}}    
     {{/if}}
+</template>
+
+<template name="achieve_panel">
+    <div id="achieve_sum">
+        <div id="summary" >
+            <img src="nav_sum.png" />
+            <label class="title">Total</label>           
+        </div>
+        <ul>
+        {{#each summary}}
+            <li><span class="s-name">{{name}}:</span><span class="s-count">{{count}}</span>/20</li>
+        {{/each}}
+        </ul>
+    </div>
 </template>
 
 <template name="collect_panel">
