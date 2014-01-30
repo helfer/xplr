@@ -14,6 +14,16 @@ Template.header.events(
             if (src.indexOf("hover") == -1){
                 var new_src = src.replace("_inactive.png","_hover.png");
                 ev.target.children[0].src = new_src;
+            }
+
+            if(!Meteor.userId() && ev.target.id != "menu-guess"){
+                var tooltiptext=''
+                if (ev.target.id == "menu-collect") tooltiptext = "What's after guess? Sign in to collect places!";
+                else tooltiptext = "Sign in to see your achievements!";
+                var tooltip ='<span class="tooltip-down" style="top:42px;left:0px">'+ tooltiptext+' <span class="arrow-down"></span></span>';
+
+                $("#" + ev.target.id).append(tooltip);
+
             }    
         },
 
@@ -21,6 +31,13 @@ Template.header.events(
             var src = ev.target.children[0].src;
             var new_src = src.replace("_hover.png","_inactive.png");
             ev.target.children[0].src = new_src;
+
+            if(!Meteor.userId() && ev.target.id != "menu-guess"){
+
+              $("#"+ev.target.id+" .tooltip-down").fadeOut(1000,function(){ $("#menu-collect .tooltip-down").remove(); });
+
+
+            }  
         },
 
         'click .menu':function(ev,template){
@@ -29,11 +46,12 @@ Template.header.events(
         },
 
         'click #menu-achievement': function(ev,template){
-            console.log('achievement');
-            Session.set("mode","achievement");
-            $("#circle").css("display","none");
-            $("#achievement").animate({"height":"380px"},1000);
-            //TODO write a function fo hide "panel content"
+             if(Meteor.userId()){
+                console.log('achievement');
+                Session.set("mode","achievement");
+                $("#circle").css("display","none");
+                $("#achievement").animate({"height":"380px"},1000);
+             }  
 
             //update_map_collection_marker();                       
         },
@@ -50,24 +68,25 @@ Template.header.events(
         },
 
         'click #menu-collect': function(ev,template){
-            console.log('collect');
-            Session.set("mode","collect");
-            $("#circle").css("display","none");
-            $("#achievement").animate({"height":"0px"},1000);
-   
-            clear_mapbox_marker();
+            if(Meteor.userId()){
+              console.log('collect');
+              Session.set("mode","collect");
+              $("#circle").css("display","none");
+              $("#achievement").animate({"height":"0px"},1000);
+     
+              clear_mapbox_marker();
 
-            var pano_cur_loc = pano.getPosition();
+              var pano_cur_loc = pano.getPosition();
 
-            Session.set("current_position",pano_cur_loc);
-            pano_latlng = L.latLng(pano_cur_loc["d"], pano_cur_loc["e"]);
-            var littleguy = L.marker(pano_latlng, {
-                icon: mark_Icon_b,
-                draggable: false
-            }).addTo(map);
-
-
+              Session.set("current_position",pano_cur_loc);
+              pano_latlng = L.latLng(pano_cur_loc["d"], pano_cur_loc["e"]);
+              var littleguy = L.marker(pano_latlng, {
+                  icon: mark_Icon_b,
+                  draggable: false
+              }).addTo(map);
+            } 
         },
+        
         'click #logo': function (){
 
             clear_mapbox_marker();

@@ -514,6 +514,8 @@ input:hover {
 	font-size:13px;	
 	position:relative;
 	float:right;
+	top:-7px;
+	line-height: 2;
 	
 }
 #login-buttons {
@@ -772,6 +774,8 @@ span.tooltip {
 	position: absolute;
 	text-align: center;
 }
+
+
 span.arrow {
 	border-left: 5px solid transparent;
 	border-right: 5px solid transparent;
@@ -784,3 +788,27 @@ span.arrow {
 	width: 1px;
 }
 
+span.tooltip-down {
+	background: none repeat scroll 0 0 #009CC6;
+   	color: #FFFFFF;
+   	border-radius: 2px;	
+	font-size: 11px;
+	width:120px;
+	padding: 4px 3px 0px 5px;
+	position: absolute;
+	text-align: center;
+	z-index:999;
+	line-height: 15px
+}
+
+span.arrow-down {
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	border-bottom: 7px solid #009CC6;
+	display: block;
+	height: 1px;
+	left: 52px;
+	position: relative;
+	top: -42px;
+	width: 1px;
+}
