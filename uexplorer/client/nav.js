@@ -43,8 +43,10 @@ Template.header.events(
             Session.set("mode","guess");
             $("#circle").css("display","block");
             $("#achievement").animate({"height":"0px"},1000);
-            TimerId = setInterval(setTime, 1000);
+            
             clear_mapbox_marker();
+            round = 0;
+            generate_next_location();
         },
 
         'click #menu-collect': function(ev,template){
@@ -52,13 +54,11 @@ Template.header.events(
             Session.set("mode","collect");
             $("#circle").css("display","none");
             $("#achievement").animate({"height":"0px"},1000);
-            $("path.leaflet-clickable").remove();
-            $("img[src='marker_g.png']").remove();
-            $("img[src='icon_p_b.png']").remove();
-            $("img[src='marker_b_guess.png']").remove();
+   
             clear_mapbox_marker();
 
             var pano_cur_loc = pano.getPosition();
+
             Session.set("current_position",pano_cur_loc);
             pano_latlng = L.latLng(pano_cur_loc["d"], pano_cur_loc["e"]);
             var littleguy = L.marker(pano_latlng, {
@@ -142,9 +142,8 @@ clear_mapbox_marker = function(){
 //Here take each collected place add a marker on the mapbox map...
 //TODO: Merge this code with collect mode ?
 
-add_mapbox_collection_marker = function(collected){
+add_mapbox_collection_marker = function(p){
 
-      var p = collected.place;
       var item_latlng = L.latLng(p.lat, p.lng);
       //console.log(distance);
       
@@ -175,14 +174,23 @@ add_mapbox_collection_marker = function(collected){
         this.openPopup();
       });
 
-      collection_marker_group.push(marker_temp);
-      marker_group[p.place_id] = marker_temp;
+      if(Session.get("mode") == "achievement"){
+          collection_marker_group.push(marker_temp);
+          marker_group[p.place_id] = marker_temp;
+      } else if (Session.get("mode") == "collect"){
+          unvisited_marker_group_bound.push(marker_temp);
+          unvisited_marker_group[p.place_id] = marker_temp;
+      }
+          
 }
 
 
 
 update_map_collection_marker = function(){
 
+      if(Session.get("mode") != "achievement"){
+        return;
+      }
       clear_mapbox_marker();
 
 
@@ -192,14 +200,12 @@ update_map_collection_marker = function(){
       //for global collection markers, click a different city set back to empty
       marker_group = {};
 
-  if(Session.get("mode") != "achievement"){
-    return;
-  }
+
       
       var visited_places = Visits.find({}).fetch();
       _.each(visited_places,function(x,i){
           //console.log(x);
-          add_mapbox_collection_marker(x);
+          add_mapbox_collection_marker(x.place);
       });
 
       //fit map to markers
