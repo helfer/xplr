@@ -154,6 +154,7 @@ if (Meteor.isClient) {
 
       //clear_mapbox_marker();
 
+      var pano_cur_loc = pano.getPosition();
       pano_latlng = L.latLng(pano_cur_loc["d"], pano_cur_loc["e"]);
       
 
@@ -247,7 +248,9 @@ if (Meteor.isClient) {
           var group = new L.featureGroup(unvisited_marker_group_bound);
 
           //map.fitBounds(group.getBounds());
-        }  
+          
+        }
+        map.panTo(pano_latlng);  
   }
 
 
@@ -460,11 +463,14 @@ if (Meteor.isClient) {
 
       //start count time
       totalSeconds = 0;
-      round = 1;
+      round = 0;
       $("#rounds").text(round);
       setTimeout(setTime,6000);
       TimerId = setInterval(setTime, 1000);
       Session.set("mode","guess");
+
+      
+      generate_next_location();
     },
   });
 
@@ -773,7 +779,20 @@ if (Meteor.isClient) {
 
       addr_container.css("display","none");
 
-      map.fitBounds(map_start_bound);
+      //map.fitBounds(map_start_bound);
+
+      var place = Session.get("current_place");
+      var vp = place.geometry.viewport;
+      map.fitBounds([[vp.ta.d,vp.ia.d],[vp.ta.b,vp.ia.b]]);
+      map.zoomIn();
+      map_start_bound = map.getBounds();
+      var center = map.getCenter();
+        marker = L.marker(center, {
+                    icon: mark_Icon_guess,
+                    draggable: true,
+                    title: "Drag me to guess"
+                }).addTo(map);
+
       var center = map.getCenter();
 
       //var place_loc = new google.maps.LatLng(next_location['lat'],next_location['lng']);

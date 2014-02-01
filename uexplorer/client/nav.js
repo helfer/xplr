@@ -79,11 +79,16 @@ Template.header.events(
               var pano_cur_loc = pano.getPosition();
 
               Session.set("current_position",pano_cur_loc);
+             /*
               pano_latlng = L.latLng(pano_cur_loc["d"], pano_cur_loc["e"]);
+              
               var littleguy = L.marker(pano_latlng, {
                   icon: mark_Icon_b,
                   draggable: false
-              }).addTo(map);
+              }).addTo(map);*/
+              update_markers();
+              //setTimeout(update_markers,1000);
+
             } 
         },
         
