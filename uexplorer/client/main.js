@@ -1,9 +1,15 @@
 
 
 if (Meteor.isClient) {
-    markersArray = [];
+    markersArray = [];//on guess streetview
+    StreetOverlayArray = [];// on collect streetview
+    StreetOverlay = {};//on collect streetview
+    unvisited_marker_group_bound = [];
+    unvisited_marker_group = {};
     TimerId = null;
     placedetails = {};
+
+  $("head").append('<meta property="og:title" content="Urban Explorer" />');
 
   Session.set("mode","welcome");
 
@@ -66,12 +72,19 @@ if (Meteor.isClient) {
       }
   }
 
-    clearOverlays = function(){
-      for (var i = 0; i < markersArray.length; i++ ) {
-        markersArray[i].setMap(null);
-      }
-      markersArray.length = 0;
+  clearstreetOverlays = function(){
+    for (var i = 0; i < StreetOverlay.length; i++ ) {
+      StreetOverlayArray[i].setMap(null);
     }
+    StreetOverlayArray.length = 0;
+  }
+
+  clearOverlays = function(){
+    for (var i = 0; i < markersArray.length; i++ ) {
+      markersArray[i].setMap(null);
+    }
+    markersArray.length = 0;
+  }
 
 
   make_panosvc_cb = function(next_location){
@@ -88,6 +101,7 @@ if (Meteor.isClient) {
   }
 
   //just to test, copied from google developers
+  //This is where add google markers in guess mode? -Shan
     function createMarker(place) {
       var placeLoc = place.geometry.location;
       var marker = new google.maps.Marker({
@@ -105,6 +119,12 @@ if (Meteor.isClient) {
     }
 
     addMarkerWindow = function(place){
+
+        var detail_title = '<p id="name">' + place.name + '</p>';
+        if(place.place_link){
+            detail_title = '<a href="http://www.w3schools.com/" target="_blank"><p id="name">' + detail_title+ '</p></a>';
+        }
+
         var detail_address = '';
         if(place.vicinity) {
            detail_address = '<label>Address:</label><p id="address" class="detail">' + place.vicinity + '</p>';
@@ -113,7 +133,7 @@ if (Meteor.isClient) {
         var detail_price = '';
         if(place.price_level) {
             detail_price = '<label>Price level:</label><p id="price" class="detail">'
-            for (var p = 0; p<place.price_level-1; p++){
+            for (var p = 0; p<place.price_level; p++){
               detail_price +="$";
             }
               detail_price +='</p>';
@@ -130,114 +150,128 @@ if (Meteor.isClient) {
           detail_types ='<label>Type:</label><p id="type" class="detail">';
           for(var i=0; i<place.types.length; i++){
               detail_types += place.types[i];
-              if (i < place.types.length-1) {detail_types += ", ";}
-                
+              if (i < place.types.length-1) {detail_types += ", ";}                
           }
           detail_types +='</p>'; 
         }
         var infoContentString = '<div id="content">'+
-        '<div id="siteNotice">'+
-        
-          '<p id="name">' + place.name + '</p>'+
+        '<div id="siteNotice">'+detail_title+
               detail_address+ detail_rating + detail_price +
         '</div>'+
         '</div>';
-
+        //<a href="http://www.w3schools.com/" target="_blank">Visit W3Schools!</a>
         return infoContentString;
       };
 
 
-  //update marker in collection mode
+  //update marker in collection mode, are we calling this after click collect?
   update_markers = function(pano_cur_loc){
-          pano_latlng = L.latLng(pano_cur_loc["d"], pano_cur_loc["e"]);
-          var littleguy = L.marker(pano_latlng, {
-                icon: mark_Icon_b,
-                draggable: false
-            }).addTo(map);
 
-        var places = Places.find().fetch();
+      //clear markers that are already there
+      //if (StreetOverlay.length !=0){
+
+        //    clearstreetOverlays();
+      //}
+
+      //clear_mapbox_marker();
+
+      var pano_cur_loc = pano.getPosition();
+      pano_latlng = L.latLng(pano_cur_loc["d"], pano_cur_loc["e"]);
+      
+
+
+      //add people to pano position, not working?
+      var littleguy = L.marker(pano_latlng, {
+            icon: mark_Icon_b,
+            draggable: false
+        }).addTo(map);
+
+      //unvisited_marker_group_bound.push(littleguy);
+      
+
+
+      var places = Places.find().fetch();
         _.each(places,function(p){
             //console.log(p);
             var item_latlng = L.latLng(p.lat, p.lng);
             var distance = parseInt(item_latlng.distanceTo(pano_latlng));
+            var c = Visits.find({'place_id':p.place_id}).count();
+            if (c > 0){
+              return;
+            }
             //console.log(distance);
             if(distance < 150){
                 //show marker in street view only if really close
                 if(distance < 75){
+
+                  //check if marker already exist
+                  if (StreetOverlay[p.place_id] == undefined) {
+                  //customize markers
                       var cafeMarkerImage = new google.maps.MarkerImage('/marker_'+p.category+'.png');
                       cafeMarkerImage.size = new google.maps.Size(26,34);
                       cafeMarkerImage.scaledSize = new google.maps.Size(26,34);
 
-                  //next_location.category    
-                  // Here put a place marker in street view
-                  var placeMarker = new google.maps.Marker({
-                      position: new google.maps.LatLng(p.lat,p.lng),
-                      map: gmap,
-                      icon: cafeMarkerImage,
-                      title: p.name + " (click to collect!)"
-                  });
+                      //next_location.category    
+                      // Here put a place marker in street view
+                      var placeMarker = new google.maps.Marker({
+                          position: new google.maps.LatLng(p.lat,p.lng),
+                          map: gmap,
+                          icon: cafeMarkerImage
+                          
+                      });
+                      //add to dictionary
+                      StreetOverlay[p.place_id] = placeMarker;
+                      StreetOverlayArray.push(placeMarker);
 
-                    var markerinfo = addMarkerWindow(p);
-                    markerinfo += "<label style='color:#E16C4E;font:15px;text-align:center'>Collected!</label>";
+                      var markerinfo = addMarkerWindow(p);
+                      markerinfo += "<label style='color:#E16C4E;font:15px;text-align:center'>Collected!</label>";
                     //console.log(place);
-                    google.maps.event.addListener(placeMarker, 'click', function() {
-                      infowindow.setContent(markerinfo);
-                      infowindow.open(pano, this);
-                      if(Meteor.userId()){
-                            var c = Visits.find({'place_id':p.place_id}).count();
-                            if(c == 0){ 
-                                var visit = { 
-                                    'user':Meteor.userId(),
-                                    'city':Session.get("current_place").id,
-                                    'place_id':p.place_id,
-                                    'cat':p.category,
-                                    'place':p
-                                };  
-                                console.log(visit);
-                                Visits.insert(visit);
-                                //alert("collected " + p.name);
-                            }   
-                      }
-                    });
+                      google.maps.event.addListener(placeMarker, 'click', function() {
 
-                }
-
-                var mark_Icon_tmp = L.icon({
-                          iconUrl: '/marker_'+p.category+'.png',
-                          iconRetinaUrl: '/marker_'+p.category+'.png',
-                          iconSize: [26, 34],
-                          iconAnchor: [13, 34],
-                          popupAnchor: [-3, -76]
-                });
+                          this.setMap(null);
+                          //StreetOverlay[p.place_id] = null;
+                          unvisited_marker_group[p.place_id].setOpacity(0);
 
 
-              //here put a place marker on the map
-                var littleguy = L.marker(item_latlng, {
-                                icon: mark_Icon_tmp,
-                                draggable: false
-                            }).addTo(map);
+                          infowindow.setContent(markerinfo);
+                          infowindow.open(pano, this);
+                          if(Meteor.userId()){
+                                var c = Visits.find({'place_id':p.place_id}).count();
+                                if(c == 0){ 
+                                    var visit = { 
+                                        'user':Meteor.userId(),
+                                        'city':Session.get("current_place").id,
+                                        'place_id':p.place_id,
+                                        'cat':p.category,
+                                        'place':p
+                                    };  
+                                    //console.log(visit);
+                                    Visits.insert(visit);
+                                    //alert("collected " + p.name);
+                                }   
+                            }
+                        });//end addlistener
 
-         if(Meteor.userId()){
-                var c = Visits.find({'place_id':p.place_id}).count();
-                if(c == 0){ 
-                    var visit = { 
-                        'user':Meteor.userId(),
-                        'city':Session.get("current_place").id,
-                        'place_id':p.place_id,
-                        'cat':p.category,
-                        'place':p
-                    };  
-                    console.log(visit);
-                    //Visits.insert(visit);
-                }   
-      }   
-   }
+                      }// end if placemarker exists
+
+                    }//end if distance < 75 
+
+                    if (unvisited_marker_group[p.place_id] == undefined) {
+                        add_mapbox_collection_marker(p);
+                    }    
+          
+                }// end if distance<150
             //if place is within 500m, show icon on map and in street view
             //add listener to marker, that when clicked is collected
-        });
+        });// end for each
+        
+        if (unvisited_marker_group_bound != []) {
+          var group = new L.featureGroup(unvisited_marker_group_bound);
 
-
-
+          //map.fitBounds(group.getBounds());
+          
+        }
+        map.panTo(pano_latlng);  
   }
 
 
@@ -304,12 +338,6 @@ if (Meteor.isClient) {
           //update places list.
 
       });
-
-
-
-
-
-
   }
 
   map_rendered = false;
@@ -415,7 +443,12 @@ if (Meteor.isClient) {
       map.fitBounds([[vp.ta.d,vp.ia.d],[vp.ta.b,vp.ia.b]]);
       map.zoomIn();
       map_start_bound = map.getBounds();
-      marker.setLatLng([place.geometry.location.d,place.geometry.location.e]);
+      var center = map.getCenter();
+        marker = L.marker(center, {
+                    icon: mark_Icon_guess,
+                    draggable: true,
+                    title: "Drag me to guess"
+                }).addTo(map);
 
       pano.setPosition(place.geometry.location);
       pano_start_loc = pano.getPosition();
@@ -451,15 +484,21 @@ if (Meteor.isClient) {
 
       //start count time
       totalSeconds = 0;
-      round = 1;
+      round = 0;
       $("#rounds").text(round);
       setTimeout(setTime,6000);
       TimerId = setInterval(setTime, 1000);
       Session.set("mode","guess");
+
+      
+      generate_next_location();
     },
   });
 
   Template.map.rendered = function (){
+    if(!this._rendered) {
+        this._rendered = true;
+
         map = L.mapbox.map('map', 'heshan0131.h074i536', {
             doubleClickZoom: false
         });
@@ -505,17 +544,18 @@ if (Meteor.isClient) {
         });
 
         //add marker 
-        
+        /*
         marker = L.marker([42.381, -71.106], {
                     icon: mark_Icon_guess,
                     draggable: true,
                     title: "Drag me to guess"
-                }).addTo(map);
+                }).addTo(map);*/
         
         map.on('click', function(e){
           var mouse_position = e.latlng;
           marker.setLatLng(mouse_position);
         });
+    }    
   }
 
   Template.guessbutton.isguess = function(){
@@ -610,7 +650,7 @@ if (Meteor.isClient) {
     //_.each(needplaces,function(x){console.log(x.distance)});
 
     //return the places and total number still to find
-    return {'count':hasplaces.length, 'places':needplaces.slice(0,5)}
+    return {'count':hasplaces.length, 'places':needplaces.slice(0,4)}
   }
 
   Template.circle.events({
@@ -736,7 +776,7 @@ if (Meteor.isClient) {
    
   }
 
-  function generate_next_location(){
+  generate_next_location=function(){
 
       var next_location = get_random_location();
       console.log(next_location);
@@ -760,25 +800,21 @@ if (Meteor.isClient) {
 
       addr_container.css("display","none");
 
-      map.fitBounds(map_start_bound);
+      //map.fitBounds(map_start_bound);
+
+      var place = Session.get("current_place");
+      var vp = place.geometry.viewport;
+      map.fitBounds([[vp.ta.d,vp.ia.d],[vp.ta.b,vp.ia.b]]);
+      map.zoomIn();
+      map_start_bound = map.getBounds();
       var center = map.getCenter();
+        marker = L.marker(center, {
+                    icon: mark_Icon_guess,
+                    draggable: true,
+                    title: "Drag me to guess"
+                }).addTo(map);
 
-      if(Meteor.userId()){
-        var c = Visits.find({'place_id':next_location.place_id}).count();
-        if(c == 0){
-            console.log(next_location);
-            var visit = {
-                'user':Meteor.userId(),
-                'city':Session.get("current_place").id,
-                'place_id':next_location.place_id,
-                'cat':next_location.category,
-                'place':next_location
-            };
-            console.log(visit);
-            //Visits.insert(visit);
-        }
-      }
-
+      var center = map.getCenter();
 
       //var place_loc = new google.maps.LatLng(next_location['lat'],next_location['lng']);
       pano = gmap.getStreetView();
@@ -786,12 +822,9 @@ if (Meteor.isClient) {
       pano.setOptions({'enableCloseButton':false});
       pano_start_loc =  pano.getPosition();
       
-      var cafeMarkerImage = new google.maps.MarkerImage('/marker_'+next_location.category+'.png');
-          cafeMarkerImage.size = new google.maps.Size(26,34);
-          cafeMarkerImage.scaledSize = new google.maps.Size(26,34);
-
       //next_location.category    
       // Here put a place marker on the map
+      /*
       var placeMarker = new google.maps.Marker({
           position: place_loc,
           map: gmap,
@@ -811,7 +844,7 @@ if (Meteor.isClient) {
       google.maps.event.addListener(placeMarker, 'click', function() {
         infowindow.setContent(contentString);
         infowindow.open(pano,placeMarker);
-      });
+      });*/
 
       //new round and start counting
       round++;
@@ -860,6 +893,7 @@ if (Meteor.isClient) {
     if(Session.get("mode")){
         if(Session.get("mode") != "guess"){
             console.log("running");
+            clearOverlays();
             //reset game, stop timer.
             totalScore = 0;
             round = 1;

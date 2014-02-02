@@ -4,12 +4,12 @@
         <img id="logo" src="logo.png"/>
         <div id="menu">
             <ul>
-                {{#if loggedin}}
+               
                     <a><li class="menu" id="menu-guess" style="visibility:visible">
                         <img src="nav_g{{isactive "guess"}}.png"/>
                         <label>Guess</label>
                     </li></a>
-                
+                {{#if loggedin}}
                     <a><li class="menu" id="menu-collect" style="visibility:visible">
                         <img src="nav_f{{isactive "collect"}}.png"/>
                         <label>Collect</label>
@@ -18,6 +18,16 @@
                         <img src="nav_p{{isactive "achievement"}}.png"/>
                         <label>Achievement</label>
                     </li></a>
+
+                 {{else}}
+                    <a><li class="menu" id="menu-collect" style="visibility:visible">
+                        <img src="nav_f_dead.png"/>
+                        <label style="color:#938F92">Collect</label>
+                    </li></a>
+                    <a><li class="menu" id="menu-achievement" style="visibility:visible">
+                        <img src="nav_p_dead.png"/>
+                        <label style="color:#938F92">Achievement</label>
+                    </li></a>   
                 {{/if}}                        
             </ul> 
         </div>           
