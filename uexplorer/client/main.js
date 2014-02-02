@@ -3,17 +3,38 @@
 if (Meteor.isClient) {
     markersArray = [];
     TimerId = null;
+    placedetails = {};
 
   Session.set("mode","welcome");
 
   update_places = function(){
     console.log('subscription complete');
     console.log("sessmode " + Session.get("mode"));
-
-    if(Session.get("mode") == "guess"){
+        if(Session.get("mode") == "guess"){
         //generate_next_location();
     }
   }
+
+  /*update_place_details = function(place,status){
+    if(status == "OK"){
+        console.log('inserted place');
+        placedetails[place.id] = place;
+    } else {
+        console.log("bad placedetail status " + status);
+    }
+  }
+  Deps.autorun(function(){
+    _.each(Places.find().fetch(),function(p){
+            if(p.place_ref != undefined){
+                if(placedetails[p.id] == undefined){
+                    console.log('query place ' + p.name);
+                    placesvc.getDetails({reference:p.place_ref},update_place_details);
+                }
+            }
+        });
+  });*/
+
+
 
 
   //subscribe to places, when city is updated.

@@ -16,6 +16,7 @@ var make_cb = function(city,cat,offset){
                 'city_id':city.id,
                 'place_id':p.id,
                 'name':p.name,
+                'place_ref':p.reference,
                 'category':cat,
                 'lat':p.geometry.location.lat,
                 'lng':p.geometry.location.lng,
