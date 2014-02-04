@@ -419,7 +419,8 @@ if (Meteor.isClient) {
           }
       }
       var vp = place.geometry.viewport;
-      map.fitBounds([[vp.ta.d,vp.ia.d],[vp.ta.b,vp.ia.b]]);
+      console.log(place);
+      map.fitBounds([[vp.ta.d,vp.ga.d],[vp.ta.b,vp.ga.b]]);
       map.zoomIn();
       map_start_bound = map.getBounds();
       var center = map.getCenter();
@@ -470,7 +471,7 @@ if (Meteor.isClient) {
       Session.set("mode","guess");
 
       
-      generate_next_location();
+      //generate_next_location();
     },
   });
 
@@ -758,8 +759,8 @@ if (Meteor.isClient) {
   generate_next_location=function(){
 
       var next_location = get_random_location();
-      console.log(next_location);
-      console.log('name: ' + next_location.name);
+      //console.log(next_location);
+      //console.log('name: ' + next_location.name);
 
       var panosvc_cb = make_panosvc_cb(next_location);
 
