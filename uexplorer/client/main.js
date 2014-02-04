@@ -93,7 +93,10 @@ if (Meteor.isClient) {
       markersArray.push(marker);
       google.maps.event.addListener(marker, 'click', function() {
         infowindow.setContent(markerinfo);
+        $(".gm-style .gm-style-iw").css("height","auto");
+        $(".gm-style .gm-style-iw").css("text-align","center");
         infowindow.open(pano, this);
+
       });
     }
 
@@ -138,6 +141,14 @@ if (Meteor.isClient) {
               detail_address+ detail_rating + detail_price +
         '</div>'+
         '</div>';
+
+        if(Session.get("mode") == "collect") {
+          infoContentString += "<div id='content'><img src='/sticker_"+place.category+"_30.png'/>";
+          infoContentString += "<label style='color:#E16C4E;font-size:15px;text-align:center'> x 1 <br>Collected!</label></div>";
+        }
+
+        infoContentString += '</div></div>';
+
         //<a href="http://www.w3schools.com/" target="_blank">Visit W3Schools!</a>
         return infoContentString;
       };
@@ -203,7 +214,6 @@ if (Meteor.isClient) {
                       StreetOverlayArray.push(placeMarker);
 
                       var markerinfo = addMarkerWindow(p);
-                      markerinfo += "<label style='color:#E16C4E;font:15px;text-align:center'>Collected!</label>";
                     //console.log(place);
                       google.maps.event.addListener(placeMarker, 'click', function() {
 
@@ -211,9 +221,9 @@ if (Meteor.isClient) {
                           //StreetOverlay[p.place_id] = null;
                           unvisited_marker_group[p.place_id].setOpacity(0);
 
-
                           infowindow.setContent(markerinfo);
                           infowindow.open(pano, this);
+                          
                           if(Meteor.userId()){
                                 var c = Visits.find({'place_id':p.place_id}).count();
                                 if(c == 0){ 

@@ -715,8 +715,8 @@ line-height: 2.7;
 
 #instruction #skip{
 	position:absolute;
-	top:28px;
-	left:800px;
+	top:18px;
+	left:850px;
 	color:#ffffff;
 	font-size: 12px;	
 }
@@ -798,6 +798,11 @@ line-height: 2.7;
 
 .gm-style div[style*="z-index: 1; margin: 10px; position: absolute; left: 88px; top: 0px;"] {
 	display:none;
+}
+
+
+.gm-style .gm-style-iw {
+	height:auto;
 }
 
 .gm-style .gm-style-iw div #siteNotice{
