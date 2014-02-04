@@ -83,9 +83,10 @@ input:hover {
 }
 
 #menu ul li label{
+	position:absolute;
+	top:10px;
 	font-size: 14px;
 	margin-left: 8px;
-	vertical-align: 50%;
 }
 
 #menu ul li label:hover{
@@ -451,7 +452,7 @@ input:hover {
 	padding:0 10px 0 10px;
 }
 
-#guess,#play {
+#guess,#play,#gotit {
 	font-weight:300;
 	background-color: #E16C4E;
 }
@@ -461,7 +462,7 @@ input:hover {
 	margin-top: 0px;
 }
 
-#guess,#play:hover{
+#guess,#play,#gotit:hover{
 	background-color: #D65238;
 }
 
@@ -698,6 +699,91 @@ line-height: 2.7;
 	margin-left: 4px;
 }
 
+/*******************************
+*
+*   instruction
+*
+********************************/
+
+#instruction{
+	position:absolute;
+	width:900px;
+	height:800px;
+	display:none;
+	z-index:1000;
+}
+
+#instruction #skip{
+	position:absolute;
+	top:28px;
+	left:800px;
+	color:#ffffff;
+	font-size: 12px;	
+}
+
+#instruction input{
+	position:absolute;
+	top:28px;
+	left:700px;
+	font-size: 12px;
+
+}
+
+#instruction .steps{
+	position:absolute;
+	opacity:0;
+
+}
+
+#instruction .steps img{
+	position:relative;
+	float: left;
+}
+
+#instruction .steps p{
+	position:relative;
+	float: left;
+	color:#ffffff;
+	font-size: 18px;
+	width:200px;
+	margin-left: 10px;
+}
+
+
+#instruction #step1{
+	top:150px;
+	left:212px;
+}
+
+#instruction #step2{
+	top:397px;
+	left:378px;
+}
+
+#instruction #step2 p{
+	width:250px;
+	margin-top: 0px;	
+}
+
+#instruction #step3{
+	top:525px;
+	left:450px;
+}
+
+#instruction #step3 p{
+	text-align:right;
+	margin-right:10px;
+	margin-top: 0px;
+}
+
+#instruction #background{
+	position:absolute;
+	background-color:#404041;
+	width:900px;
+	height:800px;
+	opacity:0.6;
+	display:block;
+}
 
 /*******************************
 *

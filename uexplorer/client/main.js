@@ -459,6 +459,11 @@ if (Meteor.isClient) {
           $("#intro-img-2").css("display","none");
           $(".circle-text-2").css("display","block");
           $("#back-btn").css("display","block");
+          $("#instruction").css("display","block");
+          $("#step1").animate({"opacity":"1"},1000);
+          $("#step2").animate({"opacity":"1"},1000);
+          $("#step3").animate({"opacity":"1"},1000);
+
       }
       setTimeout(displaynone,2000);
 
@@ -466,13 +471,12 @@ if (Meteor.isClient) {
       totalSeconds = 0;
       round = 0;
       $("#rounds").text(round);
-      setTimeout(setTime,6000);
-      TimerId = setInterval(setTime, 1000);
-      Session.set("mode","guess");
-
-      
+      //setTimeout(setTime,6000);
+      //TimerId = setInterval(setTime, 1000);
+      Session.set("mode","guess");   
       //generate_next_location();
     },
+
   });
 
   Template.map.rendered = function (){
@@ -784,7 +788,8 @@ if (Meteor.isClient) {
 
       var place = Session.get("current_place");
       var vp = place.geometry.viewport;
-      map.fitBounds([[vp.ta.d,vp.ia.d],[vp.ta.b,vp.ia.b]]);
+      map.fitBounds([[vp.ta.d,vp.ga.d],[vp.ta.b,vp.ga.b]]);
+      //[[vp.ta.d,vp.ga.d],[vp.ta.b,vp.ga.b]]
       map.zoomIn();
       map_start_bound = map.getBounds();
       var center = map.getCenter();

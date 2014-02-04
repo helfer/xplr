@@ -132,7 +132,7 @@
 
 <template name="guessbutton">
     {{#if isguess}}  
-    <input type="button" class="inc" id="guess" value="Guess!" />
+    <input type="button" class="inc red" id="guess" value="Guess!" />
     {{/if}} 
 </template>    
 
@@ -183,6 +183,7 @@
             {{> top}}
             {{> bottom}}
             {{> apage}}
+            {{> instruction}}
         </div>
     </div>
 <div id="override_javascript_alert"></div>
