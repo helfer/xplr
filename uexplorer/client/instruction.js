@@ -1,8 +1,4 @@
 Template.instruction.events({
-	'click #gotit': function (){
- 		remove_instruction();
-	},
-
 	'click #instruction': function (){
  		remove_instruction();
 	}
@@ -11,12 +7,14 @@ Template.instruction.events({
 
 remove_instruction = function(){
 	$("#instruction").css("display","none");
-	generate_next_location();
-    clearOverlays();
-    state = 'GUESS';	
+	if(Session.get("mode") == "guess" && round == 0)
+	{
+		generate_next_location();
+	    clearOverlays();
+    }	
 }
 
 Template.instruction.isactive = function(session){
-	if (Session.get("mode") == session) return true;
+	return Session.get("mode") == session;
 }
 

@@ -181,7 +181,8 @@ add_mapbox_collection_marker = function(p){
 
       var marker_temp = L.marker(item_latlng, {
           icon: mark_Icon_tmp,
-          draggable: false
+          draggable: false,
+          riseOnHover:true
       }).addTo(map);
 
       var html_temp = addMarkerWindow(p) ;

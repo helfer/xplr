@@ -820,29 +820,6 @@ if (Meteor.isClient) {
       pano.setOptions({'enableCloseButton':false});
       pano_start_loc =  pano.getPosition();
       
-      //next_location.category    
-      // Here put a place marker on the map
-      /*
-      var placeMarker = new google.maps.Marker({
-          position: place_loc,
-          map: gmap,
-          icon: cafeMarkerImage,
-          title: next_location.name
-      });
-
-      var contentString = '<div id="content">'+
-      '<div id="siteNotice">'+
-      
-        '<p id="name">' + next_location.name + '</p>'+
-      
-      '</div>'+
-      '</div>';
-
-      //add info window
-      google.maps.event.addListener(placeMarker, 'click', function() {
-        infowindow.setContent(contentString);
-        infowindow.open(pano,placeMarker);
-      });*/
 
       //new round and start counting
       round++;
