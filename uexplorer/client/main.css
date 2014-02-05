@@ -135,6 +135,16 @@ input:hover {
 	left:450px;
 }
 
+#intro #help{
+	position: absolute;
+	top:10px;
+	left: 850px;
+}
+
+#intro #help:hover{
+	cursor: pointer;
+}
+
 #circle{
 	width:130px;
 	height:130px;
@@ -708,9 +718,10 @@ line-height: 2.7;
 #instruction{
 	position:absolute;
 	width:900px;
-	height:800px;
+	height:660px;
 	display:none;
 	z-index:1000;
+	overflow: hidden;
 }
 
 #instruction #skip{
@@ -719,6 +730,11 @@ line-height: 2.7;
 	left:850px;
 	color:#ffffff;
 	font-size: 12px;	
+}
+
+#instruction #skip:hover{
+	color:#E16C4E;
+	cursor: pointer;
 }
 
 #instruction input{
@@ -744,36 +760,85 @@ line-height: 2.7;
 	position:relative;
 	float: left;
 	color:#ffffff;
-	font-size: 18px;
+	font-size: 16px;
 	width:200px;
 	margin-left: 10px;
 }
 
 
-#instruction #step1{
+#instruction #step1-g{
 	top:150px;
 	left:212px;
 }
 
-#instruction #step2{
+#instruction #step2-g{
 	top:397px;
 	left:378px;
 }
 
-#instruction #step2 p{
+#instruction #step2-g p{
 	width:250px;
 	margin-top: 0px;	
 }
 
-#instruction #step3{
+#instruction #step3-g{
 	top:525px;
 	left:450px;
 }
 
-#instruction #step3 p{
+#instruction #step3-g p{
 	text-align:right;
 	margin-right:10px;
 	margin-top: 0px;
+}
+
+
+#instruction #step1-c{
+	top:336px;
+	left:434px;
+}
+
+#instruction #step1-c p{
+	text-align:right;
+	margin-right:10px;
+	margin-top: 0px;
+}
+
+#instruction #step2-c{
+	top:418px;
+	left:362px;
+}
+
+#instruction #step2-c p{
+	width:250px;
+	margin-top: 0px;	
+}
+
+#instruction #step3-c{
+	top:100px;
+	left:270px;
+}
+
+#instruction #step3-c img{
+	margin-right:4px; 
+	float: left;
+
+}
+
+#instruction #step3-c div{
+	float:left;
+	width: 150px; 
+}
+
+#instruction #step3-c div{
+	float:left;
+	width: 150px; 
+}
+
+#instruction #step3-c div p{
+	margin-top: 0px;
+	margin-top: 4px;
+	margin-bottom: 4px;
 }
 
 #instruction #background{

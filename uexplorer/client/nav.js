@@ -74,19 +74,18 @@ Template.header.events(
               $("#circle").css("display","none");
               $("#achievement").animate({"height":"0px"},1000);
      
+              
               clear_mapbox_marker();
+              //show_instruction();
 
               var pano_cur_loc = pano.getPosition();
 
               Session.set("current_position",pano_cur_loc);
-             /*
-              pano_latlng = L.latLng(pano_cur_loc["d"], pano_cur_loc["e"]);
-              
-              var littleguy = L.marker(pano_latlng, {
-                  icon: mark_Icon_b,
-                  draggable: false
-              }).addTo(map);*/
+
               update_markers();
+              //$("#instruction").css("display","block");
+              
+              setTimeout(show_instruction,500);
               //setTimeout(update_markers,1000);
 
             } 
@@ -236,6 +235,13 @@ update_map_collection_marker = function(){
       var group = new L.featureGroup(collection_marker_group);
 
       map.fitBounds(group.getBounds());
+
+}
+
+show_instruction = function(){
+    console.log("show instruction");
+      $("#instruction").css("display","block");
+      $(".steps").animate({"opacity":"1"},1000);
 
 }
 

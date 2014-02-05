@@ -409,6 +409,12 @@ if (Meteor.isClient) {
     }
   }
 
+  Template.streetview.events({
+    'click #help' : function(){
+        show_instruction();
+    }
+  })
+
   Template.map.events({
     'click #play': function (){
        
@@ -419,7 +425,7 @@ if (Meteor.isClient) {
         setTimeout(function(){$("#autocomplete").css("visibility","visible");},100);
         return;
       }
-      
+      Session.set("mode","guess");  
       Session.set("current_place",place);
       document.getElementById("autocomplete").value = "";
       if(Meteor.userId()){
@@ -469,13 +475,10 @@ if (Meteor.isClient) {
           $("#intro-img-2").css("display","none");
           $(".circle-text-2").css("display","block");
           $("#back-btn").css("display","block");
-          $("#instruction").css("display","block");
-          $("#step1").animate({"opacity":"1"},1000);
-          $("#step2").animate({"opacity":"1"},1000);
-          $("#step3").animate({"opacity":"1"},1000);
 
       }
       setTimeout(displaynone,2000);
+      setTimeout(show_instruction,2500);
 
       //start count time
       totalSeconds = 0;
@@ -483,7 +486,7 @@ if (Meteor.isClient) {
       $("#rounds").text(round);
       //setTimeout(setTime,6000);
       //TimerId = setInterval(setTime, 1000);
-      Session.set("mode","guess");   
+       
       //generate_next_location();
     },
 
@@ -759,7 +762,7 @@ if (Meteor.isClient) {
   }
 
 
-  function get_random_location(){
+  get_random_location = function(){
     var pcount = Places.find().count();
     console.log("found n places " + pcount);
     var pick = Math.floor(Math.random()*pcount);
@@ -785,7 +788,7 @@ if (Meteor.isClient) {
 
  //the coordinates of next_location may not be exactly those of place_loc
  //this happens when no nearby panorama is returned.
- function prompt_new_guess(next_location,place_loc){
+ prompt_new_guess = function(next_location,place_loc){
 
      //hide address
       var addr_container = $(".gm-style div").filter(function() {
@@ -877,7 +880,7 @@ if (Meteor.isClient) {
       $("#clock").text( pad(parseInt(totalSeconds/60))+":"+pad(totalSeconds%60));
   }
 
-  function pad(val)
+  pad = function(val)
   {
       var valString = val + "";
       if(valString.length < 2) return "0" + valString;

@@ -3,21 +3,51 @@
 		<div id="background">
 		</div>
 		<div id="skip">
-			Close
-		</div>		
-		<div class="steps" id="step1">
-			<img src="instr_1.png"/>
-			<p>Explore in the streetview, guess where you are</p>
-			<img src="instr_1_1.png"/>
+			Close X
 		</div>
-		<div class="steps" id="step2">
-			<img src="instr_2.png"/>
-			<p>Click in the map to place the marker at your guessed location</p>
-		</div>
-		<div class="steps" id="step3">			
-			<p>Click guess to see the answer</p>
-			<img src="instr_3.png"/>
-		</div>
-			
+		{{#if isactive "guess"}}		
+			<div class="steps guess" id="step1-g">
+				<img src="instr_1.png"/>
+				<p>Explore in the streetview, guess where you are</p>
+				<img src="instr_1_1.png"/>
+			</div>
+			<div class="steps guess" id="step2-g">
+				<img src="instr_2.png"/>
+				<p>Click in the map to place the marker at your guessed location</p>
+			</div>
+			<div class="steps guess" id="step3-g">			
+				<p>Click guess to see the answer</p>
+				<img src="instr_3.png"/>
+			</div>
+		{{/if}}	
+		{{#if isactive "collect"}}
+			<div class="steps collect" id="step1-c">
+				
+				<p>A list of place near your current location to collect</p>
+				<img src="instr_1_c.png"/>
+			</div>
+			<div class="steps collect" id="step2-c">
+				<img src="instr_2.png"/>
+				<p>The little person shows where you are. Place markers will show up when you move closer to them</p>
+			</div>
+			<div class="steps collect" id="step3-c">
+
+				<img src="instr_3_c.png"/>	
+				<div>		
+				<p>Navigate in the streetview. Find these markers at places:<br></p>
+				<p>
+				<img src="marker_bars.png"/>
+				<img src="marker_cafe.png"/>
+				<img src="marker_educ.png"/>
+				<img src="marker_arts.png"/>
+				<img src="marker_resto.png"/>
+				<img src="marker_shop.png"/>
+				</p>
+				<p>Click on markers will add the place to your collection</p>
+			</div>
+				
+			</div>
+		{{/if}}
+
 	</div>	
 </template>	
