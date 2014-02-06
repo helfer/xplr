@@ -17,16 +17,19 @@
                     <a><li class="menu" id="menu-achievement" style="visibility:visible">
                         <img src="nav_p{{isactive "achievement"}}.png"/>
                         <label>Achievement</label>
+                        {{>collect}}
                     </li></a>
 
                  {{else}}
                     <a><li class="menu" id="menu-collect" style="visibility:visible">
                         <img src="nav_f_dead.png"/>
                         <label style="color:#938F92">Collect</label>
+
                     </li></a>
                     <a><li class="menu" id="menu-achievement" style="visibility:visible">
                         <img src="nav_p_dead.png"/>
                         <label style="color:#938F92">Achievement</label>
+
                     </li></a>   
                 {{/if}}                        
             </ul> 
@@ -42,6 +45,16 @@
         </div> 
 
     </div>
+</template>
+
+<template name="collect">
+    {{#constant}}
+    <div id="collected-shadow"></div>
+    <div id="collected" style="display:none">
+             
+    </div>
+    {{/constant}}    
+
 </template>
 
 <template name="modals">

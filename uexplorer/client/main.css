@@ -92,6 +92,33 @@ input:hover {
 #menu ul li label:hover{
 	cursor: pointer;
 }
+
+#menu #menu-achievement #collected {
+	position: absolute;
+	top: -4px;
+	left: 24px;
+	background-color: #E16C4E;
+	width: 14px;
+	height:14px;
+	border-radius: 7px;
+	color:#ffffff;
+	font-size: 10px;
+	text-align: center;
+	line-height: 14px;
+}
+
+#menu #menu-achievement #collected-shadow {
+	position: absolute;
+	top: -4px;
+	left: 24px;
+	background-color: #E16C4E;
+	width: 14px;
+	height:14px;
+	border-radius: 7px;
+	opacity: 0.7;
+	display:none;
+}
+
 .sig {
 	width:56px;
 	height:30px;

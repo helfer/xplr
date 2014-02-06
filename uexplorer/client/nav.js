@@ -51,6 +51,10 @@ Template.header.events(
                 Session.set("mode","achievement");
                 $("#circle").css("display","none");
                 $("#achievement").animate({"height":"380px"},1000);
+                $("#collected").css("display","none");
+                $("#collected-shadow").css("display","none");
+                setTimeout(sticker_animate,2000)
+                
              }  
 
             //update_map_collection_marker();                       
@@ -81,11 +85,13 @@ Template.header.events(
               var pano_cur_loc = pano.getPosition();
 
               Session.set("current_position",pano_cur_loc);
+              map.zoomIn(2);
+              setTimeout(update_markers,500);
+              //update_markers();
 
-              update_markers();
               //$("#instruction").css("display","block");
               
-              setTimeout(show_instruction,500);
+              setTimeout(show_instruction,1000);
               //setTimeout(update_markers,1000);
 
             } 
@@ -140,6 +146,14 @@ Template.header.loggedin = function(){
     }
 }
 
+Template.collect.collect = function(){
+  return collected;   
+}
+
+Template.collect.iscollect = function(){
+  return collected != null;
+}
+
 Template.header.rendered = function (){
     if(Session.get("mode") == "welcome"){
         $("#menu-collect").css("visibility","hidden");
@@ -154,7 +168,6 @@ Template.header.rendered = function (){
             $("#menu-guess").css("visibility","visible");
         }
     }
-
 }
 
 clear_mapbox_marker = function(){
@@ -185,7 +198,7 @@ add_mapbox_collection_marker = function(p){
           riseOnHover:true
       }).addTo(map);
 
-      var html_temp = addMarkerWindow(p) ;
+      var html_temp = addMarkerWindow(p,"mapbox") ;
 
       var popup_option = {
 
@@ -246,6 +259,21 @@ show_instruction = function(){
 
 }
 
+collected_animate = function(){
+      $("#collected").text(collected.length);
+      $("#collected").css("display","block");
+      $("#collected-shadow").css("display","block");
+      $("#collected-shadow").animate({"width":"24px","height":"24px","border-radius":"12px","top":"-9px","left":"20px","opacity":"0.2"},750);
+      $("#collected-shadow").animate({"width":"14px","height":"14px","border-radius":"7px","top":"-4px","left":"24px","opacity":"0"},100).delay(750);
+      setTimeout(function(){$("#collected-shadow").css("opacity","0.7");},1000);
+}
+
+sticker_animate = function(){
+  collected.forEach(function(d){
+    $("#user-collections #"+d).animate({"opacity":1},1000);
+  });
+  collected=[];
+}
 //autorun makes it run whenever a session or collection variable used inside the function changes
 Deps.autorun(function(){update_map_collection_marker();});
 /*

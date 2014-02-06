@@ -7,6 +7,7 @@ if (Meteor.isClient) {
     unvisited_marker_group_bound = [];
     unvisited_marker_group = {};
     TimerId = null;
+    collected = [];//number of collected marker in this collection mode
 
   $("head").append('<meta property="og:title" content="Urban Explorer" />');
 
@@ -100,7 +101,7 @@ if (Meteor.isClient) {
       });
     }
 
-    addMarkerWindow = function(place){
+    addMarkerWindow = function(place,mtype){
 
         var detail_title = '<p id="name">' + place.name + '</p>';
         if(place.place_link){
@@ -142,7 +143,7 @@ if (Meteor.isClient) {
         '</div>'+
         '</div>';
 
-        if(Session.get("mode") == "collect") {
+        if(Session.get("mode") == "collect" && mtype != "mapbox") {
           infoContentString += "<div id='content'><img src='/sticker_"+place.category+"_30.png'/>";
           infoContentString += "<label style='color:#E16C4E;font-size:15px;text-align:center'> x 1 <br>Collected!</label></div>";
         }
@@ -213,7 +214,7 @@ if (Meteor.isClient) {
                       StreetOverlay[p.place_id] = placeMarker;
                       StreetOverlayArray.push(placeMarker);
 
-                      var markerinfo = addMarkerWindow(p);
+                      var markerinfo = addMarkerWindow(p,"streetview");
                     //console.log(place);
                       google.maps.event.addListener(placeMarker, 'click', function() {
 
@@ -239,6 +240,11 @@ if (Meteor.isClient) {
                                     //alert("collected " + p.name);
                                 }   
                             }
+
+                            collected.push(p.place_id);
+                            collected_animate();
+
+
                         });//end addlistener
 
                       }// end if placemarker exists
@@ -630,7 +636,7 @@ if (Meteor.isClient) {
             needplaces.push(allplaces[ap]);
         }
     }
-    console.log("needlen " + needplaces.length);
+    //console.log("needlen " + needplaces.length);
 
     //now add distance and sort the places by distance!
     var pano_cur_loc = Session.get("current_position");

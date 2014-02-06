@@ -102,8 +102,11 @@ Template.stickers.minusvisits = function(cat){
     return Visits.find({'cat':cat}).count();
 }
 
-Template.stickers.position = function(i,o){
-    return "top:"+sticker_grid[i+o]['top'] + "px; left:" + sticker_grid[i+o]['left'] + "px;";
+Template.stickers.position = function(i,o,id){
+    if (collected.indexOf(id) > -1) var v = 0;
+    else v = 1;
+
+    return "top:"+sticker_grid[i+o]['top'] + "px; left:" + sticker_grid[i+o]['left'] + "px; opacity:" + v + ";";
 }
 
 Template.rankings.getranks = function(){
