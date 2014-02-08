@@ -425,6 +425,7 @@ if (Meteor.isClient) {
     'click #play': function (){
        
       var place = autocomplete.getPlace();
+      console.log(place);
       if(place == undefined){
         $("#autocomplete").css("border","1px solid #D65238");
         $("#autocomplete").css("visibility","hidden");
@@ -441,7 +442,7 @@ if (Meteor.isClient) {
           }
       }
       var vp = place.geometry.viewport;
-      console.log(place);
+      //console.log(place);
       map.fitBounds([[vp.ta.d,vp.ga.d],[vp.ta.b,vp.ga.b]]);
       map.zoomIn();
       map_start_bound = map.getBounds();

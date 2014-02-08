@@ -65,8 +65,12 @@ Template.city.events(
             var src = ev.target.children[0].style.visibility="hidden";
         },
         'click a': function(ev, template){
-            //console.log(template);
-            Session.set("current_place",template.data.place);
+            console.log(template);
+            var place = template.data.place;
+            Session.set("current_place",place);
+            var vp = place.geometry.viewport;
+            //console.log(place);
+            map.fitBounds([[vp.ta.d,vp.ga.d],[vp.ta.b,vp.ga.b]]);
             clear_mapbox_marker();
         }
     });
