@@ -465,8 +465,10 @@ if (Meteor.isClient) {
           }
       }
       var vp = place.geometry.viewport;
-      //console.log(place);
-      map.fitBounds([[vp.ta.d,vp.ga.d],[vp.ta.b,vp.ga.b]]);
+      console.log(vp);
+      // @shan: start fixing here
+      // fitBounds([[minLon, minLat], [maxLon, maxLat]]);
+      //map.fitBounds([[vp.j.j,vp.R.R],[vp.j.R,vp.R.j]]);
       map.zoomIn();
       map_start_bound = map.getBounds();
       var center = map.getCenter();
