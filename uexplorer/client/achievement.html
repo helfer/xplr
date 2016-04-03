@@ -54,9 +54,9 @@
 </template>
 
 <template name="stickers">
-    {{#times 20}}
+    {{#each repeat 20}}
         <img src="sticker_0.png" style="{{position this 0}}"/>
-    {{/times}}
+    {{/each}}
     {{#each visits cat}}
         <img id="{{place.place_id}}" title="{{place.name}}" src="sticker_{{cat}}.png" style="{{position index 0 place.place_id}}"/>
     {{/each}} 						

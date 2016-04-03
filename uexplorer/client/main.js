@@ -1,4 +1,4 @@
-
+import { Session } from 'meteor/session';
 
 if (Meteor.isClient) {
     markersArray = [];//on guess streetview
@@ -424,9 +424,11 @@ if (Meteor.isClient) {
     });
   });
 
-  Template.steps.steps = function () {
-    return steps;
-  };
+  Template.steps.helpers({
+    steps: function () {
+      return steps;
+    }
+  });
 
 
   Template.streetview.rendered = function (){
@@ -613,22 +615,24 @@ if (Meteor.isClient) {
            
   });
 
-  Template.panel.guessmode = function(){
-    console.log('smode ' + Session.get("mode"));
-    if(Session.get("mode") == "guess"){
-        console.log("true");
-        return true;
-    }
-    return false;
-  } 
-  Template.panel.collectmode = function(){
-    console.log('smode ' + Session.get("mode"));
-    return Session.get("mode") == "collect";
-  } 
-  Template.panel.achievemode = function(){
-    console.log('smode ' + Session.get("mode"));
-    return Session.get("mode") == "achievement";
-  } 
+  Template.panel.helpers({
+    guessmode: function(){
+      console.log('smode ' + Session.get("mode"));
+      if(Session.get("mode") == "guess"){
+          console.log("true");
+          return true;
+      }
+      return false;
+    },
+    collectmode: function(){
+      console.log('smode ' + Session.get("mode"));
+      return Session.get("mode") == "collect";
+    },
+    achievemode: function(){
+      console.log('smode ' + Session.get("mode"));
+      return Session.get("mode") == "achievement";
+    } 
+  });
 
   Template.achieve_panel.summary = function(){
     var ret = [];

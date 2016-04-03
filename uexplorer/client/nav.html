@@ -35,7 +35,7 @@
             </ul> 
         </div>           
         <div id="login-temp">
-            {{loginButtons}}   
+            {{> loginButtons}}   
             <!--<a class="login-link-text" id="login-sign-in-link">Sign in ▾</a>
             
             <input type="button" class="sig" id="signup" value="Sign up" />
@@ -48,12 +48,8 @@
 </template>
 
 <template name="collect">
-    {{#constant}}
     <div id="collected-shadow"></div>
-    <div id="collected" style="display:none">
-             
-    </div>
-    {{/constant}}    
+    <div id="collected" style="display:none"></div>
 
 </template>
 

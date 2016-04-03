@@ -1,17 +1,22 @@
+import { Session } from 'meteor/session';
 
-Template.achievement.username = function(){
+Template.achievement.helpers({
+  username: function(){
     if(Meteor.user()){
         return Meteor.user().username;
-    }
-}
-
-Template.achievement.cname = function(){
-    if(Session.get("current_place")){
-        return Session.get("current_place").name;
     } else {
-        return "";
+      return '';
     }
-}
+  },
+
+  cname: function(){
+      if(Session.get("current_place")){
+          return Session.get("current_place").name;
+      } else {
+          return "";
+      }
+  }
+});
 
 Template.stickers.events(
     {
@@ -78,20 +83,31 @@ Template.city.events(
 Template.city.active = function(name){
     if(Session.get("current_place")){
         return Session.get("current_place").name == name;
+    } else {
+      return false;
     }
 }
 
-Template.cities.visited = function(){
+Template.cities.helpers({
+  visited: function(){
     return CityVisits.find().fetch();
-}
+  }
+});
 
 
-Template.collections.categories = function(){
+Template.collections.helpers({
+  categories: function(){
     return cat_titles;
-}
+  }
+});
 
 
-Template.stickers.visits = function(cat){
+Template.stickers.helpers({
+  repeat: function(n){
+    return _.range(n);
+  },
+  visits: function(cat){
+    console.log('visits');
     //console.log("looking for " + cat);
     var n = Visits.find({'cat':cat}).fetch();
     _.each(n,function(x,i){
@@ -100,18 +116,21 @@ Template.stickers.visits = function(cat){
     //console.log("returning " + n.length);
     //console.log(n);
     return n;
-}
+  },
 
-Template.stickers.minusvisits = function(cat){
-    return Visits.find({'cat':cat}).count();
-}
+  minusvisits: function(cat){
+      console.log('minusvisits');
+      return Visits.find({'cat':cat}).count();
+  },
 
-Template.stickers.position = function(i,o,id){
-    if (collected.indexOf(id) > -1) var v = 0;
-    else v = 1;
+  position: function(i,o,id){
+      console.log('position');
+      if (collected.indexOf(id) > -1) var v = 0;
+      else v = 1;
 
-    return "top:"+sticker_grid[i+o]['top'] + "px; left:" + sticker_grid[i+o]['left'] + "px; opacity:" + v + ";";
-}
+      return "top:"+sticker_grid[i+o]['top'] + "px; left:" + sticker_grid[i+o]['left'] + "px; opacity:" + v + ";";
+  }
+});
 
 Template.rankings.getranks = function(){
     if(Session.get("current_place")){
@@ -142,7 +161,7 @@ for (var n=0; n<20; n++){
         sticker_grid.push({"top":96 ,"left":24*(n-16)});              
 }
 
-Handlebars.registerHelper('fora', function(from, to, incr, block) {
+UI.registerHelper('fora', function(from, to, incr, block) {
     //console.log("for",from,to,incr);
     var accum = '';
     for(var i = from; i < to; i += incr){
@@ -152,9 +171,6 @@ Handlebars.registerHelper('fora', function(from, to, incr, block) {
     return accum;
 });
 
-Handlebars.registerHelper('times', function(n, block) {
-    var accum = '';
-    for(var i = 0; i < n; ++i)
-        accum += block.fn(i);
-    return accum;
+UI.registerHelper('times', function() {
+  throw new Error('do not use this any more, find another way');
 });

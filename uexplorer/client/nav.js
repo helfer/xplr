@@ -1,3 +1,4 @@
+import { Session } from 'meteor/session';
 
 Template.header.events(
     {
@@ -128,31 +129,34 @@ Template.header.events(
 
     });
 
-Template.header.isactive = function(name){
-    console.log("isactive " + name + " " + Session.get("mode"));
-    if(Session.get("mode") == name){
-        console.log("return hoverrrrrrr");
-        return "_active";
-    } else {
-        return "_inactive";
-    }
-}
+Template.header.helpers({
+    isactive: function(name){
+      console.log("isactive " + name + " " + Session.get("mode"));
+      if(Session.get("mode") == name){
+          console.log("return hoverrrrrrr");
+          return "_active";
+      } else {
+          return "_inactive";
+      }
+    },
 
-Template.header.loggedin = function(){
-    if(Meteor.userId()){
-        return true;
-    } else {
-        return false;
-    }
-}
+    loggedin: function(){
+      if(Meteor.userId()){
+          return true;
+      } else {
+          return false;
+      }
+  }
 
-Template.collect.collect = function(){
-  return collected;   
-}
-
-Template.collect.iscollect = function(){
-  return collected != null;
-}
+});
+Template.collect.helpers({
+  collect: function(){
+    return collected;   
+  },
+  iscollect: function(){
+    return collected != null;
+  }
+});
 
 Template.header.rendered = function (){
     if(Session.get("mode") == "welcome"){
