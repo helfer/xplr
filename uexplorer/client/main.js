@@ -1,5 +1,3 @@
-import { Session } from 'meteor/session';
-
 if (Meteor.isClient) {
     markersArray = [];//on guess streetview
     StreetOverlayArray = [];// on collect streetview

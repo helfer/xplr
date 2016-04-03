@@ -1,5 +1,3 @@
-import { Session } from 'meteor/session';
-
 Template.header.events(
     {
         'click #signin': function(ev,template){

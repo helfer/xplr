@@ -1,4 +1,3 @@
-import { Session } from 'meteor/session';
 Template.instruction.events({
 	'click #instruction': function (){
  		remove_instruction();

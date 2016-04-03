@@ -1,5 +1,3 @@
-import { Session } from 'meteor/session';
-
 Template.achievement.helpers({
   username: function(){
     if(Meteor.user()){
